@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8" />
+  <link href="react-tagsinput.css" rel="stylesheet" type="text/css" />
+  <style>
+  </style>
+</head>
+<body>
+<div id="content"></div>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.10.0/JSXTransformer.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.10.0/react-with-addons.js"></script>
+<script src="react-tagsinput.js"></script>
+<script type="text/jsx">
+/** @jsx React.DOM */
+
+var App = React.createClass({
+  getInitialState: function () {
+    return {
+      text: ""
+    };
+  }
+
+  , onChange: function (tags) {
+    this.setState({
+      text: tags.join("\n")
+    });
+  }
+
+  , render: function () {
+    return (
+      <div>
+        <h1>react-tagsinput Demo</h1>
+        <ReactTagsInput onChange={this.onChange} ref="tags" />
+        <h4>Tags:</h4>
+        <pre>{this.state.text}</pre>
+      </div>
+    );
+  }
+});
+
+window.onload = function () {
+  React.renderComponent(
+    <App />
+    , document.getElementById("content")
+  );
+};
+</script>
+</body>
+</html>
