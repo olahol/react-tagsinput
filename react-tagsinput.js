@@ -1,6 +1,4 @@
 ;(function () {
-  var React = this.React || require("react");
-
   var Input = React.createClass({
     render: function () {
       var inputClass = this.props.invalid ?
