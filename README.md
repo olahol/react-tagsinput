@@ -54,3 +54,7 @@ Callback when a tag is removed, argument is the removed tag.
 ### getTags()
 
 Returns an array of the current tags in the input.
+
+## Styling
+
+Look at `react-tagsinput.css` for an idea on how to style this component.
