@@ -5,6 +5,18 @@
   <meta charset="utf-8" />
   <link href="react-tagsinput.css" rel="stylesheet" type="text/css" />
   <style>
+  h1 {
+    font-family: sans-serif;
+  }
+
+  pre {
+    background-color: #f1f1f1;
+  }
+
+  #content {
+    width: 900px;
+    margin: auto;
+  }
   </style>
 </head>
 <body>
@@ -12,7 +24,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.10.0/JSXTransformer.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.10.0/react-with-addons.js"></script>
 <script src="react-tagsinput.js"></script>
-<script type="text/jsx">
+<script id="source" type="text/jsx">
 /** @jsx React.DOM */
 
 var App = React.createClass({
@@ -24,17 +36,20 @@ var App = React.createClass({
 
   , onChange: function (tags) {
     this.setState({
-      text: tags.join("\n")
+      text: tags.join(", ")
     });
   }
 
   , render: function () {
+    var source = document.getElementById("source").textContent;
+
     return (
       <div>
-        <h1>react-tagsinput Demo</h1>
-        <ReactTagsInput onChange={this.onChange} ref="tags" />
-        <h4>Tags:</h4>
-        <pre>{this.state.text}</pre>
+        <h1>Tag input component</h1>
+        <ReactTagsInput onChange={this.onChange} />
+        <h4>Tags: {this.state.text}</h4>
+        <h2>Source</h2>
+        <pre>{source}</pre>
       </div>
     );
   }
@@ -47,5 +62,6 @@ window.onload = function () {
   );
 };
 </script>
+<a href="https://github.com/olahol/react-tagsinput"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
 </body>
 </html>

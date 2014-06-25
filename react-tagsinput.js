@@ -25,7 +25,7 @@
         }, this.props.tag + " ", React.DOM.a({
           onClick: this.props.remove
           , className: "react-tagsinput-remove"
-        }, "X"))
+        }))
       );
     }
   });
