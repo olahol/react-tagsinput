@@ -45,7 +45,7 @@ Callback when the tag input changes, the argument is an array of the current tag
 
 Callback when a tag is added, argument is the added tag.
 
-### onTagAdd
+### onTagRemove
 
 Callback when a tag is removed, argument is the removed tag.
 
@@ -53,7 +53,7 @@ Callback when a tag is removed, argument is the removed tag.
 
 ### getTags()
 
-Returns an array of the current tags in the input.
+Returns an array of the current tags.
 
 ## Styling
 
