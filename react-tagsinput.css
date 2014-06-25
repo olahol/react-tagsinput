@@ -33,6 +33,10 @@
   cursor: pointer;
 }
 
+.react-tagsinput-remove {
+  content: "X";
+}
+
 .react-tagsinput-input {
 	width:80px;
 	margin:0px;
