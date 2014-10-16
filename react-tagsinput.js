@@ -33,6 +33,9 @@
       return {
         tags: []
         , placeholder: "Add a tag"
+        , validate: function (tag) { return tag !== ""; }
+        , addKeys: [13, 9]
+        , removeKeys: [8]
         , onTagAdd: function () { }
         , onTagRemove: function () { }
         , onChange: function () { }
@@ -60,7 +63,7 @@
     , addTag: function () {
       var tag = this.state.tag.trim();
 
-      if (this.state.tags.indexOf(tag) !== -1 || tag === "") {
+      if (this.state.tags.indexOf(tag) !== -1 || !this.props.validate(tag)) {
         return this.setState({
           invalid: true
         });
@@ -90,12 +93,15 @@
     }
 
     , onKeyDown: function (e) {
-      if (e.keyCode === 13 || e.keyCode === 9) {
+      var add = this.props.addKeys.indexOf(e.keyCode) !== -1
+        , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
+
+      if (add) {
         e.preventDefault();
         this.addTag();
       }
 
-      if (e.keyCode === 8 && this.state.tags.length > 0 && this.state.tag === "") {
+      if (remove && this.state.tags.length > 0 && this.state.tag === "") {
         this.removeTag(this.state.tags.length - 1);
       }
     }
@@ -105,6 +111,12 @@
         tag: e.target.value
         , invalid: false
       });
+    }
+
+    , onBlur: function (e) {
+      if (this.state.tag !== "" && !this.state.invalid) {
+        this.addTag();
+      }
     }
 
     , inputFocus: function () {
@@ -130,14 +142,15 @@
           , invalid: this.state.invalid
           , onKeyDown: this.onKeyDown
           , onChange: this.onChange
+          , onBlur: this.onBlur
         }))
       );
     }
   });
 
-	if (typeof module === "object" && module.exports){
-		module.exports = TagsInput;
-	} else {
+  if (typeof module === "object" && module.exports){
+    module.exports = TagsInput;
+  } else {
     this.ReactTagsInput = TagsInput;
-	}
+  }
 }.call(this));

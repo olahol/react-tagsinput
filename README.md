@@ -37,6 +37,15 @@ Tags to preloaded, default is `[]`.
 
 Placeholder text for the add a tag input, default is "Add a tag".
 
+### validate
+
+A function which returns true if a tag is valid, default function returns
+true for every string but the empty string.
+
+### addKeys
+
+An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter.)
+
 ### onChange
 
 Callback when the tag input changes, the argument is an array of the current tags.
@@ -58,3 +67,11 @@ Returns an array of the current tags.
 ## Styling
 
 Look at `react-tagsinput.css` for an idea on how to style this component.
+
+## CHANGELOG
+
+### 2014-10-16
+
+* `validate` prop which is a function that returns true if a tag is valid.
+* Add tag when input is blurred.
+* `addKeys` prop which defines key code that add a tag, default is Tab (9) and Enter (13.)
