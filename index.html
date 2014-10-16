@@ -26,6 +26,11 @@
 <script src="react-tagsinput.js"></script>
 <script id="source" type="text/jsx">
 /** @jsx React.DOM */
+var validateTag = function (tag) {
+  return tag !== "" && !/_/.test(tag); // lets not allow underscore in our tags.
+};
+
+var keyCodes = [13, 9, 32]; // add tags when keys Enter (13), Tab (9) or Space (32) is down.
 
 var App = React.createClass({
   getInitialState: function () {
@@ -46,7 +51,7 @@ var App = React.createClass({
     return (
       <div>
         <h1>Tag input component</h1>
-        <ReactTagsInput onChange={this.onChange} />
+        <ReactTagsInput validate={validateTag} onChange={this.onChange} addKeys={[13, 9, 32]} />
         <h4>Tags: {this.state.text}</h4>
         <h2>Source</h2>
         <pre>{source}</pre>
