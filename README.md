@@ -58,7 +58,7 @@ true for every string but the empty string.
 
 ##### addKeys
 
-An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter.)
+An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
 ##### onChange
 

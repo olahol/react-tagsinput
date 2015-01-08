@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <title>react-tagsinput example (without JSX)</title>
+  <link rel="stylesheet" href="../react-tagsinput.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    body {
+      background: #eeefef;
+    }
+    #tags {
+      width: 80%;
+      margin: 100px auto;
+    }
+    button {
+      background: #e74c3c;
+      color: #fff;
+      border: 1px solid #c0392b;
+      width: 70px;
+      height: 30px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: bold;
+      float: right;
+      margin-top: 10px;
+      line-height: 30px;
+      cursor: pointer;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="tags"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.min.js"></script>
+  <script src="../react-tagsinput.js"></script>
+  <script>
+    var TagsComponent = React.createClass({
+      displayName: 'TagsComponent',
+      saveTags: function () {
+        console.log('tags: ', this.refs.tags.getTags().join(', '));
+      },
+
+      render: function () {
+        return (
+          React.createElement('div', null,
+            React.createElement(ReactTagsInput, {ref: 'tags', tags: ['tag1', 'tag2']}),
+            React.createElement('button', {onClick: this.saveTags}, 'Save')
+          )
+        );
+      }
+    });
+    React.render(React.createElement(TagsComponent, null), document.getElementById('tags'));
+  </script>
+</body>
+</html>
