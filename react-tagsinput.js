@@ -15,11 +15,13 @@
         "react-tagsinput-input react-tagsinput-invalid" :
         "react-tagsinput-input";
 
-      return this.transferPropsTo(
-        React.DOM.input({
+      return React.DOM.input(
+        // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
+        // avoid dependency on ES6's `Object.assign()`
+        React.__spread({}, this.props, {
           type: "text"
-          , className: inputClass
-          , placeholder: this.props.placeholder
+        , className: inputClass
+        , placeholder: this.props.placeholder
         })
       );
     }
