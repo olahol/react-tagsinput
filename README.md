@@ -21,14 +21,14 @@ bower install react-tagsinput --save
 ## Example
 
 ```js
-var TagsInput = require("./react-tagsinput");
+var TagsInput = require('./react-tagsinput');
 
 var App = React.createClass({
   saveTags: function () {
-    console.log("tags: ", this.refs.tags.getTags().join(", "));
-  }
+    console.log('tags: ', this.refs.tags.getTags().join(', '));
+  }, 
 
-  , render: function () {
+  render: function () {
     return (
       <div>
         <TagsInput ref="tags" tags={["tag1", "tag2"]} />
@@ -80,10 +80,6 @@ Returns an array of the current tags.
 
 Look at `react-tagsinput.css` for an idea on how to style this component.
 
-## CHANGELOG
+## [Changelog]()
 
-### 2014-10-16
 
-* `validate` prop which is a function that returns true if a tag is valid.
-* Add tag when input is blurred.
-* `addKeys` prop which defines key code that add a tag, default is Tab (9) and Enter (13.)
