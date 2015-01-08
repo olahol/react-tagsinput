@@ -1,15 +1,27 @@
-;(function () {
+;(function (root, factory) {
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = factory(require("react"));
+    } else if (typeof define === "function" && define.amd) {
+        define(["react"], factory);
+    } else {
+        root.ReactTagsInput = factory(root.React);
+    }
+})(this, function (React) {
+  "use strict";
+
   var Input = React.createClass({
     render: function () {
       var inputClass = this.props.invalid ?
         "react-tagsinput-input react-tagsinput-invalid" :
         "react-tagsinput-input";
 
-      return this.transferPropsTo(
-        React.DOM.input({
+      return React.createElement("input",
+        // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
+        // avoid dependency on ES6's `Object.assign()`
+        React.__spread({}, this.props, {
           type: "text"
-          , className: inputClass
-          , placeholder: this.props.placeholder
+        , className: inputClass
+        , placeholder: this.props.placeholder
         })
       );
     }
@@ -18,9 +30,9 @@
   var Tag = React.createClass({
     render: function () {
       return (
-        React.DOM.span({
+        React.createElement("span", {
           className: "react-tagsinput-tag"
-        }, this.props.tag + " ", React.DOM.a({
+        }, this.props.tag + " ", React.createElement("a", {
           onClick: this.props.remove
           , className: "react-tagsinput-remove"
         }))
@@ -125,7 +137,7 @@
 
     , render: function() {
       var tagNodes = this.state.tags.map(function (tag, i) {
-        return Tag({
+        return React.createElement(Tag, {
           key: i
           , tag: tag
           , remove: this.removeTag.bind(null, i)
@@ -133,9 +145,9 @@
       }.bind(this));
 
       return (
-        React.DOM.div({
+        React.createElement("div", {
           className: "react-tagsinput"
-        }, tagNodes, Input({
+        }, tagNodes, React.createElement(Input, {
           ref: "input"
           , placeholder: this.props.placeholder
           , value: this.state.tag
@@ -148,9 +160,5 @@
     }
   });
 
-  if (typeof module === "object" && module.exports){
-    module.exports = TagsInput;
-  } else {
-    this.ReactTagsInput = TagsInput;
-  }
-}.call(this));
+  return TagsInput;
+});

@@ -4,7 +4,7 @@
     "react-tagsinput.js",
     "react-tagsinput.css"
   ],
-  "version": "0.1.2",
+  "version": "0.2.1",
   "homepage": "https://github.com/olahol/react-tagsinput",
   "description": "Simple react.js component for inputing tags",
   "keywords": [
@@ -15,7 +15,8 @@
     "javascript"
   ],
   "authors": [
-    "Ola Holmström"
+    "Ola Holmström",
+    "Dmitri Voronianski <dmitri.voronianski@gmail.com>"
   ],
   "license": "MIT",
   "ignore": [
@@ -23,7 +24,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "example"
   ],
   "dependencies": {
     "react": "~0.12.2"
