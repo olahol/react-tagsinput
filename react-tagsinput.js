@@ -15,7 +15,7 @@
         "react-tagsinput-input react-tagsinput-invalid" :
         "react-tagsinput-input";
 
-      return React.DOM.input(
+      return React.createElement("input",
         // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
         // avoid dependency on ES6's `Object.assign()`
         React.__spread({}, this.props, {
@@ -30,9 +30,9 @@
   var Tag = React.createClass({
     render: function () {
       return (
-        React.DOM.span({
+        React.createElement("span", {
           className: "react-tagsinput-tag"
-        }, this.props.tag + " ", React.DOM.a({
+        }, this.props.tag + " ", React.createElement("a", {
           onClick: this.props.remove
           , className: "react-tagsinput-remove"
         }))
@@ -145,7 +145,7 @@
       }.bind(this));
 
       return (
-        React.DOM.div({
+        React.createElement("div", {
           className: "react-tagsinput"
         }, tagNodes, React.createElement(Input, {
           ref: "input"
