@@ -1,6 +1,6 @@
 # react-tagsinput
 
-> Simple react component for inputing tags.
+> Simple [React](http://facebook.github.io/react/index.html) component for inputing tags.
 
 ## Demo
 
@@ -20,7 +20,7 @@ bower install react-tagsinput --save
 
 ## Example
 
-```js
+```javascript
 var TagsInput = require('./react-tagsinput');
 
 var App = React.createClass({
@@ -39,47 +39,51 @@ var App = React.createClass({
 });
 ```
 
-## Props
+## API
 
-### tags
+### Props
+
+##### tags
 
 Tags to preloaded, default is `[]`.
 
-### placeholder
+##### placeholder
 
 Placeholder text for the add a tag input, default is "Add a tag".
 
-### validate
+##### validate
 
 A function which returns true if a tag is valid, default function returns
 true for every string but the empty string.
 
-### addKeys
+##### addKeys
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter.)
 
-### onChange
+##### onChange
 
 Callback when the tag input changes, the argument is an array of the current tags.
 
-### onTagAdd
+##### onTagAdd
 
 Callback when a tag is added, argument is the added tag.
 
-### onTagRemove
+##### onTagRemove
 
 Callback when a tag is removed, argument is the removed tag.
 
-## Methods
+### Methods
 
-### getTags()
+##### getTags()
 
 Returns an array of the current tags.
 
-## Styling
+## Styles
 
 Look at `react-tagsinput.css` for an idea on how to style this component.
 
-## [Changelog]()
+---
+
+MIT Licensed
 
 

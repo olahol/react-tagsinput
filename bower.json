@@ -23,7 +23,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "example"
   ],
   "dependencies": {
     "react": "~0.12.2"
