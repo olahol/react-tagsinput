@@ -2,6 +2,8 @@
 
 > Simple [React](http://facebook.github.io/react/index.html) component for inputing tags.
 
+<img src="https://dl.dropboxusercontent.com/u/100463011/react-tagsinput-demo.gif" width="300">
+
 ## Demo
 
 A demonstration can be found here: https://olahol.github.io/react-tagsinput
