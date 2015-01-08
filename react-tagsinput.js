@@ -1,4 +1,14 @@
-;(function () {
+;(function (root, factory) {
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = factory(require("react"));
+    } else if (typeof define === "function" && define.amd) {
+        define(["react"], factory);
+    } else {
+        root.ReactTagsInput = factory(root.React);
+    }
+})(this, function (React) {
+  "use strict";
+
   var Input = React.createClass({
     render: function () {
       var inputClass = this.props.invalid ?
@@ -125,7 +135,7 @@
 
     , render: function() {
       var tagNodes = this.state.tags.map(function (tag, i) {
-        return Tag({
+        return React.createElement(Tag, {
           key: i
           , tag: tag
           , remove: this.removeTag.bind(null, i)
@@ -135,7 +145,7 @@
       return (
         React.DOM.div({
           className: "react-tagsinput"
-        }, tagNodes, Input({
+        }, tagNodes, React.createElement(Input, {
           ref: "input"
           , placeholder: this.props.placeholder
           , value: this.state.tag
@@ -148,9 +158,5 @@
     }
   });
 
-  if (typeof module === "object" && module.exports){
-    module.exports = TagsInput;
-  } else {
-    this.ReactTagsInput = TagsInput;
-  }
-}.call(this));
+  return TagsInput;
+});
