@@ -13,7 +13,7 @@
 npm install react-tagsinput --save
 ```
 
-or 
+or
 
 ```bash
 bower install react-tagsinput --save
@@ -27,7 +27,7 @@ var TagsInput = require('./react-tagsinput');
 var App = React.createClass({
   saveTags: function () {
     console.log('tags: ', this.refs.tags.getTags().join(', '));
-  }, 
+  },
 
   render: function () {
     return (
@@ -51,6 +51,10 @@ Tags to preloaded, default is `[]`.
 ##### placeholder
 
 Placeholder text for the add a tag input, default is "Add a tag".
+
+##### classNamespace
+
+Namespace for CSS classes, default is `react` i.e CSS classes are `react-tagsinput`.
 
 ##### validate
 
