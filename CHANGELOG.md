@@ -1,3 +1,7 @@
+### 0.2.3 (2015-01-20)
+
+* Add prop `classNamespace`, for namespacing CSS classes.
+
 ### 0.2.0 (2015-01-07)
 
 * Add [UMD](https://github.com/umdjs/umd) support
