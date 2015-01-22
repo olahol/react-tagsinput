@@ -1,5 +1,8 @@
 # react-tagsinput
 
+[![npm version](https://badge.fury.io/js/react-tagsinput.svg)](http://badge.fury.io/js/react-tagsinput)
+[![Build Status](https://travis-ci.org/olahol/react-tagsinput.svg)](https://travis-ci.org/olahol/react-tagsinput)
+
 > Simple [React](http://facebook.github.io/react/index.html) component for inputing tags.
 
 ### [Demo](https://olahol.github.io/react-tagsinput)
