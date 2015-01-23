@@ -3,3 +3,4 @@ components
 node_modules
 bower_components
 *.log
+coverage

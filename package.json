@@ -1,17 +1,20 @@
 {
   "name": "react-tagsinput",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "dependencies": {
     "react": "^0.12.2"
   },
   "devDependencies": {
-    "jsdom": "~3.0.2"
-    , "mocha": "~2.1.0"
+    "jsdom": "^3.0.2"
+    , "coveralls": "^2.11.2"
+    , "mocha": "^2.1.0"
+    , "istanbul": "^0.3.5"
   },
   "scripts": {
     "test": "mocha"
+    , "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec"
   },
   "repository": {
     "type": "git",
