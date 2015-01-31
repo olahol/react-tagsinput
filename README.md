@@ -61,6 +61,11 @@ Placeholder text for the add a tag input, default is "Add a tag".
 
 Namespace for CSS classes, default is `react` i.e CSS classes are `react-tagsinput`.
 
+##### addOnBlur
+
+Boolean whether a tag should be added when the input field blurs, default
+is `true`.
+
 ##### validate
 
 A function which returns true if a tag is valid, default function returns
@@ -74,13 +79,27 @@ An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
 Callback when the tag input changes, the argument is an array of the current tags.
 
+##### onChangeInput
+
+Callback when the input changes, the argument is the value of the input.
+
 ##### onTagAdd
 
 Callback when a tag is added, argument is the added tag.
 
+##### onBeforeTagAdd
+
+Callback before a tag is added, if it returns a `string` the tag is
+transformed if it returns a falsy value the tag is not added.
+
 ##### onTagRemove
 
 Callback when a tag is removed, argument is the removed tag.
+
+##### onBeforeTagRemove
+
+Callback before a tag removed, if it returns a falsy value the tag
+is not removed.
 
 ### Methods
 
@@ -88,9 +107,24 @@ Callback when a tag is removed, argument is the removed tag.
 
 Returns an array of the current tags.
 
+##### addTag(tag)
+
+Adds a tag.
+
+##### inputFocus()
+
+Focus on the tag input.
+
 ## Styles
 
 Look at `react-tagsinput.css` for an idea on how to style this component.
+
+## Addendum: Input completion
+
+An example of how to add input completion to the `TagsInput` component can
+be found in `examples/completion.html`.
+
+[![Completion Demo](https://cdn.rawgit.com/olahol/react-tagsinput/master/example/demo_completion.gif "Completion Demo")](https://github.com/olahol/react-tagsinput/blob/master/example/completion.html)
 
 ---
 
