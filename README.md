@@ -10,7 +10,7 @@
 
 ### [Demo](https://olahol.github.io/react-tagsinput)
 
-<img src="https://dl.dropboxusercontent.com/u/100463011/react-tagsinput-demo.gif" width="350">
+[![Demo](https://cdn.rawgit.com/olahol/react-tagsinput/master/example/demo.gif "Demo")](https://github.com/olahol/react-tagsinput/blob/master/example/index.html)
 
 ## Install
 
