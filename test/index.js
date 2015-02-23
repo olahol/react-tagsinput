@@ -111,6 +111,43 @@ describe("TagsInput", function () {
       assert.equal(input.props.value, value);
     });
 
+    it("should call onBlur prop on blur event and DO NOT add tag if addOnBlur == false", function () {
+      var value = "";
+      var tagsinput = createTagsInput({
+        onBlur: function (v) { value = v; },
+        addOnBlur: false
+      });
+      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+
+      TestUtils.Simulate.change(input, { target: { value: "test" } });
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
+      TestUtils.Simulate.change(input, { target: { value: "test2" } });
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
+      TestUtils.Simulate.change(input, { target: { value: "test3" } });
+      TestUtils.Simulate.blur(input);
+
+      assert.equal(tagsinput.getTags().length, 2);
+      assert.deepEqual(value, ["test", "test2"]);
+    });
+
+    it("should call onBlur prop on blur event and add tag", function () {
+      var value = "";
+      var tagsinput = createTagsInput({
+        onBlur: function (v) { value = v; }
+      });
+      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+
+      TestUtils.Simulate.change(input, { target: { value: "test" } });
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
+      TestUtils.Simulate.change(input, { target: { value: "test2" } });
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
+      TestUtils.Simulate.change(input, { target: { value: "test3" } });
+      TestUtils.Simulate.blur(input);
+
+      assert.equal(tagsinput.getTags().length, 3);
+      assert.deepEqual(value, ["test", "test2", "test3"]);
+    });
+
     it("should add a tag with addTag", function () {
       var tagsinput = createTagsInput();
       tagsinput.addTag("test");

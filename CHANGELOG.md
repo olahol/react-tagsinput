@@ -1,3 +1,7 @@
+### 0.3.1 (2015-01-20)
+
+* Add `onBlur` event
+
 ### 0.2.3 (2015-01-20)
 
 * Add prop `classNamespace`, for namespacing CSS classes.

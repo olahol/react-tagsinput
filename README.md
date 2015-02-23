@@ -79,6 +79,10 @@ An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
 Callback when the tag input changes, the argument is an array of the current tags.
 
+##### onBlur
+
+Callback when input field blurs, the argument is an array of the current tags.
+
 ##### onChangeInput
 
 Callback when the input changes, the argument is the value of the input.

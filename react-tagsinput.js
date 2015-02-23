@@ -55,6 +55,7 @@
         , onTagRemove: function () { }
         , onChange: function () { }
         , onChangeInput: function () { }
+        , onBlur: function () { }
         , classNamespace: "react"
         , addOnBlur: true
       };
@@ -78,7 +79,7 @@
       return this.state.tags;
     }
 
-    , addTag: function (tag) {
+    , addTag: function (tag, cb) {
       var before = this.props.onBeforeTagAdd(tag);
       var valid =  !!before && this.props.validate(tag);
 
@@ -98,6 +99,9 @@
         this.props.onTagAdd(tag);
         this.props.onChange(this.state.tags);
         this.inputFocus();
+        if (cb) {
+          return cb();
+        }
       });
     }
 
@@ -143,11 +147,19 @@
     }
 
     , onBlur: function (e) {
-      if (!this.props.addOnBlur) { return ; }
+      var _this = this;
+      if (!this.props.addOnBlur) {
+        this.props.onBlur(this.state.tags);
+        return ;
+      }
 
       if (this.state.tag !== "" && !this.state.invalid) {
-        this.addTag(this.state.tag.trim());
+        return this.addTag(this.state.tag.trim(), function () {
+          _this.props.onBlur(_this.state.tags);
+        });
       }
+
+      _this.props.onBlur(_this.state.tags);
     }
 
     , inputFocus: function () {
