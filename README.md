@@ -130,6 +130,12 @@ be found in `examples/completion.html`.
 
 [![Completion Demo](https://cdn.rawgit.com/olahol/react-tagsinput/master/example/demo_completion.gif "Completion Demo")](https://github.com/olahol/react-tagsinput/blob/master/example/completion.html)
 
+## Contributors
+
+* Ola Holmström (@olahol)
+* Dmitri Voronianski (@voronianski)
+* Artem Vovsya (@avovsya)
+
 ---
 
 MIT Licensed

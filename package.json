@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "mocha"
-    , "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec"
+    , "coverage": "./node_modules/istanbul/lib/cli.js cover --print detail ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec"
   },
   "repository": {
     "type": "git",
@@ -29,10 +29,10 @@
     "react-component"
   ],
   "author": "Ola Holmström",
-  "contributors": [{
-    "name": "Dmitri Voronianski",
-    "email": "dmitri.voronianski@gmail.com"
-  }],
+  "contributors": [
+    { "name": "Dmitri Voronianski", "email": "dmitri.voronianski@gmail.com" },
+    { "name": "Artem Vovsya", "email": "avovsya@gmail.com" }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/olahol/react-tagsinput/issues"

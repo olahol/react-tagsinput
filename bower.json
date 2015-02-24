@@ -16,8 +16,9 @@
     "react-component"
   ],
   "authors": [
-    "Ola Holmström",
-    "Dmitri Voronianski <dmitri.voronianski@gmail.com>"
+    "Ola Holmström <olaholmstrom@gmail.com>",
+    "Dmitri Voronianski <dmitri.voronianski@gmail.com>",
+    "Artem Vovsya <avovsya@gmail.com>"
   ],
   "license": "MIT",
   "ignore": [

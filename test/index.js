@@ -25,7 +25,9 @@ describe("TagsInput", function () {
 
   describe("main functionality", function () {
     it("should add a tag on enter", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput({
+        classNamespace: ""
+      });
       var input = addTag(tagsinput, "test");
 
       assert.equal(tagsinput.getTags().length, 1);
@@ -83,7 +85,7 @@ describe("TagsInput", function () {
   });
 
   describe("props and methods", function () {
-    it("should test onBeforeAddTag validation", function () {
+    it("should test onBeforeTagAdd validation", function () {
       var tagsinput = createTagsInput({ onBeforeTagAdd: function () { return false; } });
       var input = addTag(tagsinput, "test");
 
@@ -91,12 +93,21 @@ describe("TagsInput", function () {
       assert.equal(input.props.value, "test");
     });
 
-    it("should test onBeforeAddTag transformation", function () {
+    it("should test onBeforeTagAdd transformation", function () {
       var tagsinput = createTagsInput({ onBeforeTagAdd: function () { return "test1"; } });
       var input = addTag(tagsinput, "test");
 
       assert.equal(tagsinput.getTags().length, 1);
       assert.equal(tagsinput.getTags()[0], "test1");
+    });
+
+    it("should test onBeforeTagRemove validation", function () {
+      var tagsinput = createTagsInput({ onBeforeTagRemove: function () { return false; } });
+      var input = addTag(tagsinput, "test");
+
+      assert.equal(tagsinput.getTags().length, 1);
+      tagsinput.removeTag("test");
+      assert.equal(tagsinput.getTags().length, 1);
     });
 
     it("should test onChangeInput", function () {
@@ -142,6 +153,8 @@ describe("TagsInput", function () {
       TestUtils.Simulate.change(input, { target: { value: "test2" } });
       TestUtils.Simulate.keyDown(input, { keyCode: 13 });
       TestUtils.Simulate.change(input, { target: { value: "test3" } });
+      TestUtils.Simulate.blur(input);
+      TestUtils.Simulate.change(input, { target: { value: "" } });
       TestUtils.Simulate.blur(input);
 
       assert.equal(tagsinput.getTags().length, 3);
