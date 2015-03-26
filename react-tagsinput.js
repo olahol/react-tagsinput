@@ -64,16 +64,10 @@
 
     , getInitialState: function () {
       return {
-        tags: []
+        tags: this.props.tags.slice(0)
         , tag: ""
         , invalid: false
       };
-    }
-
-    , componentWillMount: function () {
-      this.setState({
-        tags: this.props.tags.slice(0)
-      });
     }
 
     , getTags: function () {
