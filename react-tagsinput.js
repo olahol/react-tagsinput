@@ -1,7 +1,7 @@
 ;(function (root, factory) {
   /* istanbul ignore next */
   if (typeof module !== "undefined" && module.exports) {
-    module.exports = factory(require("react"));
+    module.exports = factory(require("parent-require")("react"));
   } else if (typeof define === "function" && define.amd) {
     define(["react"], factory);
   } else {

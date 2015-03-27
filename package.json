@@ -7,14 +7,14 @@
     "react": "^0.13.0"
   },
   "devDependencies": {
-    "jsdom": "^3.0.2"
-    , "coveralls": "^2.11.2"
-    , "mocha": "^2.1.0"
-    , "istanbul": "^0.3.5"
+    "jsdom": "^3.0.2",
+    "coveralls": "^2.11.2",
+    "mocha": "^2.1.0",
+    "istanbul": "^0.3.5"
   },
   "scripts": {
-    "test": "mocha"
-    , "coverage": "./node_modules/istanbul/lib/cli.js cover --print detail ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec"
+    "test": "mocha",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover --print detail ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec"
   },
   "repository": {
     "type": "git",
@@ -30,12 +30,21 @@
   ],
   "author": "Ola Holmström",
   "contributors": [
-    { "name": "Dmitri Voronianski", "email": "dmitri.voronianski@gmail.com" },
-    { "name": "Artem Vovsya", "email": "avovsya@gmail.com" }
+    {
+      "name": "Dmitri Voronianski",
+      "email": "dmitri.voronianski@gmail.com"
+    },
+    {
+      "name": "Artem Vovsya",
+      "email": "avovsya@gmail.com"
+    }
   ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/olahol/react-tagsinput/issues"
   },
-  "homepage": "https://github.com/olahol/react-tagsinput"
+  "homepage": "https://github.com/olahol/react-tagsinput",
+  "dependencies": {
+    "parent-require": "^1.0.0"
+  }
 }
