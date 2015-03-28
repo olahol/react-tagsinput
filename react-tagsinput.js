@@ -1,7 +1,7 @@
 ;(function (root, factory) {
   /* istanbul ignore next */
   if (typeof module !== "undefined" && module.exports) {
-    module.exports = factory(require("react"));
+    module.exports = factory(require('parent-require')('react'));
   } else if (typeof define === "function" && define.amd) {
     define(["react"], factory);
   } else {
@@ -64,16 +64,10 @@
 
     , getInitialState: function () {
       return {
-        tags: []
+        tags: this.props.tags.slice(0)
         , tag: ""
         , invalid: false
       };
-    }
-
-    , componentWillMount: function () {
-      this.setState({
-        tags: this.props.tags.slice(0)
-      });
     }
 
     , getTags: function () {
