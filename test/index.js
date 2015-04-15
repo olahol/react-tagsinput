@@ -228,7 +228,7 @@ describe("TagsInput", function () {
       assert.equal(tags[0], tag, "tag should not have been transformed to test");
     });
 
-    it("should without any handeling", function () {
+    it("should render without any handlers", function () {
       var tagsinput = createTagsInput({
         valueLink: null
       });
@@ -240,6 +240,12 @@ describe("TagsInput", function () {
       var tags = tagsinput.getTags();
 
       assert.equal(tags.length, 0, "there should be no tags");
+    });
+
+    it("should focus input", function () {
+      var tagsinput = createTagsInput();
+
+      tagsinput.focus();
     });
   });
 });

@@ -73,7 +73,7 @@
         , onBlur: function () { }
         , onTagAdd: function () { }
         , onTagRemove: function () { }
-        , transform: function (tag) { return tag; }
+        , transform: function (tag) { return tag.trim(); }
       };
     }
 
@@ -151,7 +151,7 @@
 
       if (add) {
         e.preventDefault();
-        this.addTag(this.state.tag.trim());
+        this.addTag(this.state.tag);
       }
 
       if (remove && valueLink.value.length > 0 && this.state.tag === "") {
@@ -168,8 +168,10 @@
     }
 
     , onBlur: function (e) {
-      if (this.props.addOnBlur) {
-        this.addTag(this.state.tag.trim());
+      var tag = this.state.tag;
+
+      if (this.props.addOnBlur && tag !== "") {
+        this.addTag(tag);
       }
 
       this.props.onBlur();

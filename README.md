@@ -85,9 +85,8 @@ true for every string but the empty string and non unique tags.
 
 ##### transform
 
-A function which returns transforms a tag before it is added, the default
-function is just identity (it returns the same tag). This is useful for
-tag completion.
+A function which transforms a tag before it is added, the default
+function trims the tag of whitespaces.
 
 ##### addKeys
 
