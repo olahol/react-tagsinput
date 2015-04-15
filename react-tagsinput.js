@@ -124,7 +124,6 @@
         tag: ""
         , invalid: false
       }, function () {
-        this.focus();
         this.props.onTagAdd(tag);
       });
     }
