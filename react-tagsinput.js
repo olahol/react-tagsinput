@@ -1,15 +1,29 @@
-;(function () {
+;(function (root, factory) {
+  /* istanbul ignore next */
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = factory(require("react"));
+  } else if (typeof define === "function" && define.amd) {
+    define(["react"], factory);
+  } else {
+    root.ReactTagsInput = factory(root.React);
+  }
+})(this, function (React) {
+  "use strict";
+
   var Input = React.createClass({
     render: function () {
-      var inputClass = this.props.invalid ?
-        "react-tagsinput-input react-tagsinput-invalid" :
-        "react-tagsinput-input";
+      var ns = this.props.ns;
 
-      return this.transferPropsTo(
-        React.DOM.input({
+      var inputClass = ns + "tagsinput-input "
+        + (this.props.invalid ? ns + "tagsinput-invalid" : "");
+
+      return React.createElement("input",
+        // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
+        // avoid dependency on ES6's `Object.assign()`
+        React.__spread({}, this.props, {
           type: "text"
-          , className: inputClass
-          , placeholder: this.props.placeholder
+        , className: inputClass
+        , placeholder: this.props.placeholder
         })
       );
     }
@@ -18,95 +32,136 @@
   var Tag = React.createClass({
     render: function () {
       return (
-        React.DOM.span({
-          className: "react-tagsinput-tag"
-        }, this.props.tag + " ", React.DOM.a({
+        React.createElement("span", {
+          className: this.props.ns + "tagsinput-tag"
+        }, this.props.tag + " ", React.createElement("a", {
           onClick: this.props.remove
-          , className: "react-tagsinput-remove"
+          , className: this.props.ns + "tagsinput-remove"
         }))
       );
     }
   });
 
   var TagsInput = React.createClass({
-    getDefaultProps: function () {
+    propTypes: {
+      value: React.PropTypes.array
+      , valueLink: React.PropTypes.object
+      , placeholder: React.PropTypes.string
+      , classNamespace: React.PropTypes.string
+      , addKeys: React.PropTypes.array
+      , removeKeys: React.PropTypes.array
+      , addOnBlur: React.PropTypes.bool
+      , onChange: React.PropTypes.func
+      , onChangeInput: React.PropTypes.func
+      , onBlur: React.PropTypes.func
+      , onTagAdd: React.PropTypes.func
+      , onTagRemove: React.PropTypes.func
+      , transform: React.PropTypes.func
+      , validate: React.PropTypes.func
+    }
+
+    , getDefaultProps: function () {
       return {
-        tags: []
+        value: []
         , placeholder: "Add a tag"
-        , validate: function (tag) { return tag !== ""; }
+        , classNamespace: "react"
         , addKeys: [13, 9]
         , removeKeys: [8]
+        , addOnBlur: true
+        , onChange: function () { }
+        , onChangeInput: function () { }
+        , onBlur: function () { }
         , onTagAdd: function () { }
         , onTagRemove: function () { }
-        , onChange: function () { }
+        , transform: function (tag) { return tag; }
       };
     }
 
     , getInitialState: function () {
       return {
-        tags: []
-        , tag: ""
+        tag: ""
         , invalid: false
       };
     }
 
-    , componentWillMount: function () {
-      this.setState({
-        tags: this.props.tags.slice(0)
-      });
+    , getValueLink: function () {
+      return this.props.valueLink || {
+        value: this.props.value
+        , requestChange: this.props.onChange
+      };
+    }
+
+    , validate: function (tag) {
+      var valueLink = this.getValueLink();
+      return tag !== "" && valueLink.value.indexOf(tag) === -1;
     }
 
     , getTags: function () {
-      return this.state.tags;
+      var valueLink = this.getValueLink();
+      return valueLink.value;
     }
 
-    , addTag: function () {
-      var tag = this.state.tag.trim();
+    , addTag: function (tag) {
+      var valueLink = this.getValueLink();
 
-      if (this.state.tags.indexOf(tag) !== -1 || !this.props.validate(tag)) {
+      var validate = this.props.validate || this.validate;
+
+      var newTag = this.props.transform(tag);
+
+      tag = typeof newTag === "string" ? newTag : tag;
+
+      if (!validate(tag)) {
         return this.setState({
           invalid: true
         });
       }
 
+      var newValue = valueLink.value.concat([tag]);
+
+      valueLink.requestChange(newValue, tag);
+
       this.setState({
-        tags: this.state.tags.concat([tag])
-        , tag: ""
+        tag: ""
         , invalid: false
       }, function () {
+        this.focus();
         this.props.onTagAdd(tag);
-        this.props.onChange(this.state.tags);
-        this.inputFocus();
       });
     }
 
-    , removeTag: function (i) {
-      var tags = this.state.tags.slice(0);
-      var tag = tags.splice(i, 1);
-      this.setState({
-        tags: tags
-        , invalid: false
-      }, function () {
-        this.props.onTagRemove(tag[0]);
-        this.props.onChange(this.state.tags);
-      });
+    , removeTag: function (tag) {
+      var valueLink = this.getValueLink();
+
+      var clone = valueLink.value.concat([]);
+
+      for (var i = 0; i < clone.length; i += 1) {
+        if (clone[i] === tag) {
+          clone.splice(i, 1);
+          valueLink.requestChange(clone, tag);
+          this.props.onTagRemove(tag);
+          return ;
+        }
+      }
     }
 
     , onKeyDown: function (e) {
+      var valueLink = this.getValueLink();
+
       var add = this.props.addKeys.indexOf(e.keyCode) !== -1
         , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
 
       if (add) {
         e.preventDefault();
-        this.addTag();
+        this.addTag(this.state.tag.trim());
       }
 
-      if (remove && this.state.tags.length > 0 && this.state.tag === "") {
-        this.removeTag(this.state.tags.length - 1);
+      if (remove && valueLink.value.length > 0 && this.state.tag === "") {
+        this.removeTag(valueLink.value[valueLink.value.length - 1]);
       }
     }
 
     , onChange: function (e) {
+      this.props.onChangeInput(e.target.value);
       this.setState({
         tag: e.target.value
         , invalid: false
@@ -114,29 +169,37 @@
     }
 
     , onBlur: function (e) {
-      if (this.state.tag !== "" && !this.state.invalid) {
-        this.addTag();
+      if (this.props.addOnBlur) {
+        this.addTag(this.state.tag.trim());
       }
+
+      this.props.onBlur();
     }
 
-    , inputFocus: function () {
+    , focus: function () {
       this.refs.input.getDOMNode().focus();
     }
 
     , render: function() {
-      var tagNodes = this.state.tags.map(function (tag, i) {
-        return Tag({
+      var valueLink = this.getValueLink();
+
+      var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
+
+      var tagNodes = valueLink.value.map(function (tag, i) {
+        return React.createElement(Tag, {
           key: i
+          , ns: ns
           , tag: tag
-          , remove: this.removeTag.bind(null, i)
+          , remove: this.removeTag.bind(null, tag)
         });
       }.bind(this));
 
       return (
-        React.DOM.div({
-          className: "react-tagsinput"
-        }, tagNodes, Input({
+        React.createElement("div", {
+          className: ns + "tagsinput"
+        }, tagNodes, React.createElement(Input, {
           ref: "input"
+          , ns: ns
           , placeholder: this.props.placeholder
           , value: this.state.tag
           , invalid: this.state.invalid
@@ -148,9 +211,5 @@
     }
   });
 
-  if (typeof module === "object" && module.exports){
-    module.exports = TagsInput;
-  } else {
-    this.ReactTagsInput = TagsInput;
-  }
-}.call(this));
+  return TagsInput;
+});

@@ -10,49 +10,187 @@
   }
 
   pre {
-    background-color: #f1f1f1;
+    background-color: #fff;
+    padding: 10px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #eeefef;
   }
 
   #content {
-    width: 900px;
-    margin: auto;
+    width: 80%;
+    margin: 100px auto;
+  }
+
+  .tagscomponent {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .react-tagsinput {
+    min-height: 53px;
+  }
+
+  .president {
+    cursor: pointer;
+    background-color: #337ab7;
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px;
+    font-family: sans-serif;
   }
   </style>
 </head>
 <body>
 <div id="content"></div>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.10.0/JSXTransformer.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.10.0/react-with-addons.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.js"></script>
 <script src="react-tagsinput.js"></script>
-<script id="source" type="text/jsx">
-/** @jsx React.DOM */
-var validateTag = function (tag) {
-  return tag !== "" && !/_/.test(tag); // lets not allow underscore in our tags.
-};
+<script>
+var presidents = [
+  "George Washington",
+  "John Adams",
+  "Thomas Jefferson",
+  "James Madison",
+  "James Monroe",
+  "John Quincy Adams",
+  "Andrew Jackson",
+  "Martin van Buren",
+  "William H. Harrison",
+  "John Tyler",
+  "James K. Polk",
+  "Zachary Taylor",
+  "Millard Fillmore",
+  "Franklin Pierce",
+  "James Buchanan",
+  "Abraham Lincoln",
+  "Andrew Johnson",
+  "Ulysses S. Grant",
+  "Rutherford Hayes",
+  "James Garfield",
+  "Chester Arthur",
+  "Benjamin Harrison",
+  "Grover Cleveland",
+  "William McKinley",
+  "Theodore Roosevelt",
+  "William Taft",
+  "Woodrow Wilson",
+  "Warren Harding",
+  "Calvin Coolidge",
+  "Herbert C. Hoover",
+  "Franklin Delano Roosevelt",
+  "Harry S Truman",
+  "Dwight David Eisenhower",
+  "John Fitzgerald Kennedy",
+  "Lyndon Baines Johnson",
+  "Richard Milhous Nixon",
+  "Gerald R. Ford",
+  "James Earl Carter",
+  "Ronald Wilson Reagan",
+  "George H. W. Bush",
+  "Bill Jefferson Clinton",
+  "George W. Bush",
+  "Barack Obama"
+];
 
-var keyCodes = [13, 9, 32]; // add tags when keys Enter (13), Tab (9) or Space (32) is down.
 
-var App = React.createClass({
+</script>
+<script id="source">
+var TagsComponent = React.createClass({
+  displayName: "TagsComponent",
+
+  mixins: [React.addons.LinkedStateMixin],
+
   getInitialState: function () {
     return {
-      text: ""
+      tags: ["John Tyler", "James K. Polk"]
+      , completions: []
     };
-  }
+  },
 
-  , onChange: function (tags) {
+  complete: function (value) {
+    value = value.toLowerCase();
+
+    if (value === "") {
+      return this.setState({
+        completions: []
+      });
+    }
+
     this.setState({
-      text: tags.join(", ")
+      completions: presidents.filter(function (comp) {
+        var norm = comp.toLowerCase();
+        return norm.substr(0, value.length) == value && this.state.tags.indexOf(comp) == -1;
+      }.bind(this))
     });
-  }
+  },
 
-  , render: function () {
+  transform: function (tag) {
+    if (this.state.completions.length === 1) {
+      return this.state.completions[0];
+    }
+  },
+
+  validate: function (tag) {
+    return this.state.completions.indexOf(tag) > -1;
+  },
+
+  change: function (tags) {
+    this.setState({
+      tags: tags
+      , completions: []
+    });
+  },
+
+  render: function () {
+    var completionNodes = this.state.completions.map(function (comp) {
+      var add = function (e) {
+        this.refs.tags.addTag(comp);
+      }.bind(this);
+
+      return React.createElement("span", {},React.createElement("a", { className: "president", onClick: add }, comp)," ");
+    }.bind(this));
+
+    var tagsInputProps = {
+      ref: "tags",
+      value: this.state.tags,
+      onChange: this.change,
+      onChangeInput: this.complete,
+      transform: this.transform,
+      validate: this.validate,
+      addOnBlur: false,
+      placeholder: "President"
+    };
+
+    return (
+      React.createElement("div", { className: "tagscomponent" },
+        React.createElement(ReactTagsInput, tagsInputProps),
+        React.createElement("div", { style: { marginTop: "10px" } }, completionNodes)
+      )
+    );
+  }
+});
+</script>
+<script type="text/jsx">
+/** @jsx React.DOM */
+
+var App = React.createClass({
+  render: function () {
     var source = document.getElementById("source").textContent;
 
     return (
       <div>
-        <h1>Tag input component</h1>
-        <ReactTagsInput validate={validateTag} onChange={this.onChange} addKeys={[13, 9, 32]} />
-        <h4>Tags: {this.state.text}</h4>
+        <h1>Input some US presidents</h1>
+        <TagsComponent />
         <h2>Source</h2>
         <pre>{source}</pre>
       </div>
@@ -61,7 +199,7 @@ var App = React.createClass({
 });
 
 window.onload = function () {
-  React.renderComponent(
+  React.render(
     <App />
     , document.getElementById("content")
   );
