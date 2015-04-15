@@ -38,25 +38,35 @@
 <body>
   <div id="tags"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.min.js"></script>
   <script src="../react-tagsinput.js"></script>
   <script>
     var TagsComponent = React.createClass({
-      displayName: 'TagsComponent',
+      displayName: "TagsComponent",
+
+      mixins: [React.addons.LinkedStateMixin],
+
+      getInitialState: function() {
+        return {
+          tags: ["tag1", "tag2"]
+        };
+      },
+
       saveTags: function () {
-        console.log('tags: ', this.refs.tags.getTags().join(', '));
+        console.log("tags: ", this.tags.tags.join(", "));
       },
 
       render: function () {
         return (
-          React.createElement('div', null,
-            React.createElement(ReactTagsInput, {ref: 'tags', tags: ['tag1', 'tag2']}),
-            React.createElement('button', {onClick: this.saveTags}, 'Save')
+          React.createElement("div", null,
+            React.createElement(ReactTagsInput, {valueLink: this.linkState("tags")}),
+            React.createElement("button", {onClick: this.saveTags}, "Save")
           )
         );
       }
     });
-    React.render(React.createElement(TagsComponent, null), document.getElementById('tags'));
+
+    React.render(React.createElement(TagsComponent, null), document.getElementById("tags"));
   </script>
 </body>
 </html>

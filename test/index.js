@@ -9,164 +9,237 @@ var React = require("react/addons")
 
 var TagsInput = require("../react-tagsinput");
 
+
+var randomString = function () {
+  return Math.random().toString(36).substring(7);
+};
+
+var TestComponent = React.createClass({
+  mixins: [React.addons.LinkedStateMixin]
+
+  , getInitialState: function () {
+    return { tags: [] }
+  }
+
+  , tagsInput: function () {
+    return this.refs.tagsinput;
+  }
+
+  , render: function () {
+    return React.createElement(TagsInput, React.__spread({}, {
+      ref: "tagsinput"
+      , valueLink: this.linkState("tags")
+    }, this.props));
+  }
+});
+
 describe("TagsInput", function () {
   var createTagsInput = function (props) {
-    return TestUtils.renderIntoDocument(React.createElement(TagsInput, props));
+    var component = TestUtils.renderIntoDocument(React.createElement(TestComponent, props));
+    return component.tagsInput();
   };
 
-  var addTag = function (tagsinput, tag) {
+  var addTag = function (tagsinput, tag, blur) {
     var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
 
     TestUtils.Simulate.change(input, { target: { value: tag } });
-    TestUtils.Simulate.keyDown(input, { keyCode: 13 });
+
+    if (blur) {
+      TestUtils.Simulate.blur(input);
+    } else {
+      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
+    }
 
     return input;
   };
 
-  describe("main functionality", function () {
-    it("should add a tag on enter", function () {
-      var tagsinput = createTagsInput({
-        classNamespace: ""
-      });
-      var input = addTag(tagsinput, "test");
+  var removeTagBS = function (tagsinput) {
+    var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
 
-      assert.equal(tagsinput.getTags().length, 1);
-      assert.equal(tagsinput.getTags()[0], "test");
-      assert.equal(input.props.value, "");
+    TestUtils.Simulate.change(input, { target: { value: "" } });
+    TestUtils.Simulate.keyDown(input, { keyCode: 8 });
+
+    return input;
+  };
+
+  var removeTagIndex = function (tagsinput, index) {
+    var className = tagsinput.props.classNamespace + "-tagsinput-remove";
+    var tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, className);
+    var tag = tags[index];
+
+    if (tag) {
+      TestUtils.Simulate.click(tag.getDOMNode());
+
+      return tag;
+    }
+  };
+
+  describe("basic", function () {
+    it("should add a tag", function () {
+      var tagsinput = createTagsInput();
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag, "a tag should have been added");
     });
 
-    it("should not add a duplicate tag", function () {
+    it("should remove a tag", function () {
       var tagsinput = createTagsInput();
-      var input = addTag(tagsinput, "");
+      var tag = randomString();
 
-      assert.equal(tagsinput.getTags().length, 0);
-      assert.equal(input.props.value, "");
-      assert.ok(/invalid/.test(input.props.className));
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag, "a tag should have been added");
+
+      removeTagBS(tagsinput);
+
+      tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "there should now be zero tags");
     });
 
-    it("should remove a tag on backspace", function () {
+    it("should remove nth tag", function () {
       var tagsinput = createTagsInput();
-      var input = addTag(tagsinput, "tag1");
-      addTag(tagsinput, "tag2");
 
-      assert.equal(tagsinput.getTags().length, 2);
+      var tag1 = randomString()
+        , tag2 = randomString()
+        , tag3 = randomString();
 
-      TestUtils.Simulate.keyDown(input, { keyCode: 8 });
+      addTag(tagsinput, tag1);
+      addTag(tagsinput, tag2);
+      addTag(tagsinput, tag3);
 
-      assert.equal(tagsinput.getTags().length, 1);
-      assert.equal(tagsinput.getTags()[0], "tag1");
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag1);
+      assert.equal(tags[1], tag2);
+      assert.equal(tags[2], tag3);
+      assert.equal(tags.length, 3);
+
+      removeTagIndex(tagsinput, 1);
+
+      tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag1);
+      assert.equal(tags[1], tag3);
+      assert.equal(tags.length, 2);
     });
 
-    it("should remove a tag on click", function () {
+    it("should add invalid class to invalid tag", function () {
       var tagsinput = createTagsInput();
-      addTag(tagsinput, "tag1");
-      addTag(tagsinput, "tag2");
+      var tag = "";
 
-      assert.equal(tagsinput.getTags().length, 2);
+      var input = addTag(tagsinput, tag);
 
-      var removeNodes = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, "react-tagsinput-remove");
+      var tags = tagsinput.getTags();
 
-      TestUtils.Simulate.click(removeNodes[0]);
+      assert.equal(tags.length, 0, "a tag should not have been added");
 
-      assert.equal(tagsinput.getTags().length, 1);
-      assert.equal(tagsinput.getTags()[0], "tag2");
+      assert.ok(/invalid/.test(input.props.className), "invalid should be among input classes");
     });
 
     it("should add a tag on blur", function () {
       var tagsinput = createTagsInput();
-      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+      var tag = randomString();
 
-      TestUtils.Simulate.change(input, { target: { value: "test" } });
-      TestUtils.Simulate.blur(input);
+      addTag(tagsinput, tag, true);
 
-      assert.equal(tagsinput.getTags().length, 1);
-      assert.equal(tagsinput.getTags()[0], "test");
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag, "a tag should have been added");
+    });
+
+    it("should not add a tag on blur", function () {
+      var tagsinput = createTagsInput({
+        addOnBlur: false
+      });
+      var tag = randomString();
+
+      addTag(tagsinput, tag, true);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "there should be no tags");
     });
   });
 
-  describe("props and methods", function () {
-    it("should test onBeforeTagAdd validation", function () {
-      var tagsinput = createTagsInput({ onBeforeTagAdd: function () { return false; } });
-      var input = addTag(tagsinput, "test");
-
-      assert.equal(tagsinput.getTags().length, 0);
-      assert.equal(input.props.value, "test");
-    });
-
-    it("should test onBeforeTagAdd transformation", function () {
-      var tagsinput = createTagsInput({ onBeforeTagAdd: function () { return "test1"; } });
-      var input = addTag(tagsinput, "test");
-
-      assert.equal(tagsinput.getTags().length, 1);
-      assert.equal(tagsinput.getTags()[0], "test1");
-    });
-
-    it("should test onBeforeTagRemove validation", function () {
-      var tagsinput = createTagsInput({ onBeforeTagRemove: function () { return false; } });
-      var input = addTag(tagsinput, "test");
-
-      assert.equal(tagsinput.getTags().length, 1);
-      tagsinput.removeTag("test");
-      assert.equal(tagsinput.getTags().length, 1);
-    });
-
-    it("should test onChangeInput", function () {
-      var value = "";
+  describe("props", function (done) {
+    it("should test value and onChange instead of valueLink", function () {
       var tagsinput = createTagsInput({
-        onChangeInput: function (v) { value = v; }
-        , onBeforeTagAdd: function () { return false; }
+        value: ["test"]
+        , onChange: done
+        , valueLink: null
       });
-      var input = addTag(tagsinput, "test");
 
-      assert.equal(tagsinput.getTags().length, 0);
-      assert.equal(input.props.value, value);
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], "test", "there should be one tag");
+
+      addTag(tagsinput, "test");
     });
 
-    it("should call onBlur prop on blur event and DO NOT add tag if addOnBlur == false", function () {
-      var value = "";
+    it("should test classNamespace", function () {
       var tagsinput = createTagsInput({
-        onBlur: function (v) { value = v; },
-        addOnBlur: false
+        classNamespace: ""
       });
-      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
 
-      TestUtils.Simulate.change(input, { target: { value: "test" } });
-      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
-      TestUtils.Simulate.change(input, { target: { value: "test2" } });
-      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
-      TestUtils.Simulate.change(input, { target: { value: "test3" } });
-      TestUtils.Simulate.blur(input);
+      var tag = randomString();
 
-      assert.equal(tagsinput.getTags().length, 2);
-      assert.deepEqual(value, ["test", "test2"]);
+      var input = addTag(tagsinput, tag, true);
+
+      assert.equal(input.props.className.trim(), "tagsinput-input", "there should be no namespace");
     });
 
-    it("should call onBlur prop on blur event and add tag", function () {
-      var value = "";
+    it("should test transform prop", function () {
       var tagsinput = createTagsInput({
-        onBlur: function (v) { value = v; }
+        transform: function (tag) {
+          return "test";
+        }
       });
-      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+      var tag = randomString();
 
-      TestUtils.Simulate.change(input, { target: { value: "test" } });
-      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
-      TestUtils.Simulate.change(input, { target: { value: "test2" } });
-      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
-      TestUtils.Simulate.change(input, { target: { value: "test3" } });
-      TestUtils.Simulate.blur(input);
-      TestUtils.Simulate.change(input, { target: { value: "" } });
-      TestUtils.Simulate.blur(input);
+      addTag(tagsinput, tag);
 
-      assert.equal(tagsinput.getTags().length, 3);
-      assert.deepEqual(value, ["test", "test2", "test3"]);
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], "test", "tag should have been transformed to test");
+    });
+  });
+
+  describe("coverage", function (done) {
+    it("should test transform prop without returning a string", function () {
+      var tagsinput = createTagsInput({
+        transform: function (tag) {
+          return false;
+        }
+      });
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag, "tag should not have been transformed to test");
     });
 
-    it("should add a tag with addTag", function () {
-      var tagsinput = createTagsInput();
-      tagsinput.addTag("test");
+    it("should without any handeling", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null
+      });
 
-      assert.equal(tagsinput.getTags().length, 1);
-      assert.equal(tagsinput.getTags()[0], "test");
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "there should be no tags");
     });
   });
 });

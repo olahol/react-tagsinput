@@ -31,7 +31,7 @@
 </head>
 <body>
   <div id="tags"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.min.js"></script>
   <script src="../react-tagsinput.js"></script>
   <script>
     var presidents = [
@@ -84,13 +84,18 @@
     var TagsComponent = React.createClass({
       displayName: "TagsComponent",
 
+      mixins: [React.addons.LinkedStateMixin],
+
       getInitialState: function () {
         return {
-          completions: []
+          tags: []
+          , completions: []
         };
       },
 
       complete: function (value) {
+        value = value.toLowerCase();
+
         if (value === "") {
           return this.setState({
             completions: []
@@ -99,26 +104,26 @@
 
         this.setState({
           completions: presidents.filter(function (comp) {
-            return comp.substr(0, value.length) == value && this.refs.tags.getTags().indexOf(comp) == -1;
+            var norm = comp.toLowerCase();
+            return norm.substr(0, value.length) == value && this.state.tags.indexOf(comp) == -1;
           }.bind(this))
         });
       },
 
-      beforeAdd: function (tag) {
-        if (presidents.indexOf(tag) !== -1) {
-          return true;
-        }
-
+      transform: function (tag) {
         if (this.state.completions.length === 1) {
           return this.state.completions[0];
         }
-
-        return false;
       },
 
-      add: function () {
+      validate: function (tag) {
+        return this.state.completions.indexOf(tag) > -1;
+      },
+
+      change: function (tags) {
         this.setState({
-          completions: []
+          tags: tags
+          , completions: []
         });
       },
 
@@ -132,11 +137,11 @@
         }.bind(this));
 
         var tagsInputProps = {
-          ref: "tags",
-          tags: [],
+          value: this.state.tags,
+          onChange: this.change,
           onChangeInput: this.complete,
-          onTagAdd: this.add,
-          onBeforeTagAdd: this.beforeAdd,
+          transform: this.transform,
+          validate: this.validate,
           addOnBlur: false,
           placeholder: "President"
         };

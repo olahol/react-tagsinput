@@ -27,9 +27,15 @@ bower install react-tagsinput --save
 ## Example
 
 ```javascript
-var TagsInput = require('./react-tagsinput');
+var TagsInput = require('react-tagsinput');
 
 var App = React.createClass({
+  mixins: [React.addons.LinkedStateMixin],
+
+  getInitialState: function () {
+    return { tags: [] };
+  },
+
   saveTags: function () {
     console.log('tags: ', this.refs.tags.getTags().join(', '));
   },
@@ -37,7 +43,7 @@ var App = React.createClass({
   render: function () {
     return (
       <div>
-        <TagsInput ref="tags" tags={["tag1", "tag2"]} />
+        <TagsInput ref='tags' valueLink={this.linkState('tags')} />
         <button onClick={this.saveTags}>Save</button>
       </div>
     );
@@ -45,13 +51,19 @@ var App = React.createClass({
 });
 ```
 
+More examples in `example/`.
+
 ## API
 
 ### Props
 
-##### tags
+##### value
 
-Tags to preloaded, default is `[]`.
+An array of strings representing tags. This prop or `valueLink` is required.
+
+##### valueLink
+
+A ReactLink object.
 
 ##### placeholder
 
@@ -69,43 +81,48 @@ is `true`.
 ##### validate
 
 A function which returns true if a tag is valid, default function returns
-true for every string but the empty string.
+true for every string but the empty string and non unique tags.
+
+##### transform
+
+A function which returns transforms a tag before it is added, the default
+function is just identity (it returns the same tag). This is useful for
+tag completion.
 
 ##### addKeys
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
+##### removeKeys
+
+An array of key codes that remove a tag, default is `[8]` (Backspace).
+
 ##### onChange
 
-Callback when the tag input changes, the argument is an array of the current tags.
-
-##### onBlur
-
-Callback when input field blurs, the argument is an array of the current tags.
+Callback when the tag input changes, the argument is an array of the
+current tags and the tag which was added or removed.
 
 ##### onChangeInput
 
 Callback when the input changes, the argument is the value of the input.
 
+##### onBlur
+
+Callback when input field blurs.
+
 ##### onTagAdd
 
 Callback when a tag is added, argument is the added tag.
-
-##### onBeforeTagAdd
-
-Callback before a tag is added, if it returns a `string` the tag is
-transformed if it returns a falsy value the tag is not added.
 
 ##### onTagRemove
 
 Callback when a tag is removed, argument is the removed tag.
 
-##### onBeforeTagRemove
-
-Callback before a tag removed, if it returns a falsy value the tag
-is not removed.
-
 ### Methods
+
+##### focus()
+
+Focus on the tag input.
 
 ##### getTags()
 
@@ -115,9 +132,9 @@ Returns an array of the current tags.
 
 Adds a tag.
 
-##### inputFocus()
+##### removeTag(tag)
 
-Focus on the tag input.
+Removes a tag.
 
 ## Styles
 

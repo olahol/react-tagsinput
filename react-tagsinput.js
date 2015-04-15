@@ -43,89 +43,110 @@
   });
 
   var TagsInput = React.createClass({
-    getDefaultProps: function () {
+    propTypes: {
+      value: React.PropTypes.array
+      , valueLink: React.PropTypes.object
+      , placeholder: React.PropTypes.string
+      , classNamespace: React.PropTypes.string
+      , addKeys: React.PropTypes.array
+      , removeKeys: React.PropTypes.array
+      , addOnBlur: React.PropTypes.bool
+      , onChange: React.PropTypes.func
+      , onChangeInput: React.PropTypes.func
+      , onBlur: React.PropTypes.func
+      , onTagAdd: React.PropTypes.func
+      , onTagRemove: React.PropTypes.func
+      , transform: React.PropTypes.func
+      , validate: React.PropTypes.func
+    }
+
+    , getDefaultProps: function () {
       return {
-        tags: []
+        value: []
         , placeholder: "Add a tag"
-        , validate: function (tag) { return tag !== ""; }
+        , classNamespace: "react"
         , addKeys: [13, 9]
         , removeKeys: [8]
-        , onBeforeTagAdd: function () { return true; }
-        , onBeforeTagRemove: function () { return true; }
-        , onTagAdd: function () { }
-        , onTagRemove: function () { }
+        , addOnBlur: true
         , onChange: function () { }
         , onChangeInput: function () { }
         , onBlur: function () { }
-        , classNamespace: "react"
-        , addOnBlur: true
+        , onTagAdd: function () { }
+        , onTagRemove: function () { }
+        , transform: function (tag) { return tag; }
       };
     }
 
     , getInitialState: function () {
       return {
-        tags: []
-        , tag: ""
+        tag: ""
         , invalid: false
       };
     }
 
-    , componentWillMount: function () {
-      this.setState({
-        tags: this.props.tags.slice(0)
-      });
+    , getValueLink: function () {
+      return this.props.valueLink || {
+        value: this.props.value
+        , requestChange: this.props.onChange
+      };
+    }
+
+    , validate: function (tag) {
+      var valueLink = this.getValueLink();
+      return tag !== "" && valueLink.value.indexOf(tag) === -1;
     }
 
     , getTags: function () {
-      return this.state.tags;
+      var valueLink = this.getValueLink();
+      return valueLink.value;
     }
 
-    , addTag: function (tag, cb) {
-      var before = this.props.onBeforeTagAdd(tag);
-      var valid =  !!before && this.props.validate(tag);
+    , addTag: function (tag) {
+      var valueLink = this.getValueLink();
 
-      tag = typeof before === "string" ? before : tag;
+      var validate = this.props.validate || this.validate;
 
-      if (this.state.tags.indexOf(tag) !== -1 || !valid) {
+      var newTag = this.props.transform(tag);
+
+      tag = typeof newTag === "string" ? newTag : tag;
+
+      if (!validate(tag)) {
         return this.setState({
           invalid: true
         });
       }
 
+      var newValue = valueLink.value.concat([tag]);
+
+      valueLink.requestChange(newValue, tag);
+
       this.setState({
-        tags: this.state.tags.concat([tag])
-        , tag: ""
+        tag: ""
         , invalid: false
       }, function () {
+        this.focus();
         this.props.onTagAdd(tag);
-        this.props.onChange(this.state.tags);
-        this.inputFocus();
-        if (cb) {
-          return cb();
-        }
       });
     }
 
     , removeTag: function (tag) {
-      var valid = this.props.onBeforeTagRemove(tag);
+      var valueLink = this.getValueLink();
 
-      if (!valid) { return ; }
+      var clone = valueLink.value.concat([]);
 
-      var tags = this.state.tags.slice(0)
-        , i = tags.indexOf(tag);
-
-      tags.splice(i, 1);
-
-      this.setState({
-        tags: tags
-        , invalid: false
-      }, function () {
-        this.props.onTagRemove(tag);
-        this.props.onChange(this.state.tags);
-      });
+      for (var i = 0; i < clone.length; i += 1) {
+        if (clone[i] === tag) {
+          clone.splice(i, 1);
+          valueLink.requestChange(clone, tag);
+          this.props.onTagRemove(tag);
+          return ;
+        }
+      }
     }
 
     , onKeyDown: function (e) {
+      var valueLink = this.getValueLink();
+
       var add = this.props.addKeys.indexOf(e.keyCode) !== -1
         , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
 
@@ -134,8 +155,8 @@
         this.addTag(this.state.tag.trim());
       }
 
-      if (remove && this.state.tags.length > 0 && this.state.tag === "") {
-        this.removeTag(this.state.tags[this.state.tags.length - 1]);
+      if (remove && valueLink.value.length > 0 && this.state.tag === "") {
+        this.removeTag(valueLink.value[valueLink.value.length - 1]);
       }
     }
 
@@ -148,29 +169,23 @@
     }
 
     , onBlur: function (e) {
-      var _this = this;
-      if (!this.props.addOnBlur) {
-        this.props.onBlur(this.state.tags);
-        return ;
+      if (this.props.addOnBlur) {
+        this.addTag(this.state.tag.trim());
       }
 
-      if (this.state.tag !== "" && !this.state.invalid) {
-        return this.addTag(this.state.tag.trim(), function () {
-          _this.props.onBlur(_this.state.tags);
-        });
-      }
-
-      _this.props.onBlur(_this.state.tags);
+      this.props.onBlur();
     }
 
-    , inputFocus: function () {
+    , focus: function () {
       this.refs.input.getDOMNode().focus();
     }
 
     , render: function() {
+      var valueLink = this.getValueLink();
+
       var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
 
-      var tagNodes = this.state.tags.map(function (tag, i) {
+      var tagNodes = valueLink.value.map(function (tag, i) {
         return React.createElement(Tag, {
           key: i
           , ns: ns

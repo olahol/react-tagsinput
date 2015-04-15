@@ -1,3 +1,12 @@
+### 1.0.0 (2015-04-15)
+
+* Remove tags from internal state, TagsInput now behaves as other react
+  input elements taking its value from a prop.
+* Remove onBeforeTagAdd, onBeforeTagRemove.
+* Rename method `inputFocus` to `focus`.
+* Rename prop `tags` to `value`.
+* Add transform.
+
 ### 0.3.1 (2015-01-20)
 
 * Add `onBlur` event
