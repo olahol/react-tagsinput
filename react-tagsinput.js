@@ -46,6 +46,7 @@
     propTypes: {
       value: React.PropTypes.array
       , valueLink: React.PropTypes.object
+      , defaultValue: React.PropTypes.array
       , placeholder: React.PropTypes.string
       , classNamespace: React.PropTypes.string
       , addKeys: React.PropTypes.array
@@ -62,7 +63,7 @@
 
     , getDefaultProps: function () {
       return {
-        value: []
+        defaultValue: []
         , placeholder: "Add a tag"
         , classNamespace: "react"
         , addKeys: [13, 9]
@@ -78,16 +79,42 @@
     }
 
     , getInitialState: function () {
+      var value = this.props.defaultValue.slice(0);
+
       return {
-        tag: ""
+        value: value
+        , tag: ""
         , invalid: false
       };
     }
 
+    , componentWillUpdate: function (nextProps) {
+      if (!this.isUncontrolled() && this.isUncontrolled(nextProps)) {
+        this.setState({ value: this.props.defaultValue.slice(0) });
+      }
+    }
+
+    , isUncontrolled: function (props) {
+      props = props || this.props;
+      return !props.value && !props.valueLink;
+    }
+
     , getValueLink: function () {
-      return this.props.valueLink || {
-        value: this.props.value
-        , requestChange: this.props.onChange
+      if (!this.isUncontrolled()) {
+        return this.props.valueLink || {
+          value: this.props.value
+          , requestChange: this.props.onChange
+        };
+      }
+
+      return {
+        value: this.state.value
+        , requestChange: function (tags) {
+          this.setState({
+            value: tags
+          });
+          this.props.onChange(tags);
+        }.bind(this)
       };
     }
 

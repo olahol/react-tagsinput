@@ -1,3 +1,8 @@
+### 1.1.0 (2015-04-17)
+
+* Add uncontrolled usage.
+* Add defaultValue prop.
+
 ### 1.0.0 (2015-04-15)
 
 * Remove tags from internal state, TagsInput now behaves as other react

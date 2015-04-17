@@ -26,6 +26,8 @@ bower install react-tagsinput --save
 
 ## Example
 
+Controlled usage:
+
 ```javascript
 var TagsInput = require('react-tagsinput');
 
@@ -51,6 +53,27 @@ var App = React.createClass({
 });
 ```
 
+Uncontrolled usage:
+
+```javascript
+var TagsInput = require('react-tagsinput');
+
+var App = React.createClass({
+  saveTags: function () {
+    console.log('tags: ', this.refs.tags.getTags().join(', '));
+  },
+
+  render: function () {
+    return (
+      <div>
+        <TagsInput ref='tags' />
+        <button onClick={this.saveTags}>Save</button>
+      </div>
+    );
+  }
+});
+```
+
 More examples in `example/`.
 
 ## API
@@ -64,6 +87,11 @@ An array of strings representing tags. This prop or `valueLink` is required.
 ##### valueLink
 
 A ReactLink object.
+
+##### defaultValue
+
+Initialize the component with a value. This is only used when `value` is `null`
+(i.e when the component is uncontrolled.)
 
 ##### placeholder
 

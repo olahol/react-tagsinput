@@ -25,6 +25,10 @@ var TestComponent = React.createClass({
     return this.refs.tagsinput;
   }
 
+  , setValue: function (value) {
+    this.setState({ value: value });
+  }
+
   , render: function () {
     return React.createElement(TagsInput, React.__spread({}, {
       ref: "tagsinput"
@@ -36,7 +40,7 @@ var TestComponent = React.createClass({
 describe("TagsInput", function () {
   var createTagsInput = function (props) {
     var component = TestUtils.renderIntoDocument(React.createElement(TestComponent, props));
-    return component.tagsInput();
+    return component;
   };
 
   var addTag = function (tagsinput, tag, blur) {
@@ -76,7 +80,7 @@ describe("TagsInput", function () {
 
   describe("basic", function () {
     it("should add a tag", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput().tagsInput();
       var tag = randomString();
 
       addTag(tagsinput, tag);
@@ -87,7 +91,7 @@ describe("TagsInput", function () {
     });
 
     it("should remove a tag", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput().tagsInput();
       var tag = randomString();
 
       addTag(tagsinput, tag);
@@ -104,7 +108,7 @@ describe("TagsInput", function () {
     });
 
     it("should remove nth tag", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput().tagsInput();
 
       var tag1 = randomString()
         , tag2 = randomString()
@@ -131,7 +135,7 @@ describe("TagsInput", function () {
     });
 
     it("should add invalid class to invalid tag", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput().tagsInput();
       var tag = "";
 
       var input = addTag(tagsinput, tag);
@@ -144,7 +148,7 @@ describe("TagsInput", function () {
     });
 
     it("should add a tag on blur", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput().tagsInput();
       var tag = randomString();
 
       addTag(tagsinput, tag, true);
@@ -157,7 +161,7 @@ describe("TagsInput", function () {
     it("should not add a tag on blur", function () {
       var tagsinput = createTagsInput({
         addOnBlur: false
-      });
+      }).tagsInput();
       var tag = randomString();
 
       addTag(tagsinput, tag, true);
@@ -174,7 +178,7 @@ describe("TagsInput", function () {
         value: ["test"]
         , onChange: done
         , valueLink: null
-      });
+      }).tagsInput();
 
       var tags = tagsinput.getTags();
 
@@ -186,7 +190,7 @@ describe("TagsInput", function () {
     it("should test classNamespace", function () {
       var tagsinput = createTagsInput({
         classNamespace: ""
-      });
+      }).tagsInput();
 
       var tag = randomString();
 
@@ -200,7 +204,7 @@ describe("TagsInput", function () {
         transform: function (tag) {
           return "test";
         }
-      });
+      }).tagsInput();
       var tag = randomString();
 
       addTag(tagsinput, tag);
@@ -211,13 +215,50 @@ describe("TagsInput", function () {
     });
   });
 
+  describe("uncontrolled", function (done) {
+    it("should render without any handlers", function () {
+      var tag1 = randomString()
+        , tag2 = randomString();
+
+      var component = createTagsInput({
+        valueLink: null
+        , defaultValue: [tag1]
+      });
+
+      var tagsinput = component.tagsInput();
+
+      addTag(tagsinput, tag2);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag1);
+      assert.equal(tags[1], tag2);
+
+      component.setProps({
+        value: []
+      });
+
+      tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "there shouldn't be any tags");
+
+      component.setProps({
+        value: null
+      });
+
+      tags = tagsinput.getTags();
+
+      assert.equal(tags[0], tag1);
+    });
+  });
+
   describe("coverage", function (done) {
     it("should test transform prop without returning a string", function () {
       var tagsinput = createTagsInput({
         transform: function (tag) {
           return false;
         }
-      });
+      }).tagsInput();
 
       var tag = randomString();
 
@@ -228,22 +269,8 @@ describe("TagsInput", function () {
       assert.equal(tags[0], tag, "tag should not have been transformed to test");
     });
 
-    it("should render without any handlers", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null
-      });
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "there should be no tags");
-    });
-
     it("should focus input", function () {
-      var tagsinput = createTagsInput();
+      var tagsinput = createTagsInput().tagsInput();
 
       tagsinput.focus();
     });
