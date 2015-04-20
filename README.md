@@ -82,7 +82,7 @@ More examples in `example/`.
 
 ##### value
 
-An array of strings representing tags. This prop or `valueLink` is required.
+An array of tags. This prop or `valueLink` is required.
 
 ##### valueLink
 
@@ -109,7 +109,7 @@ is `true`.
 ##### validate
 
 A function which returns true if a tag is valid, default function returns
-true for every string but the empty string and non unique tags.
+true for non-empty strings and unique tags.
 
 ##### transform
 
@@ -165,20 +165,24 @@ Removes a tag.
 
 ## Styles
 
-Look at `react-tagsinput.css` for an idea on how to style this component.
+Look at [react-tagsinput.css](https://github.com/olahol/react-tagsinput/blob/master/react-tagsinput.css) for an idea on how to style this component.
 
 ## Addendum: Input completion
 
-An example of how to add input completion to the `TagsInput` component can
-be found in `examples/completion.html`.
+An example of how to add input completion to the `TagsInput` component can be found in [examples/completion.html](https://github.com/olahol/react-tagsinput/blob/master/example/completion.html).
 
 [![Completion Demo](https://cdn.rawgit.com/olahol/react-tagsinput/master/example/demo_completion.gif "Completion Demo")](https://github.com/olahol/react-tagsinput/blob/master/example/completion.html)
+
+## Addendum: Components instead of strings as tags
+
+An example of how to use React components instead of strings as tags can be found in [examples/component.html](https://github.com/olahol/react-tagsinput/blob/master/example/component.html).
 
 ## Contributors
 
 * Ola Holmström (@olahol)
 * Dmitri Voronianski (@voronianski)
 * Artem Vovsya (@avovsya)
+* scott c (@scoarescoare)
 
 ---
 

@@ -1,3 +1,8 @@
+### 1.2.0 (2015-04-21)
+
+* Allow for non-strings as tags.
+* Move space from component to css.
+
 ### 1.1.0 (2015-04-17)
 
 * Add uncontrolled usage.

@@ -170,6 +170,26 @@ describe("TagsInput", function () {
 
       assert.equal(tags.length, 0, "there should be no tags");
     });
+
+    it("should work with non-string tags", function () {
+      var tagsinput = createTagsInput({
+        transform: function (tag) {
+          return React.createElement("b", {}, tag);
+        }
+      }).tagsInput();
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 1, "there should be a tags");
+
+      var bolds = TestUtils.scryRenderedDOMComponentsWithTag(tagsinput, "b");
+
+      assert.equal(bolds.length, 1, "there should be one bold tag");
+    });
   });
 
   describe("props", function (done) {

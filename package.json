@@ -1,6 +1,6 @@
 {
   "name": "react-tagsinput",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "dependencies": {
@@ -31,7 +31,8 @@
   "author": "Ola Holmström",
   "contributors": [
     { "name": "Dmitri Voronianski", "email": "dmitri.voronianski@gmail.com" },
-    { "name": "Artem Vovsya", "email": "avovsya@gmail.com" }
+    { "name": "Artem Vovsya", "email": "avovsya@gmail.com" },
+    { "name": "scott c", "email": "" }
   ],
   "license": "MIT",
   "bugs": {

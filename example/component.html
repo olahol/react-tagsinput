@@ -41,7 +41,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.min.js"></script>
   <script src="../react-tagsinput.js"></script>
   <script>
-    var Underscore = React.createClass({
+    var Underline = React.createClass({
       render: function () {
         return React.createElement("u", null, this.props.value);
       }
@@ -63,7 +63,7 @@
       },
 
       transform: function (tag) {
-        return React.createElement(Underscore, { value: tag });
+        return React.createElement(Underline, { value: tag });
       },
 
       saveTags: function () {
