@@ -34,7 +34,7 @@
       return (
         React.createElement("span", {
           className: this.props.ns + "tagsinput-tag"
-        }, this.props.tag, " ", React.createElement("a", {
+        }, this.props.tag, React.createElement("a", {
           onClick: this.props.remove
           , className: this.props.ns + "tagsinput-remove"
         }))
@@ -93,7 +93,8 @@
 
     , validate: function (tag) {
       var valueLink = this.getValueLink();
-      return typeof tag === "string" && tag !== "" && valueLink.value.indexOf(tag) === -1;
+
+      return tag !== "" && valueLink.value.indexOf(tag) === -1;
     }
 
     , getTags: function () {
