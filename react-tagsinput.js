@@ -96,7 +96,7 @@
 
     , isUncontrolled: function (props) {
       props = props || this.props;
-      return !props.value && !props.valueLink;
+      return !props.value.length && !props.valueLink;
     }
 
     , getValueLink: function () {
