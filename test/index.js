@@ -190,13 +190,41 @@ describe("TagsInput", function () {
 
       assert.equal(bolds.length, 1, "there should be one bold tag");
     });
+
+    it("async validation of tags", function (done) {
+      var tagsinput = createTagsInput({
+        validate: function (tag, cb) {
+          setTimeout(function () {
+            cb(true);
+          }, 50);
+        }
+      }).tagsInput();
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "no tags because validation is not done");
+
+      setTimeout(function () {
+        var tags = tagsinput.getTags();
+
+        assert.equal(tags[0], tag, "there should be a tag here now");
+
+        done()
+      }, 100);
+    });
   });
 
-  describe("props", function (done) {
-    it("should test value and onChange instead of valueLink", function () {
+  describe("props", function () {
+    it("should test value and onChange instead of valueLink", function (done) {
       var tagsinput = createTagsInput({
         value: ["test"]
-        , onChange: done
+        , onChange: function () {
+          done();
+        }
         , valueLink: null
       }).tagsInput();
 
@@ -204,7 +232,9 @@ describe("TagsInput", function () {
 
       assert.equal(tags[0], "test", "there should be one tag");
 
-      addTag(tagsinput, "test");
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
     });
 
     it("should test classNamespace", function () {
@@ -235,7 +265,7 @@ describe("TagsInput", function () {
     });
   });
 
-  describe("uncontrolled", function (done) {
+  describe("uncontrolled", function () {
     it("should render without any handlers", function () {
       var tag1 = randomString()
         , tag2 = randomString();
@@ -272,7 +302,7 @@ describe("TagsInput", function () {
     });
   });
 
-  describe("coverage", function (done) {
+  describe("coverage", function () {
     it("should test transform prop without returning a string", function () {
       var tagsinput = createTagsInput({
         transform: function (tag) {
@@ -293,6 +323,20 @@ describe("TagsInput", function () {
       var tagsinput = createTagsInput().tagsInput();
 
       tagsinput.focus();
+    });
+
+    it("async validation of tags should block input", function () {
+      var tagsinput = createTagsInput({
+        validate: function (tag, cb) {
+          // blocks forever
+        }
+      }).tagsInput();
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      addTag(tagsinput, "");
     });
   });
 });

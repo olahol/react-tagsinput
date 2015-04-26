@@ -26,6 +26,10 @@
   color: #90111A !important;
 }
 
+.react-tagsinput-validating {
+  background: #FFFACD !important;
+}
+
 .react-tagsinput-remove {
   font-weight: bold;
   color: #638421;

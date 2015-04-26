@@ -109,7 +109,8 @@ is `true`.
 ##### validate
 
 A function which returns true if a tag is valid, default function returns
-true for non-empty strings and unique tags.
+true for non-empty strings and unique tags. The validation is asynchronous
+if the `validate` function takes two arguments `tag` and a callback `cb`.
 
 ##### transform
 

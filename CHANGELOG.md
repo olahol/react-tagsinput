@@ -1,3 +1,7 @@
+### 1.3.0 (2015-04-26)
+
+* Added option for async `validate`.
+
 ### 1.2.0 (2015-04-21)
 
 * Allow for non-strings as tags.

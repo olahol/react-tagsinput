@@ -14,8 +14,15 @@
     render: function () {
       var ns = this.props.ns;
 
-      var inputClass = ns + "tagsinput-input "
-        + (this.props.invalid ? ns + "tagsinput-invalid" : "");
+      var inputClass = ns + "tagsinput-input";
+
+      if (this.props.validating) {
+        inputClass += " " + ns + "tagsinput-validating";
+      }
+
+      if (this.props.invalid) {
+        inputClass += " " + ns + "tagsinput-invalid";
+      }
 
       return React.createElement("input",
         // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
@@ -85,6 +92,7 @@
         value: value
         , tag: ""
         , invalid: false
+        , validating: false
       };
     }
 
@@ -118,7 +126,7 @@
       };
     }
 
-    , validate: function (tag) {
+    , defaultValidate: function (tag) {
       var valueLink = this.getValueLink();
 
       return tag !== "" && valueLink.value.indexOf(tag) === -1;
@@ -129,31 +137,42 @@
       return valueLink.value;
     }
 
+    , validation: function (tag, cb) {
+      var validate = this.props.validate || this.defaultValidate;
+
+      var async = validate.length === 2;
+
+      if (async) {
+        validate(tag, cb);
+      } else {
+        cb(validate(tag));
+      }
+    }
+
     , addTag: function (tag) {
       var valueLink = this.getValueLink();
-
-      var validate = this.props.validate || this.validate;
 
       var newTag = this.props.transform(tag);
 
       tag = newTag ? newTag : tag;
 
-      if (!validate(tag)) {
-        return this.setState({
-          invalid: true
+      this.setState({ validating: true });
+      this.validation(tag, function (valid) {
+        this.setState({ validating: false });
+
+        if (!valid) { return this.setState({ invalid: true }); }
+
+        var newValue = valueLink.value.concat([tag]);
+
+        valueLink.requestChange(newValue, tag);
+
+        this.setState({
+          tag: ""
+          , invalid: false
+        }, function () {
+          this.props.onTagAdd(tag);
         });
-      }
-
-      var newValue = valueLink.value.concat([tag]);
-
-      valueLink.requestChange(newValue, tag);
-
-      this.setState({
-        tag: ""
-        , invalid: false
-      }, function () {
-        this.props.onTagAdd(tag);
-      });
+      }.bind(this));
     }
 
     , removeTag: function (tag) {
@@ -188,11 +207,13 @@
     }
 
     , onChange: function (e) {
-      this.props.onChangeInput(e.target.value);
-      this.setState({
-        tag: e.target.value
-        , invalid: false
-      });
+      if (!this.state.validating) {
+        this.props.onChangeInput(e.target.value);
+        this.setState({
+          tag: e.target.value
+          , invalid: false
+        });
+      }
     }
 
     , onBlur: function (e) {
@@ -232,6 +253,7 @@
           , placeholder: this.props.placeholder
           , value: this.state.tag
           , invalid: this.state.invalid
+          , validating: this.state.validating
           , onKeyDown: this.onKeyDown
           , onChange: this.onChange
           , onBlur: this.onBlur
