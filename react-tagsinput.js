@@ -66,6 +66,7 @@
       , onTagRemove: React.PropTypes.func
       , transform: React.PropTypes.func
       , validate: React.PropTypes.func
+      , validateAsync: React.PropTypes.func
     }
 
     , getDefaultProps: function () {
@@ -138,9 +139,9 @@
     }
 
     , validation: function (tag, cb) {
-      var validate = this.props.validate || this.defaultValidate;
+      var validate = this.props.validateAsync || this.props.validate || this.defaultValidate;
 
-      var async = validate.length === 2;
+      var async = !!this.props.validateAsync || validate.length == 2;
 
       if (async) {
         validate(tag, cb);

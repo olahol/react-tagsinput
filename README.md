@@ -106,11 +106,13 @@ Namespace for CSS classes, default is `react` i.e CSS classes are `react-tagsinp
 Boolean whether a tag should be added when the input field blurs, default
 is `true`.
 
-##### validate
+##### validate or validateAsync
 
 A function which returns true if a tag is valid, default function returns
 true for non-empty strings and unique tags. The validation is asynchronous
-if the `validate` function takes two arguments `tag` and a callback `cb`.
+if the `validate` function takes two arguments `tag` and a callback `cb` or if
+the prop `validateAsync` is set. `validateAsync` is always asynchronous and
+takes two arguments `tag` and `cb`.
 
 ##### transform
 

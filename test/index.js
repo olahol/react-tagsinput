@@ -191,7 +191,7 @@ describe("TagsInput", function () {
       assert.equal(bolds.length, 1, "there should be one bold tag");
     });
 
-    it("async validation of tags", function (done) {
+    it("should do async validation of tags", function (done) {
       var tagsinput = createTagsInput({
         validate: function (tag, cb) {
           setTimeout(function () {
@@ -213,6 +213,26 @@ describe("TagsInput", function () {
 
         assert.equal(tags[0], tag, "there should be a tag here now");
 
+        done()
+      }, 100);
+    });
+
+    it("should do async validation of tags with validateAsync", function (done) {
+      var tagsinput = createTagsInput({
+        validateAsync: function () { } // will never fire.
+      }).tagsInput();
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "no tags because validation is not done");
+
+      setTimeout(function () {
+        var tags = tagsinput.getTags();
+        assert.equal(tags.length, 0, "no tags because validation is not done");
         done()
       }, 100);
     });

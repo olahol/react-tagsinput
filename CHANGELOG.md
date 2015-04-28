@@ -1,3 +1,7 @@
+### 1.3.1 (2015-04-28)
+
+* Added prop `validateAsync` to fix bugs in async validation.
+
 ### 1.3.0 (2015-04-26)
 
 * Added option for async `validate`.
