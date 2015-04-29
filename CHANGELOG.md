@@ -1,3 +1,7 @@
+### 1.3.2 (2015-04-29)
+
+* Ignore falsey values from `transform`.
+
 ### 1.3.1 (2015-04-28)
 
 * Added prop `validateAsync` to fix bugs in async validation.

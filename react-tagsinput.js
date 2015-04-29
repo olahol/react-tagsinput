@@ -130,7 +130,7 @@
     , defaultValidate: function (tag) {
       var valueLink = this.getValueLink();
 
-      return tag !== "" && valueLink.value.indexOf(tag) === -1;
+      return valueLink.value.indexOf(tag) === -1;
     }
 
     , getTags: function () {
@@ -155,23 +155,23 @@
 
       var newTag = this.props.transform(tag);
 
-      tag = newTag ? newTag : tag;
+      if (!newTag) { return ; }
 
       this.setState({ validating: true });
-      this.validation(tag, function (valid) {
+      this.validation(newTag, function (valid) {
         this.setState({ validating: false });
 
         if (!valid) { return this.setState({ invalid: true }); }
 
-        var newValue = valueLink.value.concat([tag]);
+        var newValue = valueLink.value.concat([newTag]);
 
-        valueLink.requestChange(newValue, tag);
+        valueLink.requestChange(newValue, newTag);
 
         this.setState({
           tag: ""
           , invalid: false
         }, function () {
-          this.props.onTagAdd(tag);
+          this.props.onTagAdd(newTag);
         });
       }.bind(this));
     }
@@ -220,7 +220,7 @@
     , onBlur: function (e) {
       var tag = this.state.tag;
 
-      if (this.props.addOnBlur && tag !== "") {
+      if (this.props.addOnBlur) {
         this.addTag(tag);
       }
 

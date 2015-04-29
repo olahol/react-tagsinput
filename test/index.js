@@ -136,15 +136,30 @@ describe("TagsInput", function () {
 
     it("should add invalid class to invalid tag", function () {
       var tagsinput = createTagsInput().tagsInput();
+      var tag = randomString();
+
+      var input = addTag(tagsinput, tag);
+      addTag(tagsinput, tag);
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 1, "one tag should have been added");
+
+      assert.ok(/invalid/.test(input.props.className), "invalid should be among input classes");
+    });
+
+    it("should ignore empty tags", function () {
+      var tagsinput = createTagsInput().tagsInput();
       var tag = "";
 
       var input = addTag(tagsinput, tag);
 
       var tags = tagsinput.getTags();
 
-      assert.equal(tags.length, 0, "a tag should not have been added");
+      assert.equal(tags.length, 0, "no tag should have been added");
 
-      assert.ok(/invalid/.test(input.props.className), "invalid should be among input classes");
+      assert.ok(!/invalid/.test(input.props.className), "invalid should not be among input classes");
+      assert.ok(!/validating/.test(input.props.className), "validating should not be among input classes");
     });
 
     it("should add a tag on blur", function () {
@@ -336,7 +351,7 @@ describe("TagsInput", function () {
 
       var tags = tagsinput.getTags();
 
-      assert.equal(tags[0], tag, "tag should not have been transformed to test");
+      assert.equal(tags.length, 0, "there should be no tags");
     });
 
     it("should focus input", function () {
