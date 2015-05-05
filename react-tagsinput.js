@@ -115,27 +115,38 @@
           , requestChange: this.props.onChange
         };
       }
+    }
 
-      return {
-        value: this.state.value
-        , requestChange: function (tags) {
-          this.setState({
-            value: tags
-          });
-          this.props.onChange(tags);
-        }.bind(this)
-      };
+    , _valueTransaction: function (fn, tag) {
+      var valueLink = this.getValueLink();
+
+      if (!this.isUncontrolled()) {
+        return valueLink.requestChange(fn(valueLink.value), tag);
+      }
+
+      this.setState(function (state) {
+        var newValue = fn(state.value);
+        this.props.onChange(newValue, tag);
+        return { value: newValue };
+      });
+    }
+
+    , _value: function () {
+      var valueLink = this.getValueLink();
+
+      if (!this.isUncontrolled()) {
+        return valueLink.value;
+      }
+
+      return this.state.value;
     }
 
     , defaultValidate: function (tag) {
-      var valueLink = this.getValueLink();
-
-      return valueLink.value.indexOf(tag) === -1;
+      return this._value().indexOf(tag) === -1;
     }
 
     , getTags: function () {
-      var valueLink = this.getValueLink();
-      return valueLink.value;
+      return this._value();
     }
 
     , validation: function (tag, cb) {
@@ -163,37 +174,35 @@
 
         if (!valid) { return this.setState({ invalid: true }); }
 
-        var newValue = valueLink.value.concat([newTag]);
+        this._valueTransaction(function (value) {
 
-        valueLink.requestChange(newValue, newTag);
+          this.setState({
+            tag: ""
+            , invalid: false
+          }, function () {
+            this.props.onTagAdd(newTag);
+          });
 
-        this.setState({
-          tag: ""
-          , invalid: false
-        }, function () {
-          this.props.onTagAdd(newTag);
-        });
+          return value.concat([newTag]);
+        }.bind(this), newTag);
       }.bind(this));
     }
 
     , removeTag: function (tag) {
-      var valueLink = this.getValueLink();
+      this._valueTransaction(function (value) {
+        var clone = value.concat([]);
 
-      var clone = valueLink.value.concat([]);
-
-      for (var i = 0; i < clone.length; i += 1) {
-        if (clone[i] === tag) {
-          clone.splice(i, 1);
-          valueLink.requestChange(clone, tag);
-          this.props.onTagRemove(tag);
-          return ;
+        for (var i = 0; i < clone.length; i += 1) {
+          if (clone[i] === tag) {
+            clone.splice(i, 1);
+            this.props.onTagRemove(tag);
+            return clone;
+          }
         }
-      }
+      }.bind(this), tag);
     }
 
     , onKeyDown: function (e) {
-      var valueLink = this.getValueLink();
-
       var add = this.props.addKeys.indexOf(e.keyCode) !== -1
         , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
 
@@ -202,8 +211,8 @@
         this.addTag(this.state.tag);
       }
 
-      if (remove && valueLink.value.length > 0 && this.state.tag === "") {
-        this.removeTag(valueLink.value[valueLink.value.length - 1]);
+      if (remove && this._value().length > 0 && this.state.tag === "") {
+        this.removeTag(this._value()[this._value().length - 1]);
       }
     }
 
@@ -232,11 +241,9 @@
     }
 
     , render: function() {
-      var valueLink = this.getValueLink();
-
       var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
 
-      var tagNodes = valueLink.value.map(function (tag, i) {
+      var tagNodes = this._value().map(function (tag, i) {
         return React.createElement(Tag, {
           key: i
           , ns: ns

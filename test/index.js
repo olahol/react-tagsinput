@@ -374,4 +374,31 @@ describe("TagsInput", function () {
       addTag(tagsinput, "");
     });
   });
+
+  describe("bugs", function () {
+    it("issue #12", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null,
+        onTagAdd: function (tag) {
+          var tags = tag.split(/\s+/);
+
+          if (1 < tags.length) {
+            tagsinput.removeTag(tag);
+
+            tags.forEach(function (splittedTag) {
+              tagsinput.addTag(splittedTag);
+            });
+          }
+        }
+      }).tagsInput();
+
+      tagsinput.addTag("aaa bbb ccc");
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags[0], "aaa");
+      assert.equal(tags[1], "bbb");
+      assert.equal(tags[2], "ccc");
+    });
+  });
 });
