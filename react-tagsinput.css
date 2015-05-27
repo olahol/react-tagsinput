@@ -1,41 +1,28 @@
 .react-tagsinput {
+  background-color: #fff;
   border: 1px solid #ccc;
-  background: #fff;
-  padding: 4px;
-  overflow-y: auto;
-  border-radius: 3px;
-  height: 31px;
+  overflow: hidden;
+  padding-left: 5px;
+  padding-top: 5px;
 }
 
 .react-tagsinput-tag {
-  display: block;
-  border: 1px solid #a5d24a;
-  background: #cde69c;
-  color: #638421;
-  font-size: 12px;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  float: left;
-  padding: 1px 5px;
-  margin-right: 4px;
-  text-decoration: none;
+  background-color: #cde69c;
   border-radius: 2px;
-}
-
-.react-tagsinput-invalid {
-  background: #FBD8DB !important;
-  color: #90111A !important;
-}
-
-.react-tagsinput-validating {
-  background: #FFFACD !important;
+  border: 1px solid #a5d24a;
+  color: #638421;
+  float: left;
+  font-family: sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  padding: 5px;
 }
 
 .react-tagsinput-remove {
-  font-weight: bold;
-  color: #638421;
-  text-decoration: none;
-  font-size: 11px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .react-tagsinput-remove:before {
@@ -44,12 +31,23 @@
 
 .react-tagsinput-input {
   background: transparent;
-  color: #777;
   border: 0;
+  color: #777;
+  font-family: sans-serif;
   font-size: 13px;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  padding: 0px 5px;
-  margin: 0;
-  width: 80px;
+  font-weight: 400;
+  margin-bottom: 6px;
+  margin-top: 1px;
   outline: none;
+  padding: 5px;
+  width: 80px;
+}
+
+.react-tagsinput-invalid {
+  background-color: #fbd8db;
+  color: #90111a;
+}
+
+.react-tagsinput-validating {
+  background: #fffacd;
 }
