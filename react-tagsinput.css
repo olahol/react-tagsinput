@@ -1,9 +1,10 @@
 .react-tagsinput {
   border: 1px solid #ccc;
   background: #fff;
-  padding: 10px;
+  padding: 4px;
   overflow-y: auto;
   border-radius: 3px;
+  height: 31px;
 }
 
 .react-tagsinput-tag {
@@ -14,9 +15,8 @@
   font-size: 12px;
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
   float: left;
-  padding: 5px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  padding: 1px 5px;
+  margin-right: 4px;
   text-decoration: none;
   border-radius: 2px;
 }
@@ -48,7 +48,7 @@
   border: 0;
   font-size: 13px;
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  padding: 5px;
+  padding: 0px 5px;
   margin: 0;
   width: 80px;
   outline: none;
