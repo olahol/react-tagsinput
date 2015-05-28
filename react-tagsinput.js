@@ -255,6 +255,7 @@
       return (
         React.createElement("div", {
           className: ns + "tagsinput"
+          , onClick: this.focus
         }, tagNodes, React.createElement(Input, {
           ref: "input"
           , ns: ns
