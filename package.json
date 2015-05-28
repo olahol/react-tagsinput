@@ -1,6 +1,6 @@
 {
   "name": "react-tagsinput",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "dependencies": {

@@ -126,8 +126,10 @@
 
       this.setState(function (state) {
         var newValue = fn(state.value);
-        this.props.onChange(newValue, tag);
-        return { value: newValue };
+        if (newValue) {
+          this.props.onChange(newValue, tag);
+          return { value: newValue };
+        }
       });
     }
 
@@ -195,7 +197,13 @@
         for (var i = 0; i < clone.length; i += 1) {
           if (clone[i] === tag) {
             clone.splice(i, 1);
-            this.props.onTagRemove(tag);
+
+            this.setState({
+              invalid: false
+            }, function () {
+              this.props.onTagRemove(tag);
+            });
+
             return clone;
           }
         }

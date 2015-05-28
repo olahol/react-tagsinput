@@ -187,6 +187,7 @@ An example of how to use React components instead of strings as tags can be foun
 * Artem Vovsya (@avovsya)
 * scott c (@scoarescoare)
 * junk (@jedverity)
+* Buz Carter (@buzcarter)
 
 ---
 

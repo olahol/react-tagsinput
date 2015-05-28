@@ -373,6 +373,21 @@ describe("TagsInput", function () {
 
       addTag(tagsinput, "");
     });
+
+    it("if nothing has changed callbacks should not fire", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null,
+        onTagAdd: function (tag) {
+          assert.ok(false);
+        },
+        onTagRemove: function (tag) {
+          assert.ok(false);
+        }
+      }).tagsInput();
+
+      tagsinput.addTag("");
+      tagsinput.removeTag("tag1");
+    });
   });
 
   describe("bugs", function () {
@@ -399,6 +414,21 @@ describe("TagsInput", function () {
       assert.equal(tags[0], "aaa");
       assert.equal(tags[1], "bbb");
       assert.equal(tags[2], "ccc");
+    });
+
+    it("issue #15", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null,
+        onTagAdd: function (tag) {
+          assert.equal(tagsinput.getTags().length, 1);
+        },
+        onTagRemove: function (tag) {
+          assert.equal(tagsinput.getTags().length, 0);
+        }
+      }).tagsInput();
+
+      tagsinput.addTag("tag1");
+      tagsinput.removeTag("tag1");
     });
   });
 });
