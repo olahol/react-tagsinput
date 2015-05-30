@@ -1,3 +1,9 @@
+### 1.3.5 (2015-05-30)
+
+* Add clear methodj
+* Add onKeyDown and onKeyUp props.
+* When clicking on the component focus on the input.
+
 ### 1.3.2 (2015-04-29)
 
 * Ignore falsey values from `transform`.

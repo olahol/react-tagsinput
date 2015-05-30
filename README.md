@@ -140,6 +140,15 @@ Callback when the input changes, the argument is the value of the input.
 
 Callback when input field blurs.
 
+##### onKeyDown
+
+Callback when a key down event is triggered on the tag input which is not
+in the removeKeys or addKeys.
+
+##### onKeyUp
+
+Callback when a key up event is triggered on the tag input.
+
 ##### onTagAdd
 
 Callback when a tag is added, argument is the added tag.
@@ -153,6 +162,10 @@ Callback when a tag is removed, argument is the removed tag.
 ##### focus()
 
 Focus on the tag input.
+
+##### clear()
+
+Clear the tag input.
 
 ##### getTags()
 
