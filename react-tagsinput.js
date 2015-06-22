@@ -66,6 +66,7 @@
       , onKeyUp: React.PropTypes.func
       , onTagAdd: React.PropTypes.func
       , onTagRemove: React.PropTypes.func
+      , beforeTagRemove: React.PropTypes.func
       , transform: React.PropTypes.func
       , validate: React.PropTypes.func
       , validateAsync: React.PropTypes.func
@@ -86,6 +87,7 @@
         , onKeyUp: function () { }
         , onTagAdd: function () { }
         , onTagRemove: function () { }
+        , beforeTagRemove: function () { return true; }
         , transform: function (tag) { return tag.trim(); }
       };
     }
@@ -195,6 +197,9 @@
     }
 
     , removeTag: function (tag) {
+      if (this.props.beforeTagRemove.call(this, tag) === false) {
+        return;
+      };
       this._valueTransaction(function (value) {
         var clone = value.concat([]);
 

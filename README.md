@@ -157,6 +157,10 @@ Callback when a tag is added, argument is the added tag.
 
 Callback when a tag is removed, argument is the removed tag.
 
+##### beforeTagRemove
+
+Callback before tag will be removed, argument is the removed tag, you can prevent it by return false.
+
 ### Methods
 
 ##### focus()
