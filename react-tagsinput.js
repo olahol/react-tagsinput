@@ -197,7 +197,7 @@
     }
 
     , removeTag: function (tag) {
-      if (this.props.beforeTagRemove.call(this, tag) === false) {
+      if (this.props.beforeTagRemove(tag) === false) {
         return;
       };
       this._valueTransaction(function (value) {

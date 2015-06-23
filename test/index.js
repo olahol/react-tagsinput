@@ -419,6 +419,25 @@ describe("TagsInput", function () {
       tagsinput.removeTag("tag1");
     });
 
+    it("if beforeTagRemove return false, onTagRemove should not fire", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null,
+        onTagAdd: function (tag) {
+          assert.ok(true);
+        },
+        onTagRemove: function (tag) {
+          assert.ok(false);
+        },
+        beforeTagRemove: function (tag) {
+          return false;
+        }
+      }).tagsInput();
+
+      tagsinput.addTag("tag");
+      tagsinput.removeTag("tag");
+      assert.equal(tagsinput.getTags()[0], 'tag');
+    });
+
     it("test keyUp and keyDown props", function () {
       var tagsinput = createTagsInput({
         onKeyDown: function (e) {
