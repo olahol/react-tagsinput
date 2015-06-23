@@ -153,13 +153,17 @@ Callback when a key up event is triggered on the tag input.
 
 Callback when a tag is added, argument is the added tag.
 
+##### beforeTagAdd
+
+Callback before tag will be added, argument is the added tag, you can prevent it by returning false.
+
 ##### onTagRemove
 
 Callback when a tag is removed, argument is the removed tag.
 
 ##### beforeTagRemove
 
-Callback before tag will be removed, argument is the removed tag, you can prevent it by return false.
+Callback before tag will be removed, argument is the removed tag, you can prevent it by returning false.
 
 ### Methods
 
@@ -205,6 +209,7 @@ An example of how to use React components instead of strings as tags can be foun
 * scott c (@scoarescoare)
 * junk (@jedverity)
 * Buz Carter (@buzcarter)
+* Garbin Huang (@garbin)
 
 ---
 

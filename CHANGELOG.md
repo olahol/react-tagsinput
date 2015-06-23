@@ -1,6 +1,10 @@
+### 1.3.6 (2015-06-23)
+
+* Add beforeTagAdd and beforeTagRemove props.
+
 ### 1.3.5 (2015-05-30)
 
-* Add clear methodj
+* Add clear method.
 * Add onKeyDown and onKeyUp props.
 * When clicking on the component focus on the input.
 

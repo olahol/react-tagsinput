@@ -328,6 +328,40 @@ describe("TagsInput", function () {
 
       assert.equal(tags[0], "test", "tag should have been transformed to test");
     });
+
+    it("if beforeTagRemove return false, onTagRemove should not fire", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null,
+        onTagAdd: function (tag) {
+          assert.ok(true);
+        },
+        onTagRemove: function (tag) {
+          assert.ok(false);
+        },
+        beforeTagRemove: function (tag) {
+          return false;
+        }
+      }).tagsInput();
+
+      tagsinput.addTag("tag");
+      tagsinput.removeTag("tag");
+      assert.equal(tagsinput.getTags()[0], 'tag');
+    });
+
+    it("if beforeTagAdd return false, onTagAdd should not fire", function () {
+      var tagsinput = createTagsInput({
+        valueLink: null,
+        onTagAdd: function (tag) {
+          assert.ok(false);
+        },
+        beforeTagAdd: function (tag) {
+          return false;
+        }
+      }).tagsInput();
+
+      tagsinput.addTag("tag");
+      assert.equal(tagsinput.getTags().length, 0);
+    });
   });
 
   describe("uncontrolled", function () {
@@ -417,25 +451,6 @@ describe("TagsInput", function () {
 
       tagsinput.addTag("");
       tagsinput.removeTag("tag1");
-    });
-
-    it("if beforeTagRemove return false, onTagRemove should not fire", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null,
-        onTagAdd: function (tag) {
-          assert.ok(true);
-        },
-        onTagRemove: function (tag) {
-          assert.ok(false);
-        },
-        beforeTagRemove: function (tag) {
-          return false;
-        }
-      }).tagsInput();
-
-      tagsinput.addTag("tag");
-      tagsinput.removeTag("tag");
-      assert.equal(tagsinput.getTags()[0], 'tag');
     });
 
     it("test keyUp and keyDown props", function () {
