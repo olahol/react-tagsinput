@@ -111,6 +111,10 @@
       },
 
       transform: function (tag) {
+        if (this.state.completions.indexOf(tag) > -1) {
+          return tag;
+        }
+
         if (this.state.completions.length === 1) {
           return this.state.completions[0];
         }
