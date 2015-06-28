@@ -62,6 +62,7 @@
       , onChange: React.PropTypes.func
       , onChangeInput: React.PropTypes.func
       , onBlur: React.PropTypes.func
+      , onClick: React.PropTypes.func
       , onKeyDown: React.PropTypes.func
       , onKeyUp: React.PropTypes.func
       , onTagAdd: React.PropTypes.func
@@ -84,6 +85,7 @@
         , onChange: function () { }
         , onChangeInput: function () { }
         , onBlur: function () { }
+        , onClick: function (e) { }
         , onKeyDown: function () { }
         , onKeyUp: function () { }
         , onTagAdd: function () { }
@@ -276,6 +278,7 @@
       if (e.target === this.getDOMNode()) {
         this.focus();
       }
+      this.props.onClick(e);
     }
 
     , render: function() {

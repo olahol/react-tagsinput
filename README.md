@@ -140,6 +140,10 @@ Callback when the input changes, the argument is the value of the input.
 
 Callback when input field blurs.
 
+##### onClick
+
+Callback when the input field is clicked
+
 ##### onKeyDown
 
 Callback when a key down event is triggered on the tag input which is not
