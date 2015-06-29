@@ -214,6 +214,7 @@ An example of how to use React components instead of strings as tags can be foun
 * junk (@jedverity)
 * Buz Carter (@buzcarter)
 * Garbin Huang (@garbin)
+* Will Washburn (@willwashburn)
 
 ---
 
