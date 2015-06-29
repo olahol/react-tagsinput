@@ -314,6 +314,25 @@ describe("TagsInput", function () {
       assert.equal(input.props.className.trim(), "tagsinput-input", "there should be no namespace");
     });
 
+    it("should test onClick", function (done) {
+      var clicks = 0;
+      var tagsinput = createTagsInput({
+        onClick: function () {
+          clicks++;
+          if (clicks === 2) {
+            done();
+          }
+        }
+      }).tagsInput();
+
+      var tag = randomString();
+
+      var input = addTag(tagsinput, tag, true);
+
+      TestUtils.Simulate.click(tagsinput.getDOMNode());
+      TestUtils.Simulate.click(input.getDOMNode());
+    });
+
     it("should test transform prop", function () {
       var tagsinput = createTagsInput({
         transform: function (tag) {

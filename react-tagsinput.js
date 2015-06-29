@@ -278,6 +278,7 @@
       if (e.target === this.getDOMNode()) {
         this.focus();
       }
+
       this.props.onClick(e);
     }
 

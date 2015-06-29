@@ -142,7 +142,7 @@ Callback when input field blurs.
 
 ##### onClick
 
-Callback when the input field is clicked
+Callback when the component (anything from tags to the input) is clicked on.
 
 ##### onKeyDown
 
