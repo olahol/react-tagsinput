@@ -14,7 +14,7 @@
     render: function () {
       var ns = this.props.ns;
 
-      var inputClass = ns + "tagsinput-input";
+      var inputClass = this.props.inputClass || ns + "tagsinput-input";
 
       if (this.props.validating) {
         inputClass += " " + ns + "tagsinput-validating";
@@ -40,10 +40,10 @@
     render: function () {
       return (
         React.createElement("span", {
-          className: this.props.ns + "tagsinput-tag"
+          className: this.props.tagClass || this.props.ns + "tagsinput-tag"
         }, this.props.tag, React.createElement("a", {
           onClick: this.props.remove
-          , className: this.props.ns + "tagsinput-remove"
+          , className: this.props.tagRemoveClass || this.props.ns + "tagsinput-remove"
         }))
       );
     }
@@ -290,6 +290,8 @@
           key: i
           , ns: ns
           , tag: tag
+          , tagClass: this.props.tagClass
+          , tagRemoveClass: this.props.tagRemoveClass
           , remove: this.removeTag.bind(null, tag)
         });
       }.bind(this));
@@ -301,6 +303,7 @@
         }, tagNodes, React.createElement(Input, {
           ref: "input"
           , ns: ns
+          , inputClass: this.props.inputClass
           , placeholder: this.props.placeholder
           , value: this.state.tag
           , invalid: this.state.invalid
