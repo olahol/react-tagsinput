@@ -1,3 +1,8 @@
+### 1.3.8 (2015-07-08)
+
+* Add `classNames` prop for setting all classes on elements.
+* Rename `clear` to `clearInput` and use `clear` for clearing entire component of tags.
+
 ### 1.3.7 (2015-06-19)
 
 * Add onClick to component.

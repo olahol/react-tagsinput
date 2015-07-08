@@ -214,6 +214,33 @@ describe("TagsInput", function () {
       assert.equal(bolds.length, 1, "there should be one bold tag");
     });
 
+    it("should set css classes", function () {
+      var tagsinput = createTagsInput({
+        classNames: {
+          div: "div-test"
+          , input: "input-test"
+          , invalid: "invalid-test"
+          , validating: "validating-test"
+          , tag: "tag-test"
+          , remove: "remove-test"
+        }
+      }).tagsInput();
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag);
+
+      var div = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "div-test");
+      var input = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "input-test");
+      var tag = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "tag-test");
+      var remove = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "remove-test");
+
+      assert.ok(div, "there should be a div with class div-test");
+      assert.ok(input, "there should be a div with class input-test");
+      assert.ok(tag, "there should be a div with class tag-test");
+      assert.ok(remove, "there should be a div with class remove-test");
+    });
+
     it("should do async validation of tags", function (done) {
       var tagsinput = createTagsInput({
         validate: function (tag, cb) {
@@ -260,7 +287,7 @@ describe("TagsInput", function () {
       }, 100);
     });
 
-    it("should clear tags", function () {
+    it("should clear text input", function () {
       var tagsinput = createTagsInput({
       }).tagsInput();
 
@@ -270,9 +297,32 @@ describe("TagsInput", function () {
 
       assert.equal(input.props.value, tag);
 
-      tagsinput.clear();
+      tagsinput.clearInput();
 
       assert.equal(input.props.value, "");
+    });
+
+    it("should clear all tags", function () {
+      var tagsinput = createTagsInput({
+      }).tagsInput();
+
+      var tag = randomString();
+
+      addTag(tagsinput, tag + "1");
+      addTag(tagsinput, tag + "2");
+      addTag(tagsinput, tag + "3");
+      addTag(tagsinput, tag + "4");
+      addTag(tagsinput, tag + "5");
+
+      var tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 5, "there should be 5 tags");
+
+      tagsinput.clear();
+
+      tags = tagsinput.getTags();
+
+      assert.equal(tags.length, 0, "there should be no tags");
     });
 
     it("should focus input", function () {

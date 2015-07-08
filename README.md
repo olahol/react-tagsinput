@@ -97,6 +97,23 @@ Initialize the component with a value. This is only used when `value` is `null`
 
 Placeholder text for the add a tag input, default is "Add a tag".
 
+##### classNames
+
+An object of classnames for elements in the component. The default is:
+
+```javascript
+{
+  div: "react-tagsinput"
+  , input: "react-tagsinput-input"
+  , invalid: "react-tagsinput-invalid"
+  , validating: "react-tagsinput-validating"
+  , tag: "react-tagsinput-tag"
+  , remove: "react-tagsinput-remove"
+}
+```
+
+Useful if you need specific CSS classes.
+
 ##### classNamespace
 
 Namespace for CSS classes, default is `react` i.e CSS classes are `react-tagsinput`.
@@ -177,7 +194,11 @@ Focus on the tag input.
 
 ##### clear()
 
-Clear the tag input.
+Clear component of tags.
+
+##### clearInput()
+
+Clears the text input.
 
 ##### getTags()
 
@@ -215,6 +236,7 @@ An example of how to use React components instead of strings as tags can be foun
 * Buz Carter (@buzcarter)
 * Garbin Huang (@garbin)
 * Will Washburn (@willwashburn)
+* Kristján Oddsson (@koddsson)
 
 ---
 

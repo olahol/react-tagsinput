@@ -14,15 +14,15 @@
     render: function () {
       var ns = this.props.ns;
 
-      var inputClass = this.props.inputClass || ns + "tagsinput-input";
+      var inputClass = this.props.classNames.input || ns + "tagsinput-input";
 
       if (this.props.validating) {
-        var validatingClass = this.props.validatingClass || ns + "tagsinput-validating";
+        var validatingClass = this.props.classNames.validating || ns + "tagsinput-validating";
         inputClass += " " + validatingClass;
       }
 
       if (this.props.invalid) {
-        var invalidClass = this.props.invalidClass || ns + "tagsinput-invalid";
+        var invalidClass = this.props.classNames.invalid || ns + "tagsinput-invalid";
         inputClass += " " + invalidClass;
       }
 
@@ -42,10 +42,10 @@
     render: function () {
       return (
         React.createElement("span", {
-          className: this.props.tagClass || this.props.ns + "tagsinput-tag"
+          className: this.props.classNames.tag || this.props.ns + "tagsinput-tag"
         }, this.props.tag, React.createElement("a", {
           onClick: this.props.remove
-          , className: this.props.tagRemoveClass || this.props.ns + "tagsinput-remove"
+          , className: this.props.classNames.remove || this.props.ns + "tagsinput-remove"
         }))
       );
     }
@@ -57,6 +57,7 @@
       , valueLink: React.PropTypes.object
       , defaultValue: React.PropTypes.array
       , placeholder: React.PropTypes.string
+      , classNames: React.PropTypes.object
       , classNamespace: React.PropTypes.string
       , addKeys: React.PropTypes.array
       , removeKeys: React.PropTypes.array
@@ -80,6 +81,7 @@
       return {
         defaultValue: []
         , placeholder: "Add a tag"
+        , classNames: {}
         , classNamespace: "react"
         , addKeys: [13, 9]
         , removeKeys: [8]
@@ -269,6 +271,12 @@
     }
 
     , clear: function () {
+      this._valueTransaction(function (value) {
+        return [];
+      }, "");
+    }
+
+    , clearInput: function () {
       this.setState({ tag: "", invalid: false });
     }
 
@@ -292,26 +300,23 @@
           key: i
           , ns: ns
           , tag: tag
-          , tagClass: this.props.tagClass
-          , tagRemoveClass: this.props.tagRemoveClass
+          , classNames: this.props.classNames
           , remove: this.removeTag.bind(null, tag)
         });
       }.bind(this));
 
       return (
         React.createElement("div", {
-          className: ns + "tagsinput"
+          className: this.props.classNames.div || ns + "tagsinput"
           , onClick: this.handleClick
         }, tagNodes, React.createElement(Input, {
           ref: "input"
           , ns: ns
-          , inputClass: this.props.inputClass
+          , classNames: this.props.classNames
           , placeholder: this.props.placeholder
           , value: this.state.tag
           , invalid: this.state.invalid
           , validating: this.state.validating
-          , invalidClass: this.props.invalidClass
-          , validatingClass: this.props.validatingClass
           , onKeyDown: this.onKeyDown
           , onKeyUp: this.props.onKeyUp
           , onChange: this.onChange
