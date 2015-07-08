@@ -17,11 +17,13 @@
       var inputClass = this.props.inputClass || ns + "tagsinput-input";
 
       if (this.props.validating) {
-        inputClass += " " + ns + "tagsinput-validating";
+        var validatingClass = this.props.validatingClass || ns + "tagsinput-validating";
+        inputClass += " " + validatingClass;
       }
 
       if (this.props.invalid) {
-        inputClass += " " + ns + "tagsinput-invalid";
+        var invalidClass = this.props.invalidClass || ns + "tagsinput-invalid";
+        inputClass += " " + invalidClass;
       }
 
       return React.createElement("input",
@@ -308,6 +310,8 @@
           , value: this.state.tag
           , invalid: this.state.invalid
           , validating: this.state.validating
+          , invalidClass: this.props.invalidClass
+          , validatingClass: this.props.validatingClass
           , onKeyDown: this.onKeyDown
           , onKeyUp: this.props.onKeyUp
           , onChange: this.onChange
