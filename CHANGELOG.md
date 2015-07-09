@@ -1,3 +1,7 @@
+### 1.3.9 (2015-07-09)
+
+* Define React as a peer dependency.
+
 ### 1.3.8 (2015-07-08)
 
 * Add `classNames` prop for setting all classes on elements.
