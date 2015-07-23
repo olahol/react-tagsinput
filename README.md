@@ -138,7 +138,10 @@ function trims the tag of whitespaces.
 
 ##### renderTag
 
-A function which allow to use custom components for rendering tag.
+A function which allows custom rendering of the tags. Expected to return
+a React element or component and takes `index`, `tag` and `removeTag`
+as arguments. `removeTag` is the same as the `TagsInput.removeTag` but is
+included for convenience.
 
 ##### addKeys
 
@@ -241,6 +244,8 @@ An example of how to use React components instead of strings as tags can be foun
 * Garbin Huang (@garbin)
 * Will Washburn (@willwashburn)
 * Kristján Oddsson (@koddsson)
+* Vojtěch Bartoš (@VojtechBartos)
+
 
 ---
 

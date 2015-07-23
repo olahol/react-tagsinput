@@ -1,3 +1,7 @@
+### 1.4.0 (2015-07-23)
+
+* `renderTag` prop for custom rendering of tags.
+
 ### 1.3.9 (2015-07-09)
 
 * Define React as a peer dependency.
