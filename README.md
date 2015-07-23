@@ -136,6 +136,10 @@ takes two arguments `tag` and `cb`.
 A function which transforms a tag before it is added, the default
 function trims the tag of whitespaces.
 
+##### renderTag
+
+A function which allow to use custom components for rendering tag.
+
 ##### addKeys
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
