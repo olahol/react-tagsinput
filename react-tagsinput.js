@@ -309,7 +309,7 @@
           , ns: ns
           , tag: tag
           , classNames: this.props.classNames
-          , remove: this.removeTag.bind(null, tag)
+          , remove: removeTag
         });
       }.bind(this));
 
