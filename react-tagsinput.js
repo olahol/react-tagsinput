@@ -75,6 +75,7 @@
       , transform: React.PropTypes.func
       , validate: React.PropTypes.func
       , validateAsync: React.PropTypes.func
+      , renderTag: React.PropTypes.func
     }
 
     , getDefaultProps: function () {
@@ -97,6 +98,7 @@
         , onTagRemove: function () { }
         , beforeTagRemove: function () { return true; }
         , transform: function (tag) { return tag.trim(); }
+        , renderTag: null
       };
     }
 
@@ -296,6 +298,12 @@
       var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
 
       var tagNodes = this._value().map(function (tag, i) {
+        var removeTag = this.removeTag.bind(null, tag)
+
+        if (this.props.renderTag) {
+          return this.props.renderTag(i, tag, removeTag);
+        }
+
         return React.createElement(Tag, {
           key: i
           , ns: ns
