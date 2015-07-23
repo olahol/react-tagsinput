@@ -398,6 +398,35 @@ describe("TagsInput", function () {
       assert.equal(tags[0], "test", "tag should have been transformed to test");
     });
 
+    it("should test renderTag prop", function() {
+      var tagsinput = createTagsInput({
+        renderTag: function(key, tag, removeClickHandler) {
+          return React.createElement("div", {
+            key: key,
+            onClick: removeClickHandler,
+            className: 'tagClassName'
+          }, tag);
+        }
+      }).tagsInput();
+
+      var tags = [];
+      var tag1 = randomString();
+      var tag2 = randomString();
+      addTag(tagsinput, tag1);
+      addTag(tagsinput, tag2);
+
+      tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, 'tagClassName');
+      assert.equal(tags.length, 2);
+      assert.equal(tags[0].getDOMNode().textContent, tag1)
+      assert.equal(tags[1].getDOMNode().textContent, tag2)
+
+      TestUtils.Simulate.click(tags[0].getDOMNode());
+
+      tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, 'tagClassName');
+      assert.equal(tags.length, 1);
+      assert.equal(tags[0].getDOMNode().textContent, tag2)
+    });
+
     it("if beforeTagRemove return false, onTagRemove should not fire", function () {
       var tagsinput = createTagsInput({
         valueLink: null,
