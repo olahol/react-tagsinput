@@ -315,6 +315,7 @@
 
       return (
         React.createElement("div", {
+          style: this.props.style,
           className: this.props.classNames.div || ns + "tagsinput"
           , onClick: this.handleClick
         }, tagNodes, React.createElement(Input, {
