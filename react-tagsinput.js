@@ -59,6 +59,7 @@
       , placeholder: React.PropTypes.string
       , classNames: React.PropTypes.object
       , classNamespace: React.PropTypes.string
+      , style: React.PropTypes.object
       , addKeys: React.PropTypes.array
       , removeKeys: React.PropTypes.array
       , addOnBlur: React.PropTypes.bool

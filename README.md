@@ -118,6 +118,10 @@ Useful if you need specific CSS classes.
 
 Namespace for CSS classes, default is `react` i.e CSS classes are `react-tagsinput`.
 
+##### style
+
+Style prop for the top div of the component.
+
 ##### addOnBlur
 
 Boolean whether a tag should be added when the input field blurs, default
@@ -245,6 +249,7 @@ An example of how to use React components instead of strings as tags can be foun
 * Will Washburn (@willwashburn)
 * Kristján Oddsson (@koddsson)
 * Vojtěch Bartoš (@VojtechBartos)
+* Ming Fang (@mingfang)
 
 
 ---

@@ -1,3 +1,7 @@
+### 1.4.1 (2015-08-09)
+
+* `style` prop for styling top div.
+
 ### 1.4.0 (2015-07-23)
 
 * `renderTag` prop for custom rendering of tags.
