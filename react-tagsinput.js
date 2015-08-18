@@ -316,6 +316,9 @@
         });
       }.bind(this));
 
+      var hasTags = tagNodes.length;
+      var needsTags = this.props.required && !hasTags;
+
       return (
         React.createElement("div", {
           style: this.props.style,
@@ -333,7 +336,7 @@
           , onKeyUp: this.props.onKeyUp
           , onChange: this.onChange
           , onBlur: this.onBlur
-          , required: this.props.required
+          , required: needsTags
         }))
       );
     }
