@@ -289,6 +289,10 @@
       this.refs.input.getDOMNode().focus();
     }
 
+    , blur: function () {
+      this.refs.input.getDOMNode().blur();
+    }
+
     , handleClick: function (e) {
       if (e.target === this.getDOMNode()) {
         this.focus();

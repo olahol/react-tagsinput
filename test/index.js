@@ -534,6 +534,12 @@ describe("TagsInput", function () {
       tagsinput.focus();
     });
 
+    it("should blur input", function () {
+      var tagsinput = createTagsInput().tagsInput();
+
+      tagsinput.blur();
+    });
+
     it("async validation of tags should block input", function () {
       var tagsinput = createTagsInput({
         validate: function (tag, cb) {

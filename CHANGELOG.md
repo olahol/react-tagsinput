@@ -1,3 +1,11 @@
+### 1.4.3 (2015-08-18)
+
+* `blur` method for tag input.
+
+### 1.4.2 (2015-08-18)
+
+* `required` prop for input.
+
 ### 1.4.1 (2015-08-09)
 
 * `style` prop for styling top div.

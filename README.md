@@ -207,6 +207,10 @@ Callback before tag will be removed, argument is the removed tag, you can preven
 
 Focus on the tag input.
 
+##### blur()
+
+Blur the tag input.
+
 ##### clear()
 
 Clear component of tags.
