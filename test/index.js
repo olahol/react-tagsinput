@@ -427,6 +427,18 @@ describe("TagsInput", function () {
       assert.equal(tags[0].getDOMNode().textContent, tag2)
     });
 
+    it("should support required", function() {
+      var tagsinput = createTagsInput({required: true}).tagsInput();
+      var tag = randomString();
+
+      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+      assert(input.props.required);
+
+      addTag(tagsinput, tag);
+      input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+      assert(!input.props.required);
+    });
+
     it("if beforeTagRemove return false, onTagRemove should not fire", function () {
       var tagsinput = createTagsInput({
         valueLink: null,
