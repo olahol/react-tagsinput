@@ -127,6 +127,10 @@ Style prop for the top div of the component.
 Boolean whether a tag should be added when the input field blurs, default
 is `true`.
 
+##### required
+
+Add the `required` attribute to the input.
+
 ##### validate or validateAsync
 
 A function which returns true if a tag is valid, default function returns
@@ -250,6 +254,7 @@ An example of how to use React components instead of strings as tags can be foun
 * Kristján Oddsson (@koddsson)
 * Vojtěch Bartoš (@VojtechBartos)
 * Ming Fang (@mingfang)
+* Chris Adams (@thecadams)
 
 
 ---
