@@ -77,6 +77,7 @@
       , validate: React.PropTypes.func
       , validateAsync: React.PropTypes.func
       , renderTag: React.PropTypes.func
+      , required: React.PropTypes.bool
     }
 
     , getDefaultProps: function () {
@@ -100,6 +101,7 @@
         , beforeTagRemove: function () { return true; }
         , transform: function (tag) { return tag.trim(); }
         , renderTag: null
+        , required: false
       };
     }
 
@@ -331,6 +333,7 @@
           , onKeyUp: this.props.onKeyUp
           , onChange: this.onChange
           , onBlur: this.onBlur
+          , required: this.props.required
         }))
       );
     }
