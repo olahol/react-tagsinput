@@ -11,7 +11,7 @@
   border-radius: 2px;
   border: 1px solid #a5d24a;
   color: #638421;
-  float: left;
+  display: inline-block;
   font-family: sans-serif;
   font-size: 13px;
   font-weight: 400;
