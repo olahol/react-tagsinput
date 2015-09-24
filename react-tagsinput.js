@@ -78,6 +78,7 @@
       , validateAsync: React.PropTypes.func
       , renderTag: React.PropTypes.func
       , required: React.PropTypes.bool
+      , maxTagLength: React.PropTypes.number
     }
 
     , getDefaultProps: function () {
@@ -341,6 +342,7 @@
           , onChange: this.onChange
           , onBlur: this.onBlur
           , required: needsTags
+          , maxLength: this.props.maxTagLength
         }))
       );
     }

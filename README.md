@@ -131,6 +131,10 @@ is `true`.
 
 Add the `required` attribute to the input.
 
+##### maxTagLength
+
+Add the `maxLength` attribute to the input.
+
 ##### validate or validateAsync
 
 A function which returns true if a tag is valid, default function returns

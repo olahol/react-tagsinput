@@ -472,6 +472,17 @@ describe("TagsInput", function () {
       tagsinput.addTag("tag");
       assert.equal(tagsinput.getTags().length, 0);
     });
+
+    it("should add 'maxlength' attribute to input", function() {
+      var tagsinput = createTagsInput({
+        maxTagLength: 3
+      }).tagsInput();
+
+      var inputNode = React.findDOMNode(tagsinput.refs.input);
+
+      assert(inputNode.hasAttribute('maxlength'));
+      assert.equal(inputNode.getAttribute('maxlength'), 3);
+    })
   });
 
   describe("uncontrolled", function () {
