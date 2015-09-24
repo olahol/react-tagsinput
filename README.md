@@ -263,6 +263,7 @@ An example of how to use React components instead of strings as tags can be foun
 * Vojtěch Bartoš (@VojtechBartos)
 * Ming Fang (@mingfang)
 * Chris Adams (@thecadams)
+* Domenico Matteo (@dmatteo)
 
 
 ---

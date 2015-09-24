@@ -1,3 +1,7 @@
+### 1.4.4 (2015-09-24)
+
+* Add `maxLength` prop.
+
 ### 1.4.3 (2015-08-18)
 
 * `blur` method for tag input.
