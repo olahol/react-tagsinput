@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/react-tagsinput.svg)](http://badge.fury.io/js/react-tagsinput)
 [![Build Status](https://travis-ci.org/olahol/react-tagsinput.svg)](https://travis-ci.org/olahol/react-tagsinput)
 [![Coverage Status](https://img.shields.io/coveralls/olahol/react-tagsinput.svg?style=flat)](https://coveralls.io/r/olahol/react-tagsinput)
-[![Dependency Status](https://david-dm.org/olahol/react-tagsinput.svg)](https://david-dm.org/olahol/react-tagsinput)
+[![Dependency Status](https://david-dm.org/olahol/react-tagsinput/peer-status.svg)](https://david-dm.org/olahol/react-tagsinput)
 [![Download Count](https://img.shields.io/npm/dm/react-tagsinput.svg?style=flat)](https://www.npmjs.com/package/react-tagsinput)
 
 > Simple [React](http://facebook.github.io/react/index.html) component for inputing tags.
@@ -171,6 +171,10 @@ current tags and the tag which was added or removed.
 ##### onChangeInput
 
 Callback when the input changes, the argument is the value of the input.
+
+##### onFocus
+
+Callback when input field focuses.
 
 ##### onBlur
 

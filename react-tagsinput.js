@@ -69,6 +69,7 @@
       , onClick: React.PropTypes.func
       , onKeyDown: React.PropTypes.func
       , onKeyUp: React.PropTypes.func
+      , onFocus: React.PropTypes.func
       , onTagAdd: React.PropTypes.func
       , beforeTagAdd: React.PropTypes.func
       , onTagRemove: React.PropTypes.func
@@ -341,6 +342,7 @@
           , onKeyUp: this.props.onKeyUp
           , onChange: this.onChange
           , onBlur: this.onBlur
+          , onFocus: this.props.onFocus
           , required: needsTags
           , maxLength: this.props.maxTagLength
         }))

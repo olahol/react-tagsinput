@@ -383,6 +383,31 @@ describe("TagsInput", function () {
       TestUtils.Simulate.click(input.getDOMNode());
     });
 
+    it("should test onFocus", function (done) {
+      var tagsinput = createTagsInput({
+        onFocus: function () {
+          done();
+        }
+      }).tagsInput();
+
+      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+
+      TestUtils.Simulate.focus(input.getDOMNode());
+    });
+
+    it("should test onBlur", function (done) {
+      var tagsinput = createTagsInput({
+        onBlur: function () {
+          done();
+        }
+      }).tagsInput();
+
+      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+
+      TestUtils.Simulate.focus(input.getDOMNode());
+      TestUtils.Simulate.blur(input.getDOMNode());
+    });
+
     it("should test transform prop", function () {
       var tagsinput = createTagsInput({
         transform: function (tag) {
