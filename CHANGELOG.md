@@ -1,3 +1,7 @@
+### 1.4.6 (2015-09-30)
+
+* Should not block tab on empty.
+
 ### 1.4.5 (2015-09-30)
 
 * Add `onFocus` prop.

@@ -240,15 +240,16 @@
     }
 
     , onKeyDown: function (e) {
-      var add = this.props.addKeys.indexOf(e.keyCode) !== -1
+      var empty = this.state.tag === ""
+        , add = this.props.addKeys.indexOf(e.keyCode) !== -1
         , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
 
-      if (add) {
+      if (add && !empty) {
         e.preventDefault();
         this.addTag(this.state.tag);
       }
 
-      if (remove && this._value().length > 0 && this.state.tag === "") {
+      if (remove && this._value().length > 0 && empty) {
         this.removeTag(this._value()[this._value().length - 1]);
       }
 
