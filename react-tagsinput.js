@@ -32,6 +32,7 @@
         React.__spread({}, this.props, {
           type: "text"
         , className: inputClass
+        , name: this.props.name
         , placeholder: this.props.placeholder
         })
       );
@@ -57,6 +58,7 @@
       , valueLink: React.PropTypes.object
       , defaultValue: React.PropTypes.array
       , placeholder: React.PropTypes.string
+      , name: React.PropTypes.string
       , classNames: React.PropTypes.object
       , classNamespace: React.PropTypes.string
       , style: React.PropTypes.object
@@ -86,6 +88,7 @@
       return {
         defaultValue: []
         , placeholder: "Add a tag"
+        , name: 'fieldName'
         , classNames: {}
         , classNamespace: "react"
         , addKeys: [13, 9]
@@ -334,6 +337,7 @@
         }, tagNodes, React.createElement(Input, {
           ref: "input"
           , ns: ns
+          , name: this.props.name
           , classNames: this.props.classNames
           , placeholder: this.props.placeholder
           , value: this.state.tag
