@@ -1,3 +1,7 @@
+### 1.4.7 (2015-10-12)
+
+* Add name property to the input.
+
 ### 1.4.6 (2015-09-30)
 
 * Should not block tab on empty.

@@ -131,6 +131,10 @@ is `true`.
 
 Add the `required` attribute to the input.
 
+##### name
+
+Add the `name` attribute to the input.
+
 ##### maxTagLength
 
 Add the `maxLength` attribute to the input.
@@ -269,6 +273,7 @@ An example of how to use React components instead of strings as tags can be foun
 * Chris Adams (@thecadams)
 * Domenico Matteo (@dmatteo)
 * Kevin Smith (@ksmth)
+* Gaurav Tiwari (@gauravtiwari)
 
 
 ---
