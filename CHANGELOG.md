@@ -1,3 +1,7 @@
+### 1.5.0 (2015-10-13)
+
+* Update to use React 0.14 by default.
+
 ### 1.4.7 (2015-10-12)
 
 * Add name property to the input.

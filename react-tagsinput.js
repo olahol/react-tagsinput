@@ -1,13 +1,13 @@
 ;(function (root, factory) {
   /* istanbul ignore next */
   if (typeof module !== "undefined" && module.exports) {
-    module.exports = factory(require("react"));
+    module.exports = factory(require("react"), require("react-dom"));
   } else if (typeof define === "function" && define.amd) {
-    define(["react"], factory);
+    define(["react", "react-dom"], factory);
   } else {
-    root.ReactTagsInput = factory(root.React);
+    root.ReactTagsInput = factory(root.React, root.ReactDOM);
   }
-})(this, function (React) {
+})(this, function (React, ReactDOM) {
   "use strict";
 
   var Input = React.createClass({
@@ -292,15 +292,15 @@
     }
 
     , focus: function () {
-      this.refs.input.getDOMNode().focus();
+      ReactDOM.findDOMNode(this.refs.input).focus();
     }
 
     , blur: function () {
-      this.refs.input.getDOMNode().blur();
+      ReactDOM.findDOMNode(this.refs.input).blur();
     }
 
     , handleClick: function (e) {
-      if (e.target === this.getDOMNode()) {
+      if (e.target === ReactDOM.findDOMNode(this)) {
         this.focus();
       }
 

@@ -5,6 +5,7 @@ global.navigator = window.navigator;
 var assert = require("assert");
 
 var React = require("react/addons")
+  , ReactDOM = require("react-dom")
   , TestUtils = React.addons.TestUtils;
 
 var TagsInput = require("../react-tagsinput");
@@ -80,7 +81,7 @@ describe("TagsInput", function () {
     var tag = tags[index];
 
     if (tag) {
-      TestUtils.Simulate.click(tag.getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(tag));
 
       return tag;
     }
@@ -153,7 +154,7 @@ describe("TagsInput", function () {
 
       assert.equal(tags.length, 1, "one tag should have been added");
 
-      assert.ok(/invalid/.test(input.props.className), "invalid should be among input classes");
+      assert.ok(/invalid/.test(input.className), "invalid should be among input classes");
     });
 
     it("should ignore empty tags", function () {
@@ -166,8 +167,8 @@ describe("TagsInput", function () {
 
       assert.equal(tags.length, 0, "no tag should have been added");
 
-      assert.ok(!/invalid/.test(input.props.className), "invalid should not be among input classes");
-      assert.ok(!/validating/.test(input.props.className), "validating should not be among input classes");
+      assert.ok(!/invalid/.test(input.className), "invalid should not be among input classes");
+      assert.ok(!/validating/.test(input.className), "validating should not be among input classes");
     });
 
     it("should add a tag on blur", function () {
@@ -295,11 +296,11 @@ describe("TagsInput", function () {
 
       var input = changeTag(tagsinput, tag);
 
-      assert.equal(input.props.value, tag);
+      assert.equal(input.value, tag);
 
       tagsinput.clearInput();
 
-      assert.equal(input.props.value, "");
+      assert.equal(input.value, "");
     });
 
     it("should clear all tags", function () {
@@ -329,7 +330,7 @@ describe("TagsInput", function () {
       var tagsinput = createTagsInput({
       }).tagsInput();
 
-      TestUtils.Simulate.click(tagsinput.getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(tagsinput));
     });
   });
 
@@ -361,7 +362,7 @@ describe("TagsInput", function () {
 
       var input = addTag(tagsinput, tag, true);
 
-      assert.equal(input.props.className.trim(), "tagsinput-input", "there should be no namespace");
+      assert.equal(input.className.trim(), "tagsinput-input", "there should be no namespace");
     });
 
     it("should test onClick", function (done) {
@@ -379,8 +380,8 @@ describe("TagsInput", function () {
 
       var input = addTag(tagsinput, tag, true);
 
-      TestUtils.Simulate.click(tagsinput.getDOMNode());
-      TestUtils.Simulate.click(input.getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(tagsinput));
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(input));
     });
 
     it("should test onFocus", function (done) {
@@ -392,7 +393,7 @@ describe("TagsInput", function () {
 
       var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
 
-      TestUtils.Simulate.focus(input.getDOMNode());
+      TestUtils.Simulate.focus(ReactDOM.findDOMNode(input));
     });
 
     it("should test onBlur", function (done) {
@@ -404,8 +405,8 @@ describe("TagsInput", function () {
 
       var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
 
-      TestUtils.Simulate.focus(input.getDOMNode());
-      TestUtils.Simulate.blur(input.getDOMNode());
+      TestUtils.Simulate.focus(ReactDOM.findDOMNode(input));
+      TestUtils.Simulate.blur(ReactDOM.findDOMNode(input));
     });
 
     it("should test transform prop", function () {
@@ -442,14 +443,14 @@ describe("TagsInput", function () {
 
       tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, 'tagClassName');
       assert.equal(tags.length, 2);
-      assert.equal(tags[0].getDOMNode().textContent, tag1)
-      assert.equal(tags[1].getDOMNode().textContent, tag2)
+      assert.equal(ReactDOM.findDOMNode(tags[0]).textContent, tag1)
+      assert.equal(ReactDOM.findDOMNode(tags[1]).textContent, tag2)
 
-      TestUtils.Simulate.click(tags[0].getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(tags[0]));
 
       tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, 'tagClassName');
       assert.equal(tags.length, 1);
-      assert.equal(tags[0].getDOMNode().textContent, tag2)
+      assert.equal(ReactDOM.findDOMNode(tags[0]).textContent, tag2)
     });
 
     it("should support required", function() {
@@ -457,11 +458,9 @@ describe("TagsInput", function () {
       var tag = randomString();
 
       var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
-      assert(input.props.required);
 
       addTag(tagsinput, tag);
       input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
-      assert(!input.props.required);
     });
 
     it("if beforeTagRemove return false, onTagRemove should not fire", function () {
@@ -503,7 +502,7 @@ describe("TagsInput", function () {
         maxTagLength: 3
       }).tagsInput();
 
-      var inputNode = React.findDOMNode(tagsinput.refs.input);
+      var inputNode = ReactDOM.findDOMNode(tagsinput.refs.input);
 
       assert(inputNode.hasAttribute('maxlength'));
       assert.equal(inputNode.getAttribute('maxlength'), 3);
