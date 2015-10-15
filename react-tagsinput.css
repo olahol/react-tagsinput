@@ -1,9 +1,10 @@
 /*
   Default style for Input component
-  Boostrap or similer css framework can be used to style
+  Boostrap or similer css framework can be used for styling
   input field.
 */
 
+/* React Tags container */
 .react-tagsinput {
   width: 256px;
   height: 48px;
@@ -16,6 +17,7 @@
   margin-top: 10px;
 }
 
+/* Input field styling */
 .react-tagsinput-input {
   background: transparent;
   outline: none;
@@ -31,6 +33,7 @@
   padding-top: 5px;
 }
 
+/* Form validation */
 .react-tagsinput-invalid {
   background-color: #fbd8db;
   color: #90111a;
