@@ -1,0 +1,41 @@
+/*
+  Default style for Input component
+  Boostrap or similer css framework can be used to style
+  input field.
+*/
+
+.react-tagsinput {
+  width: 256px;
+  height: 48px;
+  display: inline-block;
+  position: relative;
+  font-family: Helvetica, Arial, sans-serif;
+  margin-right: 20px;
+  font-size: 16px;
+  font-weight: 300;
+  margin-top: 10px;
+}
+
+.react-tagsinput-input {
+  background: transparent;
+  outline: none;
+  padding:0;
+  position:relative;
+  width:100%;
+  height:100%;
+  border:none;
+  background-color:transparent;
+  color:rgba(0, 0, 0, 0.87);
+  font:inherit;
+  border-bottom: 1px solid #ddd;
+  padding-top: 5px;
+}
+
+.react-tagsinput-invalid {
+  background-color: #fbd8db;
+  color: #90111a;
+}
+
+.react-tagsinput-validating {
+  background: #fffacd;
+}
