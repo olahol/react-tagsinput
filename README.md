@@ -241,7 +241,11 @@ Removes a tag.
 
 ## Styles
 
-Look at [react-tagsinput.css](https://github.com/olahol/react-tagsinput/blob/master/react-tagsinput.css) for an idea on how to style this component.
+Look at the [themes/](https://github.com/olahol/react-tagsinput/blob/master/themes) folder for an idea on how to style tags and [react-tagsinput.css](https://github.com/olahol/react-tagsinput/blob/master/react-tagsinput.css) for base component styles. You can also find two examples ```tag_rounded``` and ```tag_simple``` in [example/](https://github.com/olahol/react-tagsinput/blob/master/example) folder.
+
+##### Demo:
+![grey-theme](https://cloud.githubusercontent.com/assets/771039/10509609/110d71f4-7326-11e5-8873-a184af193658.png)
+![red theme](https://cloud.githubusercontent.com/assets/771039/10509613/18c92fbe-7326-11e5-84bd-b330cb6bcb83.png)
 
 ## Addendum: Input completion
 
