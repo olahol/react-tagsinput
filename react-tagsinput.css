@@ -8,7 +8,6 @@
 .react-tagsinput {
   display: inline-block;
   position: relative;
-  margin-right: 20px;
 }
 
 /* Input field styling */
@@ -16,18 +15,18 @@
   background: transparent;
   outline: none;
   padding:0;
+  margin:0;
   position:relative;
   width:100%;
   height:100%;
   border:none;
   background-color:transparent;
-  color:rgba(0, 0, 0, 0.87);
   font:inherit;
   border-bottom: 1px solid #ddd;
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
-/* Form validation */
+/* Form validation : override with bootstrap or foundation styles */
 .react-tagsinput-invalid {
   background-color: #fbd8db;
   color: #90111a;
