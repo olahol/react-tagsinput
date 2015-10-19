@@ -6,15 +6,9 @@
 
 /* React Tags container */
 .react-tagsinput {
-  width: 256px;
-  height: 48px;
   display: inline-block;
   position: relative;
-  font-family: Helvetica, Arial, sans-serif;
   margin-right: 20px;
-  font-size: 16px;
-  font-weight: 300;
-  margin-top: 10px;
 }
 
 /* Input field styling */
