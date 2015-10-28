@@ -1,48 +1,32 @@
+/*
+  Default style for Input component
+  Boostrap or similer css framework can be used for styling
+  input field.
+*/
+
+/* React Tags container */
 .react-tagsinput {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  padding-left: 5px;
-  padding-top: 5px;
-}
-
-.react-tagsinput-tag {
-  background-color: #cde69c;
-  border-radius: 2px;
-  border: 1px solid #a5d24a;
-  color: #638421;
   display: inline-block;
-  font-family: sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  padding: 5px;
+  position: relative;
 }
 
-.react-tagsinput-remove {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.react-tagsinput-remove:before {
-  content: " x";
-}
-
+/* Input field styling */
 .react-tagsinput-input {
   background: transparent;
-  border: 0;
-  color: #777;
-  font-family: sans-serif;
-  font-size: 13px;
-  font-weight: 400;
-  margin-bottom: 6px;
-  margin-top: 1px;
   outline: none;
-  padding: 5px;
-  width: 80px;
+  padding:0;
+  margin:0;
+  position:relative;
+  width:100%;
+  height:100%;
+  border:none;
+  background-color:transparent;
+  font:inherit;
+  border-bottom: 1px solid #ddd;
+  padding-top: 10px;
 }
 
+/* Form validation : override with bootstrap or foundation styles */
 .react-tagsinput-invalid {
   background-color: #fbd8db;
   color: #90111a;

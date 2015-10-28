@@ -1,0 +1,28 @@
+/*
+  Style: Red Ronded theme (border-radius: 15px) for react tags
+  Basic style for input and tags
+*/
+
+.react-tagsinput-tag {
+  background: #e05a47;
+  color: #fff;
+  border-radius: 15px;
+  border: 1px solid #e05a47;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  padding: 8px;
+}
+
+.react-tagsinput-remove {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.react-tagsinput-remove:before {
+  content: " x";
+}
