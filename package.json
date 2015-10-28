@@ -1,6 +1,6 @@
 {
   "name": "react-tagsinput",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {

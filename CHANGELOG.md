@@ -1,3 +1,7 @@
+### 2.0.1 (2015-10-28)
+
+* Add dipslay name.
+
 ### 2.0.0 (2015-10-13)
 
 * Update to use React 0.14 by default.

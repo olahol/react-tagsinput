@@ -11,6 +11,8 @@
   "use strict";
 
   var Input = React.createClass({
+    displayName: "Input",
+
     render: function () {
       var ns = this.props.ns;
 
@@ -40,6 +42,8 @@
   });
 
   var Tag = React.createClass({
+    displayName: "Tag",
+
     render: function () {
       return (
         React.createElement("span", {
@@ -53,6 +57,8 @@
   });
 
   var TagsInput = React.createClass({
+    displayName: "TagsInput",
+
     propTypes: {
       value: React.PropTypes.array
       , valueLink: React.PropTypes.object
