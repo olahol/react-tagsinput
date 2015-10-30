@@ -1,681 +1,214 @@
-global.document = require("jsdom").jsdom("");
-global.window = document.parentWindow;
+const jsdom = require("jsdom");
+global.document = jsdom.jsdom("");
+global.window = document.defaultView;
 global.navigator = window.navigator;
 
-var assert = require("assert");
+const TagsInput = require("../src");
 
-var React = require("react/addons")
-  , ReactDOM = require("react-dom")
-  , TestUtils = React.addons.TestUtils;
+const React = require("react");
+const TestUtils = require("react-addons-test-utils");
+const assert = require("assert");
 
-var TagsInput = require("../react-tagsinput");
-
-
-var randomString = function () {
-  return Math.random().toString(36).substring(7);
-};
-
-var TestComponent = React.createClass({
-  mixins: [React.addons.LinkedStateMixin]
-
-  , getInitialState: function () {
-    return { tags: [] }
+class TestComponent extends React.Component {
+  constructor() {
+    super()
+    this.state = {tags: []}
+    this.change = this.change.bind(this);
+    this.input = this.input.bind(this);
+    this.tagsinput = this.tagsinput.bind(this);
   }
 
-  , tagsInput: function () {
+  input() {
+    return this.refs.tagsinput.refs.input;
+  }
+
+  tagsinput() {
     return this.refs.tagsinput;
   }
 
-  , setValue: function (value) {
-    this.setState({ value: value });
+  change(tags) {
+    this.setState({tags});
   }
 
-  , render: function () {
-    return React.createElement(TagsInput, React.__spread({}, {
-      ref: "tagsinput"
-      , valueLink: this.linkState("tags")
-    }, this.props));
+  len() {
+    return this.state.tags.length;
   }
-});
 
-describe("TagsInput", function () {
-  var createTagsInput = function (props) {
-    var component = TestUtils.renderIntoDocument(React.createElement(TestComponent, props));
-    return component;
-  };
+  tag(i) {
+    return this.state.tags[i];
+  }
 
-  var changeTag = function (tagsinput, tag) {
-    var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+  render() {
+    return <TagsInput ref="tagsinput" value={this.state.tags} onChange={this.change} {...this.props} />
+  }
+}
 
-    TestUtils.Simulate.change(input, { target: { value: tag } });
+function randstring() {
+  return +new Date() + "";
+}
 
-    return input;
-  };
+function change(comp, value) {
+  TestUtils.Simulate.change(comp.input(), {target: {value: value}});
+}
 
-  var addTag = function (tagsinput, tag, blur) {
-    var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+function keyDown(comp, code) {
+  TestUtils.Simulate.keyDown(comp.input(), {keyCode: code});
+}
 
-    TestUtils.Simulate.change(input, { target: { value: tag } });
+function click(comp) {
+  TestUtils.Simulate.click(comp);
+}
 
-    if (blur) {
-      TestUtils.Simulate.blur(input);
-    } else {
-      TestUtils.Simulate.keyDown(input, { keyCode: 13 });
-    }
+function add(comp, tag) {
+  change(comp, tag);
+  keyDown(comp, 13);
+}
 
-    return input;
-  };
+function remove(comp) {
+  change(comp, "");
+  keyDown(comp, 8);
+}
 
-  var removeTagBS = function (tagsinput) {
-    var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+function allTag(comp, tagName) {
+  return TestUtils.scryRenderedDOMComponentsWithTag(comp, tagName);
+}
 
-    TestUtils.Simulate.change(input, { target: { value: "" } });
-    TestUtils.Simulate.keyDown(input, { keyCode: 8 });
+function allClass(comp, className) {
+  return TestUtils.scryRenderedDOMComponentsWithClass(comp, className);
+}
 
-    return input;
-  };
+describe("TagsInput", () => {
+  describe("basic", () => {
+    it("should add a tag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
 
-  var removeTagIndex = function (tagsinput, index) {
-    var className = tagsinput.props.classNamespace + "-tagsinput-remove";
-    var tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, className);
-    var tag = tags[index];
-
-    if (tag) {
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(tag));
-
-      return tag;
-    }
-  };
-
-  describe("basic", function () {
-    it("should add a tag", function () {
-      var tagsinput = createTagsInput().tagsInput();
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag, "a tag should have been added");
+      change(comp, tag);
+      keyDown(comp, 13);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
 
-    it("should remove a tag", function () {
-      var tagsinput = createTagsInput().tagsInput();
-      var tag = randomString();
+    it("should remove a tag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
 
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag, "a tag should have been added");
-
-      removeTagBS(tagsinput);
-
-      tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "there should now be zero tags");
+      add(comp, tag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      keyDown(comp, 8);
+      assert.equal(comp.len(), 0, "there should be no tags");
     });
 
-    it("should remove nth tag", function () {
-      var tagsinput = createTagsInput().tagsInput();
+    it("should remove a tag by clicking", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
 
-      var tag1 = randomString()
-        , tag2 = randomString()
-        , tag3 = randomString();
+      add(comp, tag + "1");
+      add(comp, tag + "2");
+      assert.equal(comp.len(), 2, "there should be two tags");
 
-      addTag(tagsinput, tag1);
-      addTag(tagsinput, tag2);
-      addTag(tagsinput, tag3);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag1);
-      assert.equal(tags[1], tag2);
-      assert.equal(tags[2], tag3);
-      assert.equal(tags.length, 3);
-
-      removeTagIndex(tagsinput, 1);
-
-      tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag1);
-      assert.equal(tags[1], tag3);
-      assert.equal(tags.length, 2);
+      let removes = allTag(comp, "a");
+      assert.equal(removes.length, 2, "there should be two remove buttons");
+      click(removes[0]);
+      assert.equal(comp.len(), 1, "there should be one tag");
     });
 
-    it("should add invalid class to invalid tag", function () {
-      var tagsinput = createTagsInput().tagsInput();
-      var tag = randomString();
-
-      var input = addTag(tagsinput, tag);
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 1, "one tag should have been added");
-
-      assert.ok(/invalid/.test(input.className), "invalid should be among input classes");
+    it("should focus on input when clicking on component div", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      click(comp.tagsinput().refs.div);
     });
 
-    it("should ignore empty tags", function () {
-      var tagsinput = createTagsInput().tagsInput();
-      var tag = "";
+    it("should not add empty tag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
 
-      var input = addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "no tag should have been added");
-
-      assert.ok(!/invalid/.test(input.className), "invalid should not be among input classes");
-      assert.ok(!/validating/.test(input.className), "validating should not be among input classes");
-    });
-
-    it("should add a tag on blur", function () {
-      var tagsinput = createTagsInput().tagsInput();
-      var tag = randomString();
-
-      addTag(tagsinput, tag, true);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag, "a tag should have been added");
-    });
-
-    it("should not add a tag on blur", function () {
-      var tagsinput = createTagsInput({
-        addOnBlur: false
-      }).tagsInput();
-      var tag = randomString();
-
-      addTag(tagsinput, tag, true);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "there should be no tags");
-    });
-
-    it("should work with non-string tags", function () {
-      var tagsinput = createTagsInput({
-        transform: function (tag) {
-          return React.createElement("b", {}, tag);
-        }
-      }).tagsInput();
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 1, "there should be a tags");
-
-      var bolds = TestUtils.scryRenderedDOMComponentsWithTag(tagsinput, "b");
-
-      assert.equal(bolds.length, 1, "there should be one bold tag");
-    });
-
-    it("should set css classes", function () {
-      var tagsinput = createTagsInput({
-        classNames: {
-          div: "div-test"
-          , input: "input-test"
-          , invalid: "invalid-test"
-          , validating: "validating-test"
-          , tag: "tag-test"
-          , remove: "remove-test"
-        }
-      }).tagsInput();
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var div = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "div-test");
-      var input = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "input-test");
-      var tag = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "tag-test");
-      var remove = TestUtils.findRenderedDOMComponentWithClass(tagsinput, "remove-test");
-
-      assert.ok(div, "there should be a div with class div-test");
-      assert.ok(input, "there should be a div with class input-test");
-      assert.ok(tag, "there should be a div with class tag-test");
-      assert.ok(remove, "there should be a div with class remove-test");
-    });
-
-    it("should do async validation of tags", function (done) {
-      var tagsinput = createTagsInput({
-        validate: function (tag, cb) {
-          setTimeout(function () {
-            cb(true);
-          }, 50);
-        }
-      }).tagsInput();
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "no tags because validation is not done");
-
-      setTimeout(function () {
-        var tags = tagsinput.getTags();
-
-        assert.equal(tags[0], tag, "there should be a tag here now");
-
-        done()
-      }, 100);
-    });
-
-    it("should do async validation of tags with validateAsync", function (done) {
-      var tagsinput = createTagsInput({
-        validateAsync: function () { } // will never fire.
-      }).tagsInput();
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "no tags because validation is not done");
-
-      setTimeout(function () {
-        var tags = tagsinput.getTags();
-        assert.equal(tags.length, 0, "no tags because validation is not done");
-        done()
-      }, 100);
-    });
-
-    it("should clear text input", function () {
-      var tagsinput = createTagsInput({
-      }).tagsInput();
-
-      var tag = randomString();
-
-      var input = changeTag(tagsinput, tag);
-
-      assert.equal(input.value, tag);
-
-      tagsinput.clearInput();
-
-      assert.equal(input.value, "");
-    });
-
-    it("should clear all tags", function () {
-      var tagsinput = createTagsInput({
-      }).tagsInput();
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag + "1");
-      addTag(tagsinput, tag + "2");
-      addTag(tagsinput, tag + "3");
-      addTag(tagsinput, tag + "4");
-      addTag(tagsinput, tag + "5");
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 5, "there should be 5 tags");
-
-      tagsinput.clear();
-
-      tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "there should be no tags");
-    });
-
-    it("should focus input", function () {
-      var tagsinput = createTagsInput({
-      }).tagsInput();
-
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(tagsinput));
+      change(comp, "");
+      keyDown(comp, 13);
+      assert.equal(comp.len(), 0, "there should be no tag");
     });
   });
 
-  describe("props", function () {
-    it("should test value and onChange instead of valueLink", function (done) {
-      var tagsinput = createTagsInput({
-        value: ["test"]
-        , onChange: function () {
-          done();
-        }
-        , valueLink: null
-      }).tagsInput();
+  describe("props", () => {
+    it("should add a tag on key code 44", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent addKeys={[44]} />);
+      let tag = randstring();
 
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], "test", "there should be one tag");
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
+      change(comp, tag);
+      keyDown(comp, 44);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
 
-    it("should test classNamespace", function () {
-      var tagsinput = createTagsInput({
-        classNamespace: ""
-      }).tagsInput();
+    it("should remove a tag on key code 44", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent removeKeys={[44]} />);
+      let tag = randstring();
 
-      var tag = randomString();
-
-      var input = addTag(tagsinput, tag, true);
-
-      assert.equal(input.className.trim(), "tagsinput-input", "there should be no namespace");
+      add(comp, tag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      keyDown(comp, 44);
+      assert.equal(comp.len(), 0, "there should be no tags");
     });
 
-    it("should test onClick", function (done) {
-      var clicks = 0;
-      var tagsinput = createTagsInput({
-        onClick: function () {
-          clicks++;
-          if (clicks === 2) {
-            done();
-          }
-        }
-      }).tagsInput();
+    it("should add props to tag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent tagProps={{className: "test"}} />);
+      let tag = randstring();
 
-      var tag = randomString();
-
-      var input = addTag(tagsinput, tag, true);
-
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(tagsinput));
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(input));
+      add(comp, tag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      let tags = allClass(comp, "test");
+      assert.equal(comp.len(), tags.length, "there should be one tag");
     });
 
-    it("should test onFocus", function (done) {
-      var tagsinput = createTagsInput({
-        onFocus: function () {
-          done();
-        }
-      }).tagsInput();
+    it("should add props to input", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent inputProps={{className: "test"}} />);
+      let inputs = allTag(comp, "input");
 
-      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
-
-      TestUtils.Simulate.focus(ReactDOM.findDOMNode(input));
+      assert.equal(inputs[0].className, "test", "class name should be test");
     });
 
-    it("should test onBlur", function (done) {
-      var tagsinput = createTagsInput({
-        onBlur: function () {
-          done();
-        }
-      }).tagsInput();
+    it("should render tags with renderTag", () => {
+      let renderTag = (props) => {
+        return <div key={props.key} className="test"></div>;
+      };
 
-      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
+      let comp = TestUtils.renderIntoDocument(<TestComponent renderTag={renderTag} />);
+      let tag = randstring();
 
-      TestUtils.Simulate.focus(ReactDOM.findDOMNode(input));
-      TestUtils.Simulate.blur(ReactDOM.findDOMNode(input));
+      add(comp, tag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      let tags = allClass(comp, "test");
+      assert.equal(comp.len(), tags.length, "there should be one tag");
     });
 
-    it("should test transform prop", function () {
-      var tagsinput = createTagsInput({
-        transform: function (tag) {
-          return "test";
-        }
-      }).tagsInput();
-      var tag = randomString();
+    it("should render input with renderInput", () => {
+      let renderInput = (props) => {
+        return <input key={props.key} className="test" />;
+      };
+      let comp = TestUtils.renderIntoDocument(<TestComponent renderInput={renderInput} />);
+      let inputs = allTag(comp, "input");
 
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], "test", "tag should have been transformed to test");
-    });
-
-    it("should test renderTag prop", function() {
-      var tagsinput = createTagsInput({
-        renderTag: function(key, tag, removeClickHandler) {
-          return React.createElement("div", {
-            key: key,
-            onClick: removeClickHandler,
-            className: 'tagClassName'
-          }, tag);
-        }
-      }).tagsInput();
-
-      var tags = [];
-      var tag1 = randomString();
-      var tag2 = randomString();
-      addTag(tagsinput, tag1);
-      addTag(tagsinput, tag2);
-
-      tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, 'tagClassName');
-      assert.equal(tags.length, 2);
-      assert.equal(ReactDOM.findDOMNode(tags[0]).textContent, tag1)
-      assert.equal(ReactDOM.findDOMNode(tags[1]).textContent, tag2)
-
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(tags[0]));
-
-      tags = TestUtils.scryRenderedDOMComponentsWithClass(tagsinput, 'tagClassName');
-      assert.equal(tags.length, 1);
-      assert.equal(ReactDOM.findDOMNode(tags[0]).textContent, tag2)
-    });
-
-    it("should support required", function() {
-      var tagsinput = createTagsInput({required: true}).tagsInput();
-      var tag = randomString();
-
-      var input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
-
-      addTag(tagsinput, tag);
-      input = TestUtils.findRenderedDOMComponentWithTag(tagsinput, "input");
-    });
-
-    it("if beforeTagRemove return false, onTagRemove should not fire", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null,
-        onTagAdd: function (tag) {
-          assert.ok(true);
-        },
-        onTagRemove: function (tag) {
-          assert.ok(false);
-        },
-        beforeTagRemove: function (tag) {
-          return false;
-        }
-      }).tagsInput();
-
-      tagsinput.addTag("tag");
-      tagsinput.removeTag("tag");
-      assert.equal(tagsinput.getTags()[0], 'tag');
-    });
-
-    it("if beforeTagAdd return false, onTagAdd should not fire", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null,
-        onTagAdd: function (tag) {
-          assert.ok(false);
-        },
-        beforeTagAdd: function (tag) {
-          return false;
-        }
-      }).tagsInput();
-
-      tagsinput.addTag("tag");
-      assert.equal(tagsinput.getTags().length, 0);
-    });
-
-    it("should add 'maxlength' attribute to input", function() {
-      var tagsinput = createTagsInput({
-        maxTagLength: 3
-      }).tagsInput();
-
-      var inputNode = ReactDOM.findDOMNode(tagsinput.refs.input);
-
-      assert(inputNode.hasAttribute('maxlength'));
-      assert.equal(inputNode.getAttribute('maxlength'), 3);
-    })
-  });
-
-  describe("uncontrolled", function () {
-    it("should render without any handlers", function () {
-      var tag1 = randomString()
-        , tag2 = randomString();
-
-      var component = createTagsInput({
-        valueLink: null
-        , defaultValue: [tag1]
-      });
-
-      var tagsinput = component.tagsInput();
-
-      addTag(tagsinput, tag2);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag1);
-      assert.equal(tags[1], tag2);
-
-      component.setProps({
-        value: []
-      });
-
-      tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "there shouldn't be any tags");
-
-      component.setProps({
-        value: null
-      });
-
-      tags = tagsinput.getTags();
-
-      assert.equal(tags[0], tag1);
+      assert.equal(inputs[0].className, "test", "class name should be test");
     });
   });
 
-  describe("coverage", function () {
-    it("should test transform prop without returning a string", function () {
-      var tagsinput = createTagsInput({
-        transform: function (tag) {
-          return false;
-        }
-      }).tagsInput();
+  describe("methods", () => {
+    it("should focus input", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
 
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags.length, 0, "there should be no tags");
+      comp.tagsinput().focus();
     });
 
-    it("should focus input", function () {
-      var tagsinput = createTagsInput().tagsInput();
+    it("should blur input", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
 
-      tagsinput.focus();
-    });
-
-    it("should blur input", function () {
-      var tagsinput = createTagsInput().tagsInput();
-
-      tagsinput.blur();
-    });
-
-    it("async validation of tags should block input", function () {
-      var tagsinput = createTagsInput({
-        validate: function (tag, cb) {
-          // blocks forever
-        }
-      }).tagsInput();
-
-      var tag = randomString();
-
-      addTag(tagsinput, tag);
-
-      addTag(tagsinput, "");
-    });
-
-    it("if nothing has changed callbacks should not fire", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null,
-        onTagAdd: function (tag) {
-          assert.ok(false);
-        },
-        onTagRemove: function (tag) {
-          assert.ok(false);
-        }
-      }).tagsInput();
-
-      tagsinput.addTag("");
-      tagsinput.removeTag("tag1");
-    });
-
-    it("test keyUp and keyDown props", function () {
-      var tagsinput = createTagsInput({
-        onKeyDown: function (e) {
-          assert.equal(e.keyCode, 27);
-        }
-        , onKeyUp: function (e) {
-          assert.equal(e.keyCode, 27);
-        }
-      }).tagsInput();
-
-      var tag = randomString();
-
-      var input = addTag(tagsinput, tag);
-
-      TestUtils.Simulate.keyDown(input, {keyCode: 27});
-
-      TestUtils.Simulate.keyUp(input, {keyCode: 27});
-    });
-
-    it("test keyUp and keyDown props", function () {
-      var tagsinput = createTagsInput({
-      }).tagsInput();
-
-      var tag = randomString();
-
-      var input = addTag(tagsinput, tag);
-
-      TestUtils.Simulate.keyDown(input, {keyCode: 27});
-
-      TestUtils.Simulate.keyUp(input, {keyCode: 27});
+      comp.tagsinput().blur();
     });
   });
 
-  describe("bugs", function () {
-    it("issue #12", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null,
-        onTagAdd: function (tag) {
-          var tags = tag.split(/\s+/);
+  describe("coverage", () => {
+    it("not remove no existant index", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
 
-          if (1 < tags.length) {
-            tagsinput.removeTag(tag);
-
-            tags.forEach(function (splittedTag) {
-              tagsinput.addTag(splittedTag);
-            });
-          }
-        }
-      }).tagsInput();
-
-      tagsinput.addTag("aaa bbb ccc");
-
-      var tags = tagsinput.getTags();
-
-      assert.equal(tags[0], "aaa");
-      assert.equal(tags[1], "bbb");
-      assert.equal(tags[2], "ccc");
-    });
-
-    it("issue #15", function () {
-      var tagsinput = createTagsInput({
-        valueLink: null,
-        onTagAdd: function (tag) {
-          assert.equal(tagsinput.getTags().length, 1);
-        },
-        onTagRemove: function (tag) {
-          assert.equal(tagsinput.getTags().length, 0);
-        }
-      }).tagsInput();
-
-      tagsinput.addTag("tag1");
-      tagsinput.removeTag("tag1");
+      comp.tagsinput()._removeTag(1);
     });
   });
 });

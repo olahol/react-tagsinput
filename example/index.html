@@ -37,14 +37,12 @@
 </head>
 <body>
   <div id="tags"></div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-with-addons.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
   <script src="../react-tagsinput.js"></script>
   <script>
     var TagsComponent = React.createClass({
       displayName: "TagsComponent",
-
-      mixins: [React.addons.LinkedStateMixin],
 
       getInitialState: function() {
         return {
@@ -56,17 +54,21 @@
         console.log("tags: ", this.state.tags.join(", "));
       },
 
+      handleChange: function(value) {
+        this.setState({tags: value});
+      },
+
       render: function () {
         return (
           React.createElement("div", null,
-            React.createElement(ReactTagsInput, {valueLink: this.linkState("tags")}),
+            React.createElement(ReactTagsInput, {value: this.state.tags, onChange: this.handleChange}),
             React.createElement("button", {onClick: this.saveTags}, "Save")
           )
         );
       }
     });
 
-    React.render(React.createElement(TagsComponent, null), document.getElementById("tags"));
+    ReactDOM.render(React.createElement(TagsComponent, null), document.getElementById("tags"));
   </script>
 </body>
 </html>

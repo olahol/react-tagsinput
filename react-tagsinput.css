@@ -20,12 +20,12 @@
   padding: 5px;
 }
 
-.react-tagsinput-remove {
+.react-tagsinput-tag a {
   cursor: pointer;
   font-weight: bold;
 }
 
-.react-tagsinput-remove:before {
+.react-tagsinput-tag a::before {
   content: " x";
 }
 
@@ -41,13 +41,4 @@
   outline: none;
   padding: 5px;
   width: 80px;
-}
-
-.react-tagsinput-invalid {
-  background-color: #fbd8db;
-  color: #90111a;
-}
-
-.react-tagsinput-validating {
-  background: #fffacd;
 }

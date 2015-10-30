@@ -1,365 +1,205 @@
-;(function (root, factory) {
-  /* istanbul ignore next */
-  if (typeof module !== "undefined" && module.exports) {
-    module.exports = factory(require("react"), require("react-dom"));
-  } else if (typeof define === "function" && define.amd) {
-    define(["react", "react-dom"], factory);
+(function (global, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define('ReactTagsInput', ['exports', 'module', 'react'], factory);
+  } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
+    factory(exports, module, require('react'));
   } else {
-    root.ReactTagsInput = factory(root.React, root.ReactDOM);
+    var mod = {
+      exports: {}
+    };
+    factory(mod.exports, mod, global.React);
+    global.ReactTagsInput = mod.exports;
   }
-})(this, function (React, ReactDOM) {
-  "use strict";
+})(this, function (exports, module, _react) {
+  'use strict';
 
-  var Input = React.createClass({
-    displayName: "Input",
+  var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-    render: function () {
-      var ns = this.props.ns;
+  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-      var inputClass = this.props.classNames.input || ns + "tagsinput-input";
+  var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-      if (this.props.validating) {
-        var validatingClass = this.props.classNames.validating || ns + "tagsinput-validating";
-        inputClass += " " + validatingClass;
-      }
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-      if (this.props.invalid) {
-        var invalidClass = this.props.classNames.invalid || ns + "tagsinput-invalid";
-        inputClass += " " + invalidClass;
-      }
+  function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-      return React.createElement("input",
-        // https://gist.github.com/sebmarkbage/a6e220b7097eb3c79ab7
-        // avoid dependency on ES6's `Object.assign()`
-        React.__spread({}, this.props, {
-          type: "text"
-        , className: inputClass
-        , name: this.props.name
-        , placeholder: this.props.placeholder
-        })
-      );
-    }
-  });
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-  var Tag = React.createClass({
-    displayName: "Tag",
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    render: function () {
-      return (
-        React.createElement("span", {
-          className: this.props.classNames.tag || this.props.ns + "tagsinput-tag"
-        }, this.props.tag, React.createElement("a", {
-          onClick: this.props.remove
-          , className: this.props.classNames.remove || this.props.ns + "tagsinput-remove"
-        }))
-      );
-    }
-  });
+  var _React = _interopRequireDefault(_react);
 
-  var TagsInput = React.createClass({
-    displayName: "TagsInput",
+  function defaultRenderTag(props) {
+    var tag = props.tag;
+    var key = props.key;
+    var onRemove = props.onRemove;
 
-    propTypes: {
-      value: React.PropTypes.array
-      , valueLink: React.PropTypes.object
-      , defaultValue: React.PropTypes.array
-      , placeholder: React.PropTypes.string
-      , name: React.PropTypes.string
-      , classNames: React.PropTypes.object
-      , classNamespace: React.PropTypes.string
-      , style: React.PropTypes.object
-      , addKeys: React.PropTypes.array
-      , removeKeys: React.PropTypes.array
-      , addOnBlur: React.PropTypes.bool
-      , onChange: React.PropTypes.func
-      , onChangeInput: React.PropTypes.func
-      , onBlur: React.PropTypes.func
-      , onClick: React.PropTypes.func
-      , onKeyDown: React.PropTypes.func
-      , onKeyUp: React.PropTypes.func
-      , onFocus: React.PropTypes.func
-      , onTagAdd: React.PropTypes.func
-      , beforeTagAdd: React.PropTypes.func
-      , onTagRemove: React.PropTypes.func
-      , beforeTagRemove: React.PropTypes.func
-      , transform: React.PropTypes.func
-      , validate: React.PropTypes.func
-      , validateAsync: React.PropTypes.func
-      , renderTag: React.PropTypes.func
-      , required: React.PropTypes.bool
-      , maxTagLength: React.PropTypes.number
+    var other = _objectWithoutProperties(props, ['tag', 'key', 'onRemove']);
+
+    return _React['default'].createElement(
+      'span',
+      _extends({ key: key }, other),
+      tag,
+      _React['default'].createElement('a', { onClick: function (e) {
+          return onRemove(key);
+        } })
+    );
+  }
+
+  function defaultRenderInput(props) {
+    var onChange = props.onChange;
+    var value = props.value;
+
+    var other = _objectWithoutProperties(props, ['onChange', 'value']);
+
+    return _React['default'].createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
+  }
+
+  var TagsInput = (function (_React$Component) {
+    _inherits(TagsInput, _React$Component);
+
+    function TagsInput() {
+      _classCallCheck(this, TagsInput);
+
+      _get(Object.getPrototypeOf(TagsInput.prototype), 'constructor', this).call(this);
+      this.state = { tag: '' };
+      this.focus = this.focus.bind(this);
+      this.blur = this.blur.bind(this);
     }
 
-    , getDefaultProps: function () {
-      return {
-        defaultValue: []
-        , placeholder: "Add a tag"
-        , name: 'fieldName'
-        , classNames: {}
-        , classNamespace: "react"
-        , addKeys: [13, 9]
-        , removeKeys: [8]
-        , addOnBlur: true
-        , onChange: function () { }
-        , onChangeInput: function () { }
-        , onBlur: function () { }
-        , onClick: function (e) { }
-        , onKeyDown: function () { }
-        , onKeyUp: function () { }
-        , onTagAdd: function () { }
-        , beforeTagAdd: function () { return true; }
-        , onTagRemove: function () { }
-        , beforeTagRemove: function () { return true; }
-        , transform: function (tag) { return tag.trim(); }
-        , renderTag: null
-        , required: false
-      };
-    }
-
-    , getInitialState: function () {
-      var value = this.props.defaultValue.slice(0);
-
-      return {
-        value: value
-        , tag: ""
-        , invalid: false
-        , validating: false
-      };
-    }
-
-    , componentWillUpdate: function (nextProps) {
-      if (!this.isUncontrolled() && this.isUncontrolled(nextProps)) {
-        this.setState({ value: this.props.defaultValue.slice(0) });
-      }
-    }
-
-    , isUncontrolled: function (props) {
-      props = props || this.props;
-      return !props.value && !props.valueLink;
-    }
-
-    , getValueLink: function () {
-      if (!this.isUncontrolled()) {
-        return this.props.valueLink || {
-          value: this.props.value
-          , requestChange: this.props.onChange
-        };
-      }
-    }
-
-    , _valueTransaction: function (fn, tag) {
-      var valueLink = this.getValueLink();
-
-      if (!this.isUncontrolled()) {
-        return valueLink.requestChange(fn(valueLink.value), tag);
-      }
-
-      this.setState(function (state) {
-        var newValue = fn(state.value);
-        if (newValue) {
-          this.props.onChange(newValue, tag);
-          return { value: newValue };
+    _createClass(TagsInput, [{
+      key: '_removeTag',
+      value: function _removeTag(index) {
+        var value = this.props.value.concat([]);
+        if (index > -1 && index < value.length) {
+          value.splice(index, 1);
+          this.props.onChange(value);
         }
-      });
-    }
-
-    , _value: function () {
-      var valueLink = this.getValueLink();
-
-      if (!this.isUncontrolled()) {
-        return valueLink.value;
       }
-
-      return this.state.value;
-    }
-
-    , defaultValidate: function (tag) {
-      return this._value().indexOf(tag) === -1;
-    }
-
-    , getTags: function () {
-      return this._value();
-    }
-
-    , validation: function (tag, cb) {
-      var validate = this.props.validateAsync || this.props.validate || this.defaultValidate;
-
-      var async = !!this.props.validateAsync || validate.length == 2;
-
-      if (async) {
-        validate(tag, cb);
-      } else {
-        cb(validate(tag));
+    }, {
+      key: '_clearInput',
+      value: function _clearInput() {
+        this.setState({ tag: '' });
       }
-    }
-
-    , addTag: function (tag) {
-      var valueLink = this.getValueLink();
-
-      var newTag = this.props.transform(tag);
-
-      if (!newTag) { return ; }
-
-      if (!this.props.beforeTagAdd(tag)) {
-        return ;
-      };
-
-      this.setState({ validating: true });
-      this.validation(newTag, function (valid) {
-        this.setState({ validating: false });
-
-        if (!valid) { return this.setState({ invalid: true }); }
-
-        this._valueTransaction(function (value) {
-
-          this.setState({
-            tag: ""
-            , invalid: false
-          }, function () {
-            this.props.onTagAdd(newTag);
-          });
-
-          return value.concat([newTag]);
-        }.bind(this), newTag);
-      }.bind(this));
-    }
-
-    , removeTag: function (tag) {
-      if (!this.props.beforeTagRemove(tag)) {
-        return ;
-      };
-
-      this._valueTransaction(function (value) {
-        var clone = value.concat([]);
-
-        for (var i = 0; i < clone.length; i += 1) {
-          if (clone[i] === tag) {
-            clone.splice(i, 1);
-
-            this.setState({
-              invalid: false
-            }, function () {
-              this.props.onTagRemove(tag);
-            });
-
-            return clone;
-          }
+    }, {
+      key: '_addTag',
+      value: function _addTag(tag) {
+        if (tag !== '') {
+          var value = this.props.value.concat([tag]);
+          this.props.onChange(value);
+          this._clearInput();
         }
-      }.bind(this), tag);
-    }
-
-    , onKeyDown: function (e) {
-      var empty = this.state.tag === ""
-        , add = this.props.addKeys.indexOf(e.keyCode) !== -1
-        , remove = this.props.removeKeys.indexOf(e.keyCode) !== -1;
-
-      if (add && !empty) {
-        e.preventDefault();
-        this.addTag(this.state.tag);
       }
-
-      if (remove && this._value().length > 0 && empty) {
-        this.removeTag(this._value()[this._value().length - 1]);
+    }, {
+      key: 'focus',
+      value: function focus() {
+        this.refs.input.focus();
       }
-
-      if (!add && !remove) {
-        this.props.onKeyDown(e);
+    }, {
+      key: 'blur',
+      value: function blur() {
+        this.refs.input.focus();
       }
-    }
+    }, {
+      key: 'handleKeyDown',
+      value: function handleKeyDown(e) {
+        var _props = this.props;
+        var value = _props.value;
+        var removeKeys = _props.removeKeys;
+        var addKeys = _props.addKeys;
+        var tag = this.state.tag;
 
-    , onChange: function (e) {
-      if (!this.state.validating) {
-        this.props.onChangeInput(e.target.value);
-        this.setState({
-          tag: e.target.value
-          , invalid: false
-        });
-      }
-    }
+        var empty = tag === '';
+        var add = addKeys.indexOf(e.keyCode) !== -1;
+        var remove = removeKeys.indexOf(e.keyCode) !== -1;
 
-    , onBlur: function (e) {
-      var tag = this.state.tag;
-
-      if (this.props.addOnBlur) {
-        this.addTag(tag);
-      }
-
-      this.props.onBlur();
-    }
-
-    , clear: function () {
-      this._valueTransaction(function (value) {
-        return [];
-      }, "");
-    }
-
-    , clearInput: function () {
-      this.setState({ tag: "", invalid: false });
-    }
-
-    , focus: function () {
-      ReactDOM.findDOMNode(this.refs.input).focus();
-    }
-
-    , blur: function () {
-      ReactDOM.findDOMNode(this.refs.input).blur();
-    }
-
-    , handleClick: function (e) {
-      if (e.target === ReactDOM.findDOMNode(this)) {
-        this.focus();
-      }
-
-      this.props.onClick(e);
-    }
-
-    , render: function() {
-      var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
-
-      var tagNodes = this._value().map(function (tag, i) {
-        var removeTag = this.removeTag.bind(null, tag)
-
-        if (this.props.renderTag) {
-          return this.props.renderTag(i, tag, removeTag);
+        if (add) {
+          e.preventDefault();
+          this._addTag(tag);
         }
 
-        return React.createElement(Tag, {
-          key: i
-          , ns: ns
-          , tag: tag
-          , classNames: this.props.classNames
-          , remove: removeTag
-        });
-      }.bind(this));
+        if (remove && value.length > 0 && empty) {
+          e.preventDefault();
+          this._removeTag(value.length - 1);
+        }
+      }
+    }, {
+      key: 'handleClick',
+      value: function handleClick(e) {
+        if (e.target === this.refs.div) {
+          this.focus();
+        }
+      }
+    }, {
+      key: 'handleChange',
+      value: function handleChange(e) {
+        var tag = e.target.value;
+        this.setState({ tag: tag });
+      }
+    }, {
+      key: 'handleRemove',
+      value: function handleRemove(tag) {
+        this._removeTag(tag);
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _this = this;
 
-      var hasTags = tagNodes.length;
-      var needsTags = this.props.required && !hasTags;
+        var _props2 = this.props;
+        var value = _props2.value;
+        var onChange = _props2.onChange;
+        var inputProps = _props2.inputProps;
+        var tagProps = _props2.tagProps;
+        var renderTag = _props2.renderTag;
+        var renderInput = _props2.renderInput;
+        var addKeys = _props2.addKeys;
+        var removeKeys = _props2.removeKeys;
 
-      return (
-        React.createElement("div", {
-          style: this.props.style,
-          className: this.props.classNames.div || ns + "tagsinput"
-          , onClick: this.handleClick
-        }, tagNodes, React.createElement(Input, {
-          ref: "input"
-          , ns: ns
-          , name: this.props.name
-          , classNames: this.props.classNames
-          , placeholder: this.props.placeholder
-          , value: this.state.tag
-          , invalid: this.state.invalid
-          , validating: this.state.validating
-          , onKeyDown: this.onKeyDown
-          , onKeyUp: this.props.onKeyUp
-          , onChange: this.onChange
-          , onBlur: this.onBlur
-          , onFocus: this.props.onFocus
-          , required: needsTags
-          , maxLength: this.props.maxTagLength
-        }))
-      );
-    }
-  });
+        var other = _objectWithoutProperties(_props2, ['value', 'onChange', 'inputProps', 'tagProps', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
 
-  return TagsInput;
+        var tag = this.state.tag;
+
+        return _React['default'].createElement(
+          'div',
+          _extends({ ref: 'div', onClick: this.handleClick.bind(this) }, other),
+          value.map(function (tag, index) {
+            return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
+          }),
+          renderInput(_extends({ ref: 'input', value: tag, onKeyDown: this.handleKeyDown.bind(this),
+            onChange: this.handleChange.bind(this) }, inputProps))
+        );
+      }
+    }], [{
+      key: 'propTypes',
+      value: {
+        addKeys: _React['default'].PropTypes.array,
+        inputProps: _React['default'].PropTypes.object,
+        onChange: _React['default'].PropTypes.func.isRequired,
+        removeKeys: _React['default'].PropTypes.array,
+        renderInput: _React['default'].PropTypes.func,
+        renderTag: _React['default'].PropTypes.func,
+        tagProps: _React['default'].PropTypes.object,
+        value: _React['default'].PropTypes.array.isRequired
+      },
+      enumerable: true
+    }, {
+      key: 'defaultProps',
+      value: {
+        className: 'react-tagsinput',
+        addKeys: [9, 13],
+        inputProps: { className: 'react-tagsinput-input' },
+        removeKeys: [8],
+        renderInput: defaultRenderInput,
+        renderTag: defaultRenderTag,
+        tagProps: { className: 'react-tagsinput-tag' }
+      },
+      enumerable: true
+    }]);
+
+    return TagsInput;
+  })(_React['default'].Component);
+
+  module.exports = TagsInput;
 });
+

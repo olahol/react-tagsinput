@@ -1,21 +1,26 @@
 {
   "name": "react-tagsinput",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react": "^0.14.0"
   },
   "devDependencies": {
-    "jsdom": "^3.0.2"
-    , "coveralls": "^2.11.2"
-    , "mocha": "^2.1.0"
-    , "istanbul": "^0.3.5"
+    "babel": "^5.8.29",
+    "babel-eslint": "^4.1.3",
+    "isparta": "^3.1.0",
+    "jsdom": "^7.0.2",
+    "mocha": "^2.3.3",
+    "react": "^0.14.1",
+    "react-addons-test-utils": "^0.14.1",
+    "standard": "^5.3.1"
   },
   "scripts": {
-    "test": "mocha"
-    , "coverage": "./node_modules/istanbul/lib/cli.js cover --print detail ./node_modules/mocha/bin/_mocha -- --ui bdd -R spec"
+    "test": "standard src/index.js && mocha --compilers js:babel/register",
+    "build": "babel --module-id ReactTagsInput -m umd src/index.js > react-tagsinput.js",
+    "coverage": "./node_modules/.bin/babel-node node_modules/.bin/isparta cover --report text --report html node_modules/.bin/_mocha -- --reporter dot",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -30,14 +35,12 @@
     "react-component"
   ],
   "author": "Ola Holmström",
-  "contributors": [
-    { "name": "Dmitri Voronianski", "email": "dmitri.voronianski@gmail.com" },
-    { "name": "Artem Vovsya", "email": "avovsya@gmail.com" },
-    { "name": "scott c", "email": "" }
-  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/olahol/react-tagsinput/issues"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   },
   "homepage": "https://github.com/olahol/react-tagsinput"
 }
