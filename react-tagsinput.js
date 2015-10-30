@@ -56,6 +56,18 @@
     }
   });
 
+  function standardLayout(tagNodes, inputElement) {
+    var ns = this.props.classNamespace === "" ? "" : this.props.classNamespace + "-";
+    return (
+      React.createElement("div", {
+        style: this.props.style
+        , className: this.props.classNames.div || ns + "tagsinput"
+        , onClick: this.handleClick
+      }, tagNodes, inputElement
+      )
+    );
+  }
+
   var TagsInput = React.createClass({
     displayName: "TagsInput",
 
@@ -88,6 +100,7 @@
       , renderTag: React.PropTypes.func
       , required: React.PropTypes.bool
       , maxTagLength: React.PropTypes.number
+      , layout: React.PropTypes.func
     }
 
     , getDefaultProps: function () {
@@ -113,6 +126,7 @@
         , transform: function (tag) { return tag.trim(); }
         , renderTag: null
         , required: false
+        , layout: standardLayout
       };
     }
 
@@ -335,29 +349,25 @@
       var hasTags = tagNodes.length;
       var needsTags = this.props.required && !hasTags;
 
-      return (
-        React.createElement("div", {
-          style: this.props.style,
-          className: this.props.classNames.div || ns + "tagsinput"
-          , onClick: this.handleClick
-        }, tagNodes, React.createElement(Input, {
-          ref: "input"
-          , ns: ns
-          , name: this.props.name
-          , classNames: this.props.classNames
-          , placeholder: this.props.placeholder
-          , value: this.state.tag
-          , invalid: this.state.invalid
-          , validating: this.state.validating
-          , onKeyDown: this.onKeyDown
-          , onKeyUp: this.props.onKeyUp
-          , onChange: this.onChange
-          , onBlur: this.onBlur
-          , onFocus: this.props.onFocus
-          , required: needsTags
-          , maxLength: this.props.maxTagLength
-        }))
-      );
+      var inputElement = React.createElement(Input, {
+        ref: "input"
+        , ns: ns
+        , name: this.props.name
+        , classNames: this.props.classNames
+        , placeholder: this.props.placeholder
+        , value: this.state.tag
+        , invalid: this.state.invalid
+        , validating: this.state.validating
+        , onKeyDown: this.onKeyDown
+        , onKeyUp: this.props.onKeyUp
+        , onChange: this.onChange
+        , onBlur: this.onBlur
+        , onFocus: this.props.onFocus
+        , required: needsTags
+        , maxLength: this.props.maxTagLength
+      });
+
+      return this.props.layout.call(this, tagNodes, inputElement);
     }
   });
 
