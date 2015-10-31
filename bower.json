@@ -28,6 +28,6 @@
     "example"
   ],
   "dependencies": {
-    "react": "^0.13.0"
+    "react": "^0.14.0"
   }
 }
