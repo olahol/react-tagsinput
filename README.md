@@ -68,7 +68,7 @@ An array of key codes that remove a tag, default is `[8]` (Backspace).
 
 ##### tagProps
 
-Props passed down to every tag component. Defualt is: `{className: 'react-tagsinput-tag'}`.
+Props passed down to every tag component. Defualt is: `{className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'}`.
 
 ##### inputProps
 

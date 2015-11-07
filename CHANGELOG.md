@@ -1,3 +1,7 @@
+### 3.0.1 (2015-11-09)
+
+* Add `classNameRemove` to `tagProps`.
+
 ### 3.0.0 (2015-10-31)
 
 * Drop support for uncontrolled mode.

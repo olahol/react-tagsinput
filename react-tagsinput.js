@@ -33,14 +33,15 @@
     var tag = props.tag;
     var key = props.key;
     var onRemove = props.onRemove;
+    var classNameRemove = props.classNameRemove;
 
-    var other = _objectWithoutProperties(props, ['tag', 'key', 'onRemove']);
+    var other = _objectWithoutProperties(props, ['tag', 'key', 'onRemove', 'classNameRemove']);
 
     return _React['default'].createElement(
       'span',
       _extends({ key: key }, other),
       tag,
-      _React['default'].createElement('a', { onClick: function (e) {
+      _React['default'].createElement('a', { className: classNameRemove, onClick: function (e) {
           return onRemove(key);
         } })
     );
@@ -192,7 +193,7 @@
         removeKeys: [8],
         renderInput: defaultRenderInput,
         renderTag: defaultRenderTag,
-        tagProps: { className: 'react-tagsinput-tag' }
+        tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' }
       },
       enumerable: true
     }]);

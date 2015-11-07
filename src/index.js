@@ -1,11 +1,11 @@
 import React from 'react'
 
 function defaultRenderTag (props) {
-  let {tag, key, onRemove, ...other} = props
+  let {tag, key, onRemove, classNameRemove, ...other} = props
   return (
     <span key={key} {...other}>
       {tag}
-      <a onClick={(e) => onRemove(key)} />
+      <a className={classNameRemove} onClick={(e) => onRemove(key)} />
     </span>
   )
 }
@@ -43,7 +43,7 @@ class TagsInput extends React.Component {
     removeKeys: [8],
     renderInput: defaultRenderInput,
     renderTag: defaultRenderTag,
-    tagProps: {className: 'react-tagsinput-tag'}
+    tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'}
   }
 
   _removeTag (index) {
