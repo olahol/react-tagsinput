@@ -99,12 +99,23 @@ class TagsInput extends React.Component {
   }
 
   handleChange (e) {
+    let {onChange} = this.props.inputProps
     let tag = e.target.value
+
+    if (onChange) {
+      onChange(e)
+    }
+
     this.setState({tag})
   }
 
   handleRemove (tag) {
     this._removeTag(tag)
+  }
+
+  inputProps () {
+    let {onChange, ...otherInputProps} = this.props.inputProps
+    return otherInputProps
   }
 
   render () {
@@ -117,7 +128,7 @@ class TagsInput extends React.Component {
           return renderTag({key: index, tag, onRemove: ::this.handleRemove, ...tagProps})
         })}
         {renderInput({ref: 'input', value: tag, onKeyDown: ::this.handleKeyDown,
-          onChange: ::this.handleChange, ...inputProps})}
+          onChange: ::this.handleChange, ...this.inputProps()})}
       </div>
     )
   }

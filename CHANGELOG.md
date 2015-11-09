@@ -1,4 +1,8 @@
-### 3.0.1 (2015-11-09)
+### 3.0.2 (2015-11-09)
+
+* Handle `inputProps` `onChange` correctly.
+
+### 3.0.1 (2015-11-07)
 
 * Add `classNameRemove` to `tagProps`.
 

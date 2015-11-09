@@ -134,13 +134,30 @@
     }, {
       key: 'handleChange',
       value: function handleChange(e) {
+        var onChange = this.props.inputProps.onChange;
+
         var tag = e.target.value;
+
+        if (onChange) {
+          onChange(e);
+        }
+
         this.setState({ tag: tag });
       }
     }, {
       key: 'handleRemove',
       value: function handleRemove(tag) {
         this._removeTag(tag);
+      }
+    }, {
+      key: 'inputProps',
+      value: function inputProps() {
+        var _props$inputProps = this.props.inputProps;
+        var onChange = _props$inputProps.onChange;
+
+        var otherInputProps = _objectWithoutProperties(_props$inputProps, ['onChange']);
+
+        return otherInputProps;
       }
     }, {
       key: 'render',
@@ -168,7 +185,7 @@
             return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
           }),
           renderInput(_extends({ ref: 'input', value: tag, onKeyDown: this.handleKeyDown.bind(this),
-            onChange: this.handleChange.bind(this) }, inputProps))
+            onChange: this.handleChange.bind(this) }, this.inputProps()))
         );
       }
     }], [{

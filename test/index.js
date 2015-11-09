@@ -165,6 +165,19 @@ describe("TagsInput", () => {
       assert.equal(inputs[0].className, "test", "class name should be test");
     });
 
+    it("should fire onChange on input", (done) => {
+      let tag = randstring()
+      let onChange = (e) => {
+        assert.equal(tag, e.target.value, "input tag should be equal");
+        done();
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent inputProps={{onChange: onChange}} />);
+      let inputs = allTag(comp, "input");
+
+      change(comp, tag);
+    });
+
     it("should render tags with renderTag", () => {
       let renderTag = (props) => {
         return <div key={props.key} className="test"></div>;
