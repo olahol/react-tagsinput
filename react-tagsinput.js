@@ -56,6 +56,15 @@
     return _React['default'].createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
   }
 
+  function defaultRenderLayout(tagComponents, inputComponent) {
+    return _React['default'].createElement(
+      'span',
+      null,
+      tagComponents,
+      inputComponent
+    );
+  }
+
   var TagsInput = (function (_React$Component) {
     _inherits(TagsInput, _React$Component);
 
@@ -169,23 +178,31 @@
         var onChange = _props2.onChange;
         var inputProps = _props2.inputProps;
         var tagProps = _props2.tagProps;
+        var renderLayout = _props2.renderLayout;
         var renderTag = _props2.renderTag;
         var renderInput = _props2.renderInput;
         var addKeys = _props2.addKeys;
         var removeKeys = _props2.removeKeys;
 
-        var other = _objectWithoutProperties(_props2, ['value', 'onChange', 'inputProps', 'tagProps', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
+        var other = _objectWithoutProperties(_props2, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
 
         var tag = this.state.tag;
+
+        var tagComponents = value.map(function (tag, index) {
+          return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
+        });
+
+        var inputComponent = renderInput(_extends({
+          ref: 'input',
+          value: tag,
+          onKeyDown: this.handleKeyDown.bind(this),
+          onChange: this.handleChange.bind(this)
+        }, this.inputProps()));
 
         return _React['default'].createElement(
           'div',
           _extends({ ref: 'div', onClick: this.handleClick.bind(this) }, other),
-          value.map(function (tag, index) {
-            return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
-          }),
-          renderInput(_extends({ ref: 'input', value: tag, onKeyDown: this.handleKeyDown.bind(this),
-            onChange: this.handleChange.bind(this) }, this.inputProps()))
+          renderLayout(tagComponents, inputComponent)
         );
       }
     }], [{
@@ -197,6 +214,7 @@
         removeKeys: _React['default'].PropTypes.array,
         renderInput: _React['default'].PropTypes.func,
         renderTag: _React['default'].PropTypes.func,
+        renderLayout: _React['default'].PropTypes.func,
         tagProps: _React['default'].PropTypes.object,
         value: _React['default'].PropTypes.array.isRequired
       },
@@ -210,6 +228,7 @@
         removeKeys: [8],
         renderInput: defaultRenderInput,
         renderTag: defaultRenderTag,
+        renderLayout: defaultRenderLayout,
         tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' }
       },
       enumerable: true

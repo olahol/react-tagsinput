@@ -17,6 +17,15 @@ function defaultRenderInput (props) {
   )
 }
 
+function defaultRenderLayout (tagComponents, inputComponent) {
+  return (
+    <span>
+      {tagComponents}
+      {inputComponent}
+    </span>
+  )
+}
+
 class TagsInput extends React.Component {
   constructor () {
     super()
@@ -32,6 +41,7 @@ class TagsInput extends React.Component {
     removeKeys: React.PropTypes.array,
     renderInput: React.PropTypes.func,
     renderTag: React.PropTypes.func,
+    renderLayout: React.PropTypes.func,
     tagProps: React.PropTypes.object,
     value: React.PropTypes.array.isRequired
   }
@@ -43,6 +53,7 @@ class TagsInput extends React.Component {
     removeKeys: [8],
     renderInput: defaultRenderInput,
     renderTag: defaultRenderTag,
+    renderLayout: defaultRenderLayout,
     tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'}
   }
 
@@ -119,16 +130,24 @@ class TagsInput extends React.Component {
   }
 
   render () {
-    let {value, onChange, inputProps, tagProps, renderTag, renderInput, addKeys, removeKeys, ...other} = this.props
+    let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, ...other} = this.props
     let {tag} = this.state
+
+    let tagComponents = value.map((tag, index) => {
+      return renderTag({key: index, tag, onRemove: ::this.handleRemove, ...tagProps})
+    })
+
+    let inputComponent = renderInput({
+      ref: 'input',
+      value: tag,
+      onKeyDown: ::this.handleKeyDown,
+      onChange: ::this.handleChange,
+      ...this.inputProps()
+    })
 
     return (
       <div ref='div' onClick={::this.handleClick} {...other}>
-        {value.map((tag, index) => {
-          return renderTag({key: index, tag, onRemove: ::this.handleRemove, ...tagProps})
-        })}
-        {renderInput({ref: 'input', value: tag, onKeyDown: ::this.handleKeyDown,
-          onChange: ::this.handleChange, ...this.inputProps()})}
+        {renderLayout(tagComponents, inputComponent)}
       </div>
     )
   }

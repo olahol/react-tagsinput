@@ -103,6 +103,21 @@ function defaultRenderInput (props) {
 }
 ```
 
+##### renderLayout
+
+Renders the layout of the component. Takes `tagComponents` and `inputComponent` as args. Default is:
+
+```javascript
+function defaultRenderLayout (tagComponents, inputComponent) {
+  return (
+    <span>
+      {tagComponents}
+      {inputComponent}
+    </span>
+  )
+}
+```
+
 ## Styling
 
 Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.

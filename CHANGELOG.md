@@ -1,3 +1,7 @@
+### 3.0.3 (2015-11-24)
+
+* add `renderLayout` prop.
+
 ### 3.0.2 (2015-11-09)
 
 * Handle `inputProps` `onChange` correctly.
