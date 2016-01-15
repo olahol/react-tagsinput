@@ -55,6 +55,10 @@ function keyDown(comp, code) {
   TestUtils.Simulate.keyDown(comp.input(), {keyCode: code});
 }
 
+function blur(comp) {
+  TestUtils.Simulate.blur(comp.input());
+}
+
 function click(comp) {
   TestUtils.Simulate.click(comp);
 }
@@ -136,6 +140,37 @@ describe("TagsInput", () => {
       keyDown(comp, 44);
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), tag, "it should be the tag that was added");
+    });
+
+    it("should add a tag on blur, if `this.props.addOnBlur` is true", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnBlur={true} />);
+      let tag = randstring();
+
+      change(comp, tag);
+      blur(comp);
+
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag, "it should be the tag that was added");
+    });
+
+    it("should not add a tag on blur, if `this.props.addOnBlur` is false", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnBlur={false} />);
+      let tag = randstring();
+
+      change(comp, tag);
+      blur(comp);
+
+      assert.equal(comp.len(), 0, "there should be no tag");
+    });
+
+    it("should not add a tag on blur, if `this.props.addOnBlur` is not defined", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
+
+      change(comp, tag);
+      blur(comp);
+
+      assert.equal(comp.len(), 0, "there should be no tag");
     });
 
     it("should remove a tag on key code 44", () => {

@@ -36,6 +36,7 @@ class TagsInput extends React.Component {
 
   static propTypes = {
     addKeys: React.PropTypes.array,
+    addOnBlur: React.PropTypes.bool,
     inputProps: React.PropTypes.object,
     onChange: React.PropTypes.func.isRequired,
     removeKeys: React.PropTypes.array,
@@ -120,6 +121,12 @@ class TagsInput extends React.Component {
     this.setState({tag})
   }
 
+  handleOnBlur (e) {
+    if (this.props.addOnBlur) {
+      this._addTag(e.target.value)
+    }
+  }
+
   handleRemove (tag) {
     this._removeTag(tag)
   }
@@ -142,6 +149,7 @@ class TagsInput extends React.Component {
       value: tag,
       onKeyDown: ::this.handleKeyDown,
       onChange: ::this.handleChange,
+      onBlur: ::this.handleOnBlur,
       ...this.inputProps()
     })
 
