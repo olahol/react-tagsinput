@@ -48,7 +48,10 @@
   }
 
   defaultRenderTag.propTypes = {
-    tag: _React['default'].PropTypes.string
+    key: _React['default'].PropTypes.number,
+    tag: _React['default'].PropTypes.string,
+    onRemove: _React['default'].PropTypes['function'],
+    classNameRemove: _React['default'].PropTypes.string
   };
 
   function defaultRenderInput(props) {
@@ -59,6 +62,11 @@
 
     return _React['default'].createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
   }
+
+  defaultRenderInput.propTypes = {
+    value: _React['default'].PropTypes.string,
+    onChange: _React['default'].PropTypes['function']
+  };
 
   function defaultRenderLayout(tagComponents, inputComponent) {
     return _React['default'].createElement(
@@ -158,6 +166,13 @@
         this.setState({ tag: tag });
       }
     }, {
+      key: 'handleOnBlur',
+      value: function handleOnBlur(e) {
+        if (this.props.addOnBlur) {
+          this._addTag(e.target.value);
+        }
+      }
+    }, {
       key: 'handleRemove',
       value: function handleRemove(tag) {
         this._removeTag(tag);
@@ -200,7 +215,8 @@
           ref: 'input',
           value: tag,
           onKeyDown: this.handleKeyDown.bind(this),
-          onChange: this.handleChange.bind(this)
+          onChange: this.handleChange.bind(this),
+          onBlur: this.handleOnBlur.bind(this)
         }, this.inputProps()));
 
         return _React['default'].createElement(
@@ -213,6 +229,7 @@
       key: 'propTypes',
       value: {
         addKeys: _React['default'].PropTypes.array,
+        addOnBlur: _React['default'].PropTypes.bool,
         inputProps: _React['default'].PropTypes.object,
         onChange: _React['default'].PropTypes.func.isRequired,
         removeKeys: _React['default'].PropTypes.array,
