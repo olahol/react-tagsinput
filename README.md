@@ -62,6 +62,10 @@ Callback when tags change.
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
+##### addOnBlur
+
+Add a tag if input blurs.
+
 ##### removeKeys
 
 An array of key codes that remove a tag, default is `[8]` (Backspace).
@@ -139,6 +143,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Domenico Matteo (@dmatteo)
 * Kevin Smith (@ksmth)
 * Gaurav Tiwari (@gauravtiwari)
+* Domenico Matteo (@dmatteo)
 
 
 ---

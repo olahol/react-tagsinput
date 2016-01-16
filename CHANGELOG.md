@@ -1,3 +1,7 @@
+### 3.1.0 (2016-01-16)
+
+* add `addOnBlur` prop.
+
 ### 3.0.3 (2015-11-24)
 
 * add `renderLayout` prop.
