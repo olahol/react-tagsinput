@@ -143,7 +143,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Domenico Matteo (@dmatteo)
 * Kevin Smith (@ksmth)
 * Gaurav Tiwari (@gauravtiwari)
-* Domenico Matteo (@dmatteo)
+* Tay Yang Shun (@yangshun)
 
 
 ---
