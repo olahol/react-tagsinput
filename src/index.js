@@ -10,11 +10,23 @@ function defaultRenderTag (props) {
   )
 }
 
+defaultRenderTag.propTypes = {
+  key: React.PropTypes.number,
+  tag: React.PropTypes.string,
+  onRemove: React.PropTypes.function,
+  classNameRemove: React.PropTypes.string
+}
+
 function defaultRenderInput (props) {
   let {onChange, value, ...other} = props
   return (
     <input type='text' onChange={onChange} value={value} {...other} />
   )
+}
+
+defaultRenderInput.propTypes = {
+  value: React.PropTypes.string,
+  onChange: React.PropTypes.function
 }
 
 function defaultRenderLayout (tagComponents, inputComponent) {

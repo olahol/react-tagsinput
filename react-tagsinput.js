@@ -47,6 +47,10 @@
     );
   }
 
+  defaultRenderTag.propTypes = {
+    tag: _React['default'].PropTypes.string
+  };
+
   function defaultRenderInput(props) {
     var onChange = props.onChange;
     var value = props.value;
