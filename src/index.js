@@ -83,7 +83,7 @@ class TagsInput extends React.Component {
   }
 
   _addTag (tag) {
-    if (tag !== '') {
+    if (tag !== '' && this.props.value.indexOf(tag) === -1) {
       let value = this.props.value.concat([tag])
       this.props.onChange(value)
       this._clearInput()

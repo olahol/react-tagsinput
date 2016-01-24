@@ -106,7 +106,7 @@
     }, {
       key: '_addTag',
       value: function _addTag(tag) {
-        if (tag !== '') {
+        if (tag !== '' && this.props.value.indexOf(tag) === -1) {
           var value = this.props.value.concat([tag]);
           this.props.onChange(value);
           this._clearInput();

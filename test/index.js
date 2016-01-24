@@ -93,6 +93,17 @@ describe("TagsInput", () => {
       assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
 
+    it("should not add a tag twice", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
+
+      change(comp, tag);
+      keyDown(comp, 13);
+      change(comp, tag);
+      keyDown(comp, 13);
+      assert.equal(comp.len(), 1, "there should be one tag");
+    });
+
     it("should remove a tag", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
       let tag = randstring();
