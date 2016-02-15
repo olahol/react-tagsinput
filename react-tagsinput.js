@@ -106,10 +106,16 @@
     }, {
       key: '_addTag',
       value: function _addTag(tag) {
-        if (tag !== '' && this.props.value.indexOf(tag) === -1) {
-          var value = this.props.value.concat([tag]);
-          this.props.onChange(value);
-          this._clearInput();
+        var onlyUnique = this.props.onlyUnique;
+
+        var isUnique = this.props.value.indexOf(tag) === -1;
+
+        if (tag !== '') {
+          if (isUnique || !onlyUnique) {
+            var value = this.props.value.concat([tag]);
+            this.props.onChange(value);
+            this._clearInput();
+          }
         }
       }
     }, {
@@ -237,6 +243,7 @@
         renderTag: _React['default'].PropTypes.func,
         renderLayout: _React['default'].PropTypes.func,
         tagProps: _React['default'].PropTypes.object,
+        onlyUnique: _React['default'].PropTypes.bool,
         value: _React['default'].PropTypes.array.isRequired
       },
       enumerable: true
@@ -250,7 +257,8 @@
         renderInput: defaultRenderInput,
         renderTag: defaultRenderTag,
         renderLayout: defaultRenderLayout,
-        tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' }
+        tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
+        onlyUnique: false
       },
       enumerable: true
     }]);

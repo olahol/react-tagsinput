@@ -93,17 +93,6 @@ describe("TagsInput", () => {
       assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
 
-    it("should not add a tag twice", () => {
-      let comp = TestUtils.renderIntoDocument(<TestComponent />);
-      let tag = randstring();
-
-      change(comp, tag);
-      keyDown(comp, 13);
-      change(comp, tag);
-      keyDown(comp, 13);
-      assert.equal(comp.len(), 1, "there should be one tag");
-    });
-
     it("should remove a tag", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
       let tag = randstring();
@@ -143,6 +132,28 @@ describe("TagsInput", () => {
   });
 
   describe("props", () => {
+    it("should not add a tag twice if onlyUnique is true", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} />);
+      let tag = randstring();
+
+      change(comp, tag);
+      keyDown(comp, 13);
+      change(comp, tag);
+      keyDown(comp, 13);
+      assert.equal(comp.len(), 1, "there should be one tag");
+    });
+
+    it("should add a tag twice if onlyUnique is false", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={false} />);
+      let tag = randstring();
+
+      change(comp, tag);
+      keyDown(comp, 13);
+      change(comp, tag);
+      keyDown(comp, 13);
+      assert.equal(comp.len(), 2, "there should be two tags");
+    });
+
     it("should add a tag on key code 44", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent addKeys={[44]} />);
       let tag = randstring();

@@ -62,6 +62,10 @@ Callback when tags change.
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
+##### onlyUnique
+
+Allow only unique tags, default is `false`.
+
 ##### addOnBlur
 
 Add a tag if input blurs.
@@ -144,6 +148,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Kevin Smith (@ksmth)
 * Gaurav Tiwari (@gauravtiwari)
 * Tay Yang Shun (@yangshun)
+* Trevor Hutto (@huttotw)
 
 
 ---

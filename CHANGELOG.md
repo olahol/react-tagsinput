@@ -1,3 +1,7 @@
+### 3.2.0 (2016-02-15)
+
+* add `onlyUnique` prop.
+
 ### 3.1.0 (2016-01-16)
 
 * add `addOnBlur` prop.
