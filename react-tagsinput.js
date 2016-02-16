@@ -110,12 +110,10 @@
 
         var isUnique = this.props.value.indexOf(tag) === -1;
 
-        if (tag !== '') {
-          if (isUnique || !onlyUnique) {
-            var value = this.props.value.concat([tag]);
-            this.props.onChange(value);
-            this._clearInput();
-          }
+        if (tag !== '' && (isUnique || !onlyUnique)) {
+          var value = this.props.value.concat([tag]);
+          this.props.onChange(value);
+          this._clearInput();
         }
       }
     }, {
