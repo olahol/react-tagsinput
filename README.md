@@ -66,6 +66,10 @@ An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
 Allow only unique tags, default is `false`.
 
+##### maxTags
+
+Allow limit number of tags, default is `0`.
+
 ##### addOnBlur
 
 Add a tag if input blurs.
