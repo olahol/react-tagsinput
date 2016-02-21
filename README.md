@@ -68,7 +68,7 @@ Allow only unique tags, default is `false`.
 
 ##### maxTags
 
-Allow limit number of tags, default is `0`.
+Allow limit number of tags, default is `-1` for infinite.
 
 ##### addOnBlur
 
