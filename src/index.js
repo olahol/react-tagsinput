@@ -57,7 +57,8 @@ class TagsInput extends React.Component {
     renderLayout: React.PropTypes.func,
     tagProps: React.PropTypes.object,
     onlyUnique: React.PropTypes.bool,
-    value: React.PropTypes.array.isRequired
+    value: React.PropTypes.array.isRequired,
+    maxTags: React.PropTypes.number
   }
 
   static defaultProps = {
@@ -69,7 +70,8 @@ class TagsInput extends React.Component {
     renderTag: defaultRenderTag,
     renderLayout: defaultRenderLayout,
     tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
-    onlyUnique: false
+    onlyUnique: false,
+    maxTags: -1
   }
 
   _removeTag (index) {
@@ -84,11 +86,15 @@ class TagsInput extends React.Component {
     this.setState({tag: ''})
   }
 
+  _maxTags (tags) {
+    return this.props.maxTags !== -1 ? tags < this.props.maxTags : true
+  }
+
   _addTag (tag) {
     let {onlyUnique} = this.props
     let isUnique = this.props.value.indexOf(tag) === -1
-
-    if (tag !== '' && (isUnique || !onlyUnique)) {
+    let limit = this._maxTags(this.props.value.length)
+    if (tag !== '' && limit && (isUnique || !onlyUnique)) {
       let value = this.props.value.concat([tag])
       this.props.onChange(value)
       this._clearInput()
