@@ -149,6 +149,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Gaurav Tiwari (@gauravtiwari)
 * Tay Yang Shun (@yangshun)
 * Trevor Hutto (@huttotw)
+* David L. Goldberg (@DavidLGoldberg)
 
 
 ---
