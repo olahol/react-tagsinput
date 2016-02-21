@@ -1,3 +1,7 @@
+### 3.3.0 (2016-02-21)
+
+* add `maxTags` prop.
+
 ### 3.2.0 (2016-02-15)
 
 * add `onlyUnique` prop.

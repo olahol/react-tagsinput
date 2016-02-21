@@ -104,14 +104,17 @@
         this.setState({ tag: '' });
       }
     }, {
+      key: '_maxTags',
+      value: function _maxTags(tags) {
+        return this.props.maxTags !== -1 ? tags < this.props.maxTags : true;
+      }
+    }, {
       key: '_addTag',
       value: function _addTag(tag) {
-        var _props = this.props;
-        var onlyUnique = _props.onlyUnique;
-        var maxTags = _props.maxTags;
+        var onlyUnique = this.props.onlyUnique;
 
         var isUnique = this.props.value.indexOf(tag) === -1;
-        var limit = maxTags ? this.props.value.length < maxTags : true;
+        var limit = this._maxTags(this.props.value.length);
         if (tag !== '' && limit && (isUnique || !onlyUnique)) {
           var value = this.props.value.concat([tag]);
           this.props.onChange(value);
@@ -131,10 +134,10 @@
     }, {
       key: 'handleKeyDown',
       value: function handleKeyDown(e) {
-        var _props2 = this.props;
-        var value = _props2.value;
-        var removeKeys = _props2.removeKeys;
-        var addKeys = _props2.addKeys;
+        var _props = this.props;
+        var value = _props.value;
+        var removeKeys = _props.removeKeys;
+        var addKeys = _props.addKeys;
         var tag = this.state.tag;
 
         var empty = tag === '';
@@ -198,18 +201,18 @@
       value: function render() {
         var _this = this;
 
-        var _props3 = this.props;
-        var value = _props3.value;
-        var onChange = _props3.onChange;
-        var inputProps = _props3.inputProps;
-        var tagProps = _props3.tagProps;
-        var renderLayout = _props3.renderLayout;
-        var renderTag = _props3.renderTag;
-        var renderInput = _props3.renderInput;
-        var addKeys = _props3.addKeys;
-        var removeKeys = _props3.removeKeys;
+        var _props2 = this.props;
+        var value = _props2.value;
+        var onChange = _props2.onChange;
+        var inputProps = _props2.inputProps;
+        var tagProps = _props2.tagProps;
+        var renderLayout = _props2.renderLayout;
+        var renderTag = _props2.renderTag;
+        var renderInput = _props2.renderInput;
+        var addKeys = _props2.addKeys;
+        var removeKeys = _props2.removeKeys;
 
-        var other = _objectWithoutProperties(_props3, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
+        var other = _objectWithoutProperties(_props2, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
 
         var tag = this.state.tag;
 
@@ -260,7 +263,7 @@
         renderLayout: defaultRenderLayout,
         tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
         onlyUnique: false,
-        maxTags: 0
+        maxTags: -1
       },
       enumerable: true
     }]);

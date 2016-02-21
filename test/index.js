@@ -205,12 +205,20 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), 0, "there should be no tags");
     });
 
-    it("should limit tags added", () => {
+    it("should limit tags added to 0", () => {
         let comp = TestUtils.renderIntoDocument(<TestComponent maxTags={0} />);
         let tag = randstring();
         add(comp, tag);
         add(comp, tag);
         assert.equal(comp.len(), 0, "there should be 0 tags");
+    });
+
+    it("should limit tags added to 1", () => {
+        let comp = TestUtils.renderIntoDocument(<TestComponent maxTags={1} />);
+        let tag = randstring();
+        add(comp, tag);
+        add(comp, tag);
+        assert.equal(comp.len(), 1, "there should be 1 tags");
     });
 
     it("should add props to tag", () => {
