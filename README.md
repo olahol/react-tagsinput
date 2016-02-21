@@ -41,7 +41,7 @@ class TestComponent extends React.Component {
   }
 
   render() {
-    return <TagsInput value={this.state.tags} onChange={::this.change} />
+    return <TagsInput value={this.state.tags} onChange={::this.handleChange} />
   }
 }
 ```
