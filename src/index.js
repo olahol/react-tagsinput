@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
 
 function defaultRenderTag (props) {
   let {tag, key, onRemove, classNameRemove, ...other} = props
@@ -11,10 +11,10 @@ function defaultRenderTag (props) {
 }
 
 defaultRenderTag.propTypes = {
-  key: React.PropTypes.number,
-  tag: React.PropTypes.string,
-  onRemove: React.PropTypes.function,
-  classNameRemove: React.PropTypes.string
+  key: PropTypes.number,
+  tag: PropTypes.string,
+  onRemove: PropTypes.function,
+  classNameRemove: PropTypes.string
 }
 
 function defaultRenderInput (props) {
@@ -25,8 +25,8 @@ function defaultRenderInput (props) {
 }
 
 defaultRenderInput.propTypes = {
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.function
+  value: PropTypes.string,
+  onChange: PropTypes.function
 }
 
 function defaultRenderLayout (tagComponents, inputComponent) {
@@ -38,40 +38,12 @@ function defaultRenderLayout (tagComponents, inputComponent) {
   )
 }
 
-class TagsInput extends React.Component {
+class TagsInput extends Component {
   constructor () {
     super()
     this.state = {tag: ''}
     this.focus = ::this.focus
     this.blur = ::this.blur
-  }
-
-  static propTypes = {
-    addKeys: React.PropTypes.array,
-    addOnBlur: React.PropTypes.bool,
-    inputProps: React.PropTypes.object,
-    onChange: React.PropTypes.func.isRequired,
-    removeKeys: React.PropTypes.array,
-    renderInput: React.PropTypes.func,
-    renderTag: React.PropTypes.func,
-    renderLayout: React.PropTypes.func,
-    tagProps: React.PropTypes.object,
-    onlyUnique: React.PropTypes.bool,
-    value: React.PropTypes.array.isRequired,
-    maxTags: React.PropTypes.number
-  }
-
-  static defaultProps = {
-    className: 'react-tagsinput',
-    addKeys: [9, 13],
-    inputProps: {className: 'react-tagsinput-input'},
-    removeKeys: [8],
-    renderInput: defaultRenderInput,
-    renderTag: defaultRenderTag,
-    renderLayout: defaultRenderLayout,
-    tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
-    onlyUnique: false,
-    maxTags: -1
   }
 
   _removeTag (index) {
@@ -110,7 +82,7 @@ class TagsInput extends React.Component {
   }
 
   handleKeyDown (e) {
-    let {value, removeKeys, addKeys} = this.props
+    let {value, removeKeys, addKeys, validationRegex} = this.props
     let {tag} = this.state
     let empty = tag === ''
     let add = addKeys.indexOf(e.keyCode) !== -1
@@ -118,7 +90,9 @@ class TagsInput extends React.Component {
 
     if (add) {
       e.preventDefault()
-      this._addTag(tag)
+      if (validationRegex.test(tag)) {
+        this._addTag(tag)
+      }
     }
 
     if (remove && value.length > 0 && empty) {
@@ -182,6 +156,36 @@ class TagsInput extends React.Component {
       </div>
     )
   }
+}
+
+TagsInput.propTypes = {
+  addKeys: PropTypes.array,
+  addOnBlur: PropTypes.bool,
+  inputProps: PropTypes.object,
+  onChange: PropTypes.func.isRequired,
+  removeKeys: PropTypes.array,
+  renderInput: PropTypes.func,
+  renderTag: PropTypes.func,
+  renderLayout: PropTypes.func,
+  tagProps: PropTypes.object,
+  onlyUnique: PropTypes.bool,
+  value: PropTypes.array.isRequired,
+  maxTags: PropTypes.number,
+  validationRegex: PropTypes.regexp
+}
+
+TagsInput.defaultProps = {
+  className: 'react-tagsinput',
+  addKeys: [9, 13],
+  inputProps: {className: 'react-tagsinput-input'},
+  removeKeys: [8],
+  renderInput: defaultRenderInput,
+  renderTag: defaultRenderTag,
+  renderLayout: defaultRenderLayout,
+  tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
+  onlyUnique: false,
+  maxTags: -1,
+  validationRegex: /.*/
 }
 
 export default TagsInput

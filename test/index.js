@@ -274,6 +274,14 @@ describe("TagsInput", () => {
 
       assert.equal(inputs[0].className, "test", "class name should be test");
     });
+
+    it("should accept tags only matching validationRegex", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent validationRegex={/a+/} />);
+      add(comp, 'b');
+      assert.equal(comp.len(), 0, "there should be no tags");
+      add(comp, 'a');
+      assert.equal(comp.len(), 1, "there should be one tag");
+    });
   });
 
   describe("methods", () => {
