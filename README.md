@@ -66,6 +66,10 @@ An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 
 Allow only unique tags, default is `false`.
 
+##### validationRegex
+
+Allow only tags that pass this regex to be added. Default is `/.*/`.
+
 ##### maxTags
 
 Allow limit number of tags, default is `-1` for infinite.
@@ -155,6 +159,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Trevor Hutto (@huttotw)
 * David L. Goldberg (@DavidLGoldberg)
 * Pedro J. Parra (@pedroparra)
+* Kasper Kasper Nilsson (@k-nilsson)
 
 
 ---
