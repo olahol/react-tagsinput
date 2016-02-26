@@ -138,6 +138,7 @@
         var value = _props.value;
         var removeKeys = _props.removeKeys;
         var addKeys = _props.addKeys;
+        var validationRegex = _props.validationRegex;
         var tag = this.state.tag;
 
         var empty = tag === '';
@@ -146,7 +147,9 @@
 
         if (add) {
           e.preventDefault();
-          this._addTag(tag);
+          if (validationRegex.test(tag)) {
+            this._addTag(tag);
+          }
         }
 
         if (remove && value.length > 0 && empty) {
@@ -248,7 +251,8 @@
         tagProps: _React['default'].PropTypes.object,
         onlyUnique: _React['default'].PropTypes.bool,
         value: _React['default'].PropTypes.array.isRequired,
-        maxTags: _React['default'].PropTypes.number
+        maxTags: _React['default'].PropTypes.number,
+        validationRegex: _React['default'].PropTypes.regexp
       },
       enumerable: true
     }, {
@@ -263,7 +267,8 @@
         renderLayout: defaultRenderLayout,
         tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
         onlyUnique: false,
-        maxTags: -1
+        maxTags: -1,
+        validationRegex: /.*/
       },
       enumerable: true
     }]);
