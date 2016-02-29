@@ -252,7 +252,7 @@
         onlyUnique: _React['default'].PropTypes.bool,
         value: _React['default'].PropTypes.array.isRequired,
         maxTags: _React['default'].PropTypes.number,
-        validationRegex: _React['default'].PropTypes.regexp
+        validationRegex: _React['default'].PropTypes.instanceOf(RegExp)
       },
       enumerable: true
     }, {

@@ -59,7 +59,7 @@ class TagsInput extends React.Component {
     onlyUnique: React.PropTypes.bool,
     value: React.PropTypes.array.isRequired,
     maxTags: React.PropTypes.number,
-    validationRegex: React.PropTypes.regexp
+    validationRegex: React.PropTypes.instanceOf(RegExp)
   }
 
   static defaultProps = {
