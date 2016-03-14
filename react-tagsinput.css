@@ -41,4 +41,5 @@
   outline: none;
   padding: 5px;
   width: 80px;
+  min-width: 30px;
 }

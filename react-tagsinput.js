@@ -84,7 +84,7 @@
       _classCallCheck(this, TagsInput);
 
       _get(Object.getPrototypeOf(TagsInput.prototype), 'constructor', this).call(this);
-      this.state = { tag: '' };
+      this.state = { tag: '', width: '' };
       this.focus = this.focus.bind(this);
       this.blur = this.blur.bind(this);
     }
@@ -119,6 +119,7 @@
           var value = this.props.value.concat([tag]);
           this.props.onChange(value);
           this._clearInput();
+          if (this.props.dynamicWidth) this.setState({ width: '' });
         }
       }
     }, {
@@ -168,14 +169,16 @@
       key: 'handleChange',
       value: function handleChange(e) {
         var onChange = this.props.inputProps.onChange;
+        var _props2 = this.props;
+        var dynamicWidth = _props2.dynamicWidth;
+        var widthStep = _props2.widthStep;
 
         var tag = e.target.value;
-
         if (onChange) {
           onChange(e);
         }
-
         this.setState({ tag: tag });
+        if (dynamicWidth) this.setState({ width: tag.length * widthStep + 10 + 'px' });
       }
     }, {
       key: 'handleOnBlur',
@@ -204,20 +207,23 @@
       value: function render() {
         var _this = this;
 
-        var _props2 = this.props;
-        var value = _props2.value;
-        var onChange = _props2.onChange;
-        var inputProps = _props2.inputProps;
-        var tagProps = _props2.tagProps;
-        var renderLayout = _props2.renderLayout;
-        var renderTag = _props2.renderTag;
-        var renderInput = _props2.renderInput;
-        var addKeys = _props2.addKeys;
-        var removeKeys = _props2.removeKeys;
+        var _props3 = this.props;
+        var value = _props3.value;
+        var onChange = _props3.onChange;
+        var inputProps = _props3.inputProps;
+        var tagProps = _props3.tagProps;
+        var renderLayout = _props3.renderLayout;
+        var renderTag = _props3.renderTag;
+        var renderInput = _props3.renderInput;
+        var addKeys = _props3.addKeys;
+        var removeKeys = _props3.removeKeys;
+        var dynamicWidth = _props3.dynamicWidth;
 
-        var other = _objectWithoutProperties(_props2, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
+        var other = _objectWithoutProperties(_props3, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'dynamicWidth']);
 
-        var tag = this.state.tag;
+        var _state = this.state;
+        var tag = _state.tag;
+        var width = _state.width;
 
         var tagComponents = value.map(function (tag, index) {
           return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
@@ -228,7 +234,8 @@
           value: tag,
           onKeyDown: this.handleKeyDown.bind(this),
           onChange: this.handleChange.bind(this),
-          onBlur: this.handleOnBlur.bind(this)
+          onBlur: this.handleOnBlur.bind(this),
+          style: dynamicWidth ? { width: width } : {}
         }, this.inputProps()));
 
         return _React['default'].createElement(
@@ -252,7 +259,9 @@
         onlyUnique: _React['default'].PropTypes.bool,
         value: _React['default'].PropTypes.array.isRequired,
         maxTags: _React['default'].PropTypes.number,
-        validationRegex: _React['default'].PropTypes.instanceOf(RegExp)
+        validationRegex: _React['default'].PropTypes.instanceOf(RegExp),
+        dynamicWidth: _React['default'].PropTypes.bool,
+        widthStep: _React['default'].PropTypes.number
       },
       enumerable: true
     }, {
@@ -268,7 +277,9 @@
         tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
         onlyUnique: false,
         maxTags: -1,
-        validationRegex: /.*/
+        validationRegex: /.*/,
+        dynamicWidth: false,
+        widthStep: 10
       },
       enumerable: true
     }]);

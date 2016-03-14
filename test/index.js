@@ -12,7 +12,7 @@ const assert = require("assert");
 class TestComponent extends React.Component {
   constructor() {
     super()
-    this.state = {tags: []}
+    this.state = {tags: [], width: ''}
     this.change = this.change.bind(this);
     this.input = this.input.bind(this);
     this.tagsinput = this.tagsinput.bind(this);
@@ -39,7 +39,7 @@ class TestComponent extends React.Component {
   }
 
   render() {
-    return <TagsInput ref="tagsinput" value={this.state.tags} onChange={this.change} {...this.props} />
+    return <TagsInput ref="tagsinput" value={this.state.tags} onChange={this.change} dynamicWidth='true' widthStep='8' {...this.props} />
   }
 }
 

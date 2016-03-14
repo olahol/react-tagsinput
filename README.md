@@ -119,6 +119,14 @@ function defaultRenderInput (props) {
 }
 ```
 
+##### dynamicWidth
+
+Allows to change inputs width depending on input value length. Default is 'false'.
+
+##### widthStep
+
+Number of dynamic width step value. Default is 10.
+
 ##### renderLayout
 
 Renders the layout of the component. Takes `tagComponents` and `inputComponent` as args. Default is:

@@ -41,7 +41,7 @@ function defaultRenderLayout (tagComponents, inputComponent) {
 class TagsInput extends React.Component {
   constructor () {
     super()
-    this.state = {tag: ''}
+    this.state = {tag: '', width: ''}
     this.focus = ::this.focus
     this.blur = ::this.blur
   }
@@ -59,7 +59,9 @@ class TagsInput extends React.Component {
     onlyUnique: React.PropTypes.bool,
     value: React.PropTypes.array.isRequired,
     maxTags: React.PropTypes.number,
-    validationRegex: React.PropTypes.instanceOf(RegExp)
+    validationRegex: React.PropTypes.instanceOf(RegExp),
+    dynamicWidth: React.PropTypes.bool,
+    widthStep: React.PropTypes.number
   }
 
   static defaultProps = {
@@ -73,7 +75,9 @@ class TagsInput extends React.Component {
     tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
     onlyUnique: false,
     maxTags: -1,
-    validationRegex: /.*/
+    validationRegex: /.*/,
+    dynamicWidth: false,
+    widthStep: 10
   }
 
   _removeTag (index) {
@@ -100,6 +104,7 @@ class TagsInput extends React.Component {
       let value = this.props.value.concat([tag])
       this.props.onChange(value)
       this._clearInput()
+      if (this.props.dynamicWidth) this.setState({width: ''})
     }
   }
 
@@ -139,13 +144,13 @@ class TagsInput extends React.Component {
 
   handleChange (e) {
     let {onChange} = this.props.inputProps
+    let {dynamicWidth, widthStep} = this.props
     let tag = e.target.value
-
     if (onChange) {
       onChange(e)
     }
-
     this.setState({tag})
+    if (dynamicWidth) this.setState({width: tag.length * widthStep + 10 + 'px'})
   }
 
   handleOnBlur (e) {
@@ -164,8 +169,8 @@ class TagsInput extends React.Component {
   }
 
   render () {
-    let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, ...other} = this.props
-    let {tag} = this.state
+    let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, dynamicWidth, ...other} = this.props
+    let {tag, width} = this.state
 
     let tagComponents = value.map((tag, index) => {
       return renderTag({key: index, tag, onRemove: ::this.handleRemove, ...tagProps})
@@ -177,6 +182,7 @@ class TagsInput extends React.Component {
       onKeyDown: ::this.handleKeyDown,
       onChange: ::this.handleChange,
       onBlur: ::this.handleOnBlur,
+      style: dynamicWidth ? {width: width} : {},
       ...this.inputProps()
     })
 
