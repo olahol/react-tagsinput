@@ -4,7 +4,7 @@
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
-    "react": "^0.14.0"
+    "react": "^15.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.29",
@@ -12,8 +12,8 @@
     "isparta": "^3.1.0",
     "jsdom": "^7.0.2",
     "mocha": "^2.3.3",
-    "react": "^0.14.1",
-    "react-addons-test-utils": "^0.14.1",
+    "react": "^15.0.0",
+    "react-addons-test-utils": "^15.0.0",
     "standard": "^5.3.1"
   },
   "scripts": {
