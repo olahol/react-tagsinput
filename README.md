@@ -159,7 +159,8 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Trevor Hutto (@huttotw)
 * David L. Goldberg (@DavidLGoldberg)
 * Pedro J. Parra (@pedroparra)
-* Kasper Kasper Nilsson (@k-nilsson)
+* Kasper Nilsson (@k-nilsson)
+* Jorge (@JorgeAguirreLeon)
 
 
 ---
