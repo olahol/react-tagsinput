@@ -149,7 +149,8 @@ class TagsInput extends React.Component {
   }
 
   handleOnBlur (e) {
-    if (this.props.addOnBlur) {
+    let {validationRegex} = this.props
+    if (this.props.addOnBlur && validationRegex.test(e.target.value)) {
       this._addTag(e.target.value)
     }
   }
