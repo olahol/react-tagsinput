@@ -1,6 +1,6 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define('ReactTagsInput', ['exports', 'module', 'react'], factory);
+    define(['exports', 'module', 'react'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
     factory(exports, module, require('react'));
   } else {
@@ -8,7 +8,7 @@
       exports: {}
     };
     factory(mod.exports, mod, global.React);
-    global.ReactTagsInput = mod.exports;
+    global.index = mod.exports;
   }
 })(this, function (exports, module, _react) {
   'use strict';
