@@ -93,10 +93,11 @@ class TagsInput extends React.Component {
   }
 
   _addTag (tag) {
-    let {onlyUnique} = this.props
+    let {validationRegex, onlyUnique} = this.props
     let isUnique = this.props.value.indexOf(tag) === -1
     let limit = this._maxTags(this.props.value.length)
-    if (tag !== '' && limit && (isUnique || !onlyUnique)) {
+    let valid = validationRegex.test(tag)
+    if (tag !== '' && limit && (isUnique || !onlyUnique) && valid) {
       let value = this.props.value.concat([tag])
       this.props.onChange(value)
       this._clearInput()
@@ -112,7 +113,7 @@ class TagsInput extends React.Component {
   }
 
   handleKeyDown (e) {
-    let {value, removeKeys, addKeys, validationRegex} = this.props
+    let {value, removeKeys, addKeys} = this.props
     let {tag} = this.state
     let empty = tag === ''
     let add = addKeys.indexOf(e.keyCode) !== -1
@@ -120,9 +121,7 @@ class TagsInput extends React.Component {
 
     if (add) {
       e.preventDefault()
-      if (validationRegex.test(tag)) {
-        this._addTag(tag)
-      }
+      this._addTag(tag)
     }
 
     if (remove && value.length > 0 && empty) {
@@ -149,8 +148,7 @@ class TagsInput extends React.Component {
   }
 
   handleOnBlur (e) {
-    let {validationRegex} = this.props
-    if (this.props.addOnBlur && validationRegex.test(e.target.value)) {
+    if (this.props.addOnBlur) {
       this._addTag(e.target.value)
     }
   }

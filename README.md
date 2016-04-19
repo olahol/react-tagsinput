@@ -161,6 +161,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Pedro J. Parra (@pedroparra)
 * Kasper Nilsson (@k-nilsson)
 * Jorge (@JorgeAguirreLeon)
+* khawerrind (@khawerrind)
 
 
 ---
