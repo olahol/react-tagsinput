@@ -1,4 +1,5 @@
 import React from 'react'
+import uniq from 'uniq'
 
 function defaultRenderTag (props) {
   let {tag, key, onRemove, classNameRemove, ...other} = props
@@ -104,12 +105,49 @@ class TagsInput extends React.Component {
     }
   }
 
+  _addTags (tags) {
+    let {validationRegex, onlyUnique, maxTags, value} = this.props
+
+    // 1. Strip non-unique tags
+    if (onlyUnique) {
+      tags = uniq(tags)
+      tags = tags.filter(tag => this.props.value.indexOf(tag) === -1)
+    }
+
+    // 2. Strip invalid tags
+    tags = tags.filter(tag => validationRegex.test(tag))
+    tags = tags.filter(tag => tag.trim().length > 0)
+
+    // 3. Strip extras based on limit
+    if (maxTags >= 0) {
+      let remainingLimit = Math.max(maxTags - value.length, 0)
+
+      tags = tags.slice(0, remainingLimit)
+    }
+
+    // 4. Add remaining tags to value
+    let newValue = this.props.value.concat(tags)
+
+    this.props.onChange(newValue)
+
+    this._clearInput()
+  }
+
   focus () {
     this.refs.input.focus()
   }
 
   blur () {
     this.refs.input.focus()
+  }
+
+  handlePaste (e) {
+    e.preventDefault()
+
+    let data = e.clipboardData.getData('text/plain')
+    let tags = data.split(' ').map(d => d.trim())
+
+    this._addTags(tags)
   }
 
   handleKeyDown (e) {
@@ -173,6 +211,7 @@ class TagsInput extends React.Component {
     let inputComponent = renderInput({
       ref: 'input',
       value: tag,
+      onPaste: ::this.handlePaste,
       onKeyDown: ::this.handleKeyDown,
       onChange: ::this.handleChange,
       onBlur: ::this.handleOnBlur,

@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define('ReactTagsInput', ['exports', 'module', 'react'], factory);
+    define('ReactTagsInput', ['exports', 'module', 'react', 'uniq'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-    factory(exports, module, require('react'));
+    factory(exports, module, require('react'), require('uniq'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, mod, global.React);
+    factory(mod.exports, mod, global.React, global.uniq);
     global.ReactTagsInput = mod.exports;
   }
-})(this, function (exports, module, _react) {
+})(this, function (exports, module, _react, _uniq) {
   'use strict';
 
   var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -28,6 +28,8 @@
   function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
   var _React = _interopRequireDefault(_react);
+
+  var _uniq2 = _interopRequireDefault(_uniq);
 
   function defaultRenderTag(props) {
     var tag = props.tag;
@@ -125,6 +127,47 @@
         }
       }
     }, {
+      key: '_addTags',
+      value: function _addTags(tags) {
+        var _this = this;
+
+        var _props2 = this.props;
+        var validationRegex = _props2.validationRegex;
+        var onlyUnique = _props2.onlyUnique;
+        var maxTags = _props2.maxTags;
+        var value = _props2.value;
+
+        // 1. Strip non-unique tags
+        if (onlyUnique) {
+          tags = (0, _uniq2['default'])(tags);
+          tags = tags.filter(function (tag) {
+            return _this.props.value.indexOf(tag) === -1;
+          });
+        }
+
+        // 2. Strip invalid tags
+        tags = tags.filter(function (tag) {
+          return validationRegex.test(tag);
+        });
+        tags = tags.filter(function (tag) {
+          return tag.trim().length > 0;
+        });
+
+        // 3. Strip extras based on limit
+        if (maxTags >= 0) {
+          var remainingLimit = Math.max(maxTags - value.length, 0);
+
+          tags = tags.slice(0, remainingLimit);
+        }
+
+        // 4. Add remaining tags to value
+        var newValue = this.props.value.concat(tags);
+
+        this.props.onChange(newValue);
+
+        this._clearInput();
+      }
+    }, {
       key: 'focus',
       value: function focus() {
         this.refs.input.focus();
@@ -135,12 +178,24 @@
         this.refs.input.focus();
       }
     }, {
+      key: 'handlePaste',
+      value: function handlePaste(e) {
+        e.preventDefault();
+
+        var data = e.clipboardData.getData('text/plain');
+        var tags = data.split(' ').map(function (d) {
+          return d.trim();
+        });
+
+        this._addTags(tags);
+      }
+    }, {
       key: 'handleKeyDown',
       value: function handleKeyDown(e) {
-        var _props2 = this.props;
-        var value = _props2.value;
-        var removeKeys = _props2.removeKeys;
-        var addKeys = _props2.addKeys;
+        var _props3 = this.props;
+        var value = _props3.value;
+        var removeKeys = _props3.removeKeys;
+        var addKeys = _props3.addKeys;
         var tag = this.state.tag;
 
         var empty = tag === '';
@@ -202,30 +257,31 @@
     }, {
       key: 'render',
       value: function render() {
-        var _this = this;
+        var _this2 = this;
 
-        var _props3 = this.props;
-        var value = _props3.value;
-        var onChange = _props3.onChange;
-        var inputProps = _props3.inputProps;
-        var tagProps = _props3.tagProps;
-        var renderLayout = _props3.renderLayout;
-        var renderTag = _props3.renderTag;
-        var renderInput = _props3.renderInput;
-        var addKeys = _props3.addKeys;
-        var removeKeys = _props3.removeKeys;
+        var _props4 = this.props;
+        var value = _props4.value;
+        var onChange = _props4.onChange;
+        var inputProps = _props4.inputProps;
+        var tagProps = _props4.tagProps;
+        var renderLayout = _props4.renderLayout;
+        var renderTag = _props4.renderTag;
+        var renderInput = _props4.renderInput;
+        var addKeys = _props4.addKeys;
+        var removeKeys = _props4.removeKeys;
 
-        var other = _objectWithoutProperties(_props3, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
+        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
 
         var tag = this.state.tag;
 
         var tagComponents = value.map(function (tag, index) {
-          return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
+          return renderTag(_extends({ key: index, tag: tag, onRemove: _this2.handleRemove.bind(_this2) }, tagProps));
         });
 
         var inputComponent = renderInput(_extends({
           ref: 'input',
           value: tag,
+          onPaste: this.handlePaste.bind(this),
           onKeyDown: this.handleKeyDown.bind(this),
           onChange: this.handleChange.bind(this),
           onBlur: this.handleOnBlur.bind(this)

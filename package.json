@@ -42,5 +42,8 @@
   "standard": {
     "parser": "babel-eslint"
   },
-  "homepage": "https://github.com/olahol/react-tagsinput"
+  "homepage": "https://github.com/olahol/react-tagsinput",
+  "dependencies": {
+    "uniq": "^1.0.1"
+  }
 }

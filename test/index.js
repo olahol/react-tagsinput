@@ -51,6 +51,14 @@ function change(comp, value) {
   TestUtils.Simulate.change(comp.input(), {target: {value: value}});
 }
 
+function paste(comp, value) {
+  TestUtils.Simulate.paste(comp.input(), {
+    clipboardData: {
+      getData: () => value
+    }
+  });
+}
+
 function keyDown(comp, code) {
   TestUtils.Simulate.keyDown(comp.input(), {keyCode: code});
 }
@@ -128,6 +136,57 @@ describe("TagsInput", () => {
       change(comp, "");
       keyDown(comp, 13);
       assert.equal(comp.len(), 0, "there should be no tag");
+    });
+  });
+
+  describe("paste", () => {
+    it("should add single tag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
+
+      paste(comp, tag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag, "it should be the tag that was added");
+    });
+
+    it("should add two tags", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let firstTag = randstring();
+      let secondTag = firstTag + '2';
+
+      paste(comp, firstTag + ' ' + secondTag);
+      assert.equal(comp.len(), 2, "there should be two tags");
+      assert.equal(comp.tag(0), firstTag, "it should be the first tag that was added");
+      assert.equal(comp.tag(1), secondTag, "it should be the second tag that was added");
+    });
+
+    it("should support onlyUnique", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} />);
+      let tag = randstring();
+
+      paste(comp, tag + ' ' + tag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag, "it should be the tag that was added");
+    });
+
+    it("should support validation", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent validationRegex={/a+/} />);
+      let firstTag = 'aaa';
+      let secondTag = randstring();
+
+      paste(comp, firstTag + ' ' + secondTag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), firstTag, "it should be the tag that was added");
+    });
+
+    it("should respect limit", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent maxTags={1} />);
+      let firstTag = randstring();
+      let secondTag = firstTag + '2';
+
+      paste(comp, firstTag + ' ' + secondTag);
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), firstTag, "it should be the tag that was added");
     });
   });
 
