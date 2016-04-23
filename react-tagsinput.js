@@ -338,3 +338,4 @@
 
   module.exports = TagsInput;
 });
+
