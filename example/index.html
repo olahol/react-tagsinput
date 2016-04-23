@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>react-tagsinput example (without JSX)</title>
   <link rel="stylesheet" href="../react-tagsinput.css">
   <style>
@@ -61,7 +62,7 @@
       render: function () {
         return (
           React.createElement("div", null,
-            React.createElement(ReactTagsInput, {value: this.state.tags, onChange: this.handleChange}),
+            React.createElement(ReactTagsInput, {value: this.state.tags, onChange: this.handleChange, addOnPaste: true}),
             React.createElement("button", {onClick: this.saveTags}, "Save")
           )
         );

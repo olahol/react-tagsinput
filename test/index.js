@@ -140,8 +140,16 @@ describe("TagsInput", () => {
   });
 
   describe("paste", () => {
-    it("should add single tag", () => {
+    it("should not add a tag", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let tag = randstring();
+
+      paste(comp, tag);
+      assert.equal(comp.len(), 0, "there should be one tag");
+    });
+
+    it("should add single tag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} />);
       let tag = randstring();
 
       paste(comp, tag);
@@ -150,7 +158,7 @@ describe("TagsInput", () => {
     });
 
     it("should add two tags", () => {
-      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} />);
       let firstTag = randstring();
       let secondTag = firstTag + '2';
 
@@ -161,7 +169,7 @@ describe("TagsInput", () => {
     });
 
     it("should support onlyUnique", () => {
-      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} />);
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} onlyUnique={true} />);
       let tag = randstring();
 
       paste(comp, tag + ' ' + tag);
@@ -170,7 +178,7 @@ describe("TagsInput", () => {
     });
 
     it("should support validation", () => {
-      let comp = TestUtils.renderIntoDocument(<TestComponent validationRegex={/a+/} />);
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} validationRegex={/a+/} />);
       let firstTag = 'aaa';
       let secondTag = randstring();
 
@@ -180,13 +188,24 @@ describe("TagsInput", () => {
     });
 
     it("should respect limit", () => {
-      let comp = TestUtils.renderIntoDocument(<TestComponent maxTags={1} />);
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} maxTags={1} />);
       let firstTag = randstring();
       let secondTag = firstTag + '2';
 
       paste(comp, firstTag + ' ' + secondTag);
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), firstTag, "it should be the tag that was added");
+    });
+
+    it("should split tags on ,", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} pasteSplit={(data) => data.split(",")} />);
+      let firstTag = randstring();
+      let secondTag = firstTag + '2';
+
+      paste(comp, firstTag + ',' + secondTag);
+      assert.equal(comp.len(), 2, "there should be two tags");
+      assert.equal(comp.tag(0), firstTag, "it should be the tag that was added");
+      assert.equal(comp.tag(1), secondTag, "it should be the tag that was added");
     });
   });
 
@@ -262,6 +281,14 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), 1, "there should be one tag");
       keyDown(comp, 44);
       assert.equal(comp.len(), 0, "there should be no tags");
+    });
+
+    it("should be unlimited tags", () => {
+        let comp = TestUtils.renderIntoDocument(<TestComponent maxTags={-1} />);
+        let tag = randstring();
+        add(comp, tag);
+        add(comp, tag);
+        assert.equal(comp.len(), 2, "there should be 2 tags");
     });
 
     it("should limit tags added to 0", () => {

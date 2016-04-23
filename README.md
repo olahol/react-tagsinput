@@ -76,7 +76,21 @@ Allow limit number of tags, default is `-1` for infinite.
 
 ##### addOnBlur
 
-Add a tag if input blurs.
+Add a tag if input blurs. Default false.
+
+##### addOnPaste
+
+Add a tags if HTML5 paste on input. Default false.
+
+##### pasteSplit
+
+Function that splits pasted text. Default is:
+
+```javascript
+function defaultPasteSplit (data) {
+  return data.split(' ').map(d => d.trim())
+}
+```
 
 ##### removeKeys
 
@@ -162,6 +176,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Kasper Nilsson (@k-nilsson)
 * Jorge (@JorgeAguirreLeon)
 * khawerrind (@khawerrind)
+* Juho Vepsäläinen (@bebraw)
 
 
 ---
