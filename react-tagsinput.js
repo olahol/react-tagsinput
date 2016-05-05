@@ -98,11 +98,11 @@
   var TagsInput = (function (_React$Component) {
     _inherits(TagsInput, _React$Component);
 
-    function TagsInput() {
+    function TagsInput(props) {
       _classCallCheck(this, TagsInput);
 
-      _get(Object.getPrototypeOf(TagsInput.prototype), 'constructor', this).call(this);
-      this.state = { tag: '' };
+      _get(Object.getPrototypeOf(TagsInput.prototype), 'constructor', this).call(this, props);
+      this.state = { tag: '', inputWidth: props.initialInputWidth };
       this.focus = this.focus.bind(this);
       this.blur = this.blur.bind(this);
     }
@@ -119,7 +119,7 @@
     }, {
       key: '_clearInput',
       value: function _clearInput() {
-        this.setState({ tag: '' });
+        this.setState({ tag: '', inputWidth: this.props.initialInputWidth });
       }
     }, {
       key: '_addTags',
@@ -159,6 +159,16 @@
           onChange(newValue);
           this._clearInput();
         }
+      }
+    }, {
+      key: '_getInputWidth',
+      value: function _getInputWidth(e) {
+        var tag = e.target.value;
+        var width = tag.length * this.props.widthMultiplier;
+
+        if (width < this.props.initialInputWidth) width = this.props.initialInputWidth;
+
+        return width;
       }
     }, {
       key: 'focus',
@@ -224,12 +234,13 @@
         var onChange = this.props.inputProps.onChange;
 
         var tag = e.target.value;
+        var inputWidth = this._getInputWidth(e);
 
         if (onChange) {
           onChange(e);
         }
 
-        this.setState({ tag: tag });
+        this.setState({ tag: tag, inputWidth: inputWidth });
       }
     }, {
       key: 'handleOnBlur',
@@ -271,7 +282,9 @@
 
         var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
 
-        var tag = this.state.tag;
+        var _state = this.state;
+        var tag = _state.tag;
+        var inputWidth = _state.inputWidth;
 
         var tagComponents = value.map(function (tag, index) {
           return renderTag(_extends({ key: index, tag: tag, onRemove: _this.handleRemove.bind(_this) }, tagProps));
@@ -280,6 +293,7 @@
         var inputComponent = renderInput(_extends({
           ref: 'input',
           value: tag,
+          style: { width: inputWidth },
           onPaste: this.handlePaste.bind(this),
           onKeyDown: this.handleKeyDown.bind(this),
           onChange: this.handleChange.bind(this),
@@ -328,7 +342,9 @@
         tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
         onlyUnique: false,
         maxTags: -1,
-        validationRegex: /.*/
+        validationRegex: /.*/,
+        initialInputWidth: 80,
+        widthMultiplier: 10
       },
       enumerable: true
     }]);
@@ -338,4 +354,3 @@
 
   module.exports = TagsInput;
 });
-
