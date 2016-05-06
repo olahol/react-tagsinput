@@ -1,3 +1,7 @@
+### 3.6.1 (2016-05-06)
+
+* Regression from 1.4.6 when blocking tab.
+
 ### 3.6.0 (2016-04-23)
 
 * Paste support.

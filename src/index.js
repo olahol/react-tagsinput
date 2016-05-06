@@ -166,7 +166,7 @@ class TagsInput extends React.Component {
     let add = addKeys.indexOf(e.keyCode) !== -1
     let remove = removeKeys.indexOf(e.keyCode) !== -1
 
-    if (add) {
+    if (add && !empty) {
       e.preventDefault()
       this._addTags([tag])
     }

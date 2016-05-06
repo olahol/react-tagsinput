@@ -391,4 +391,13 @@ describe("TagsInput", () => {
       comp.tagsinput()._removeTag(1);
     });
   });
+
+  describe("bugs", () => {
+    it("should not add empty tags", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+
+      add(comp, '');
+      assert.equal(comp.len(), 0, "there should be no tags");
+    });
+  });
 });
