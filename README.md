@@ -56,7 +56,9 @@ An array of tags.
 
 ##### onChange (required)
 
-Callback when tags change.
+Callback when tags change, gets three arguments `tags` which is the new
+tag array, `changed` which is an array of the tags that have changed and
+`changedIndexes` which is an array of the indexes that have changed.
 
 ##### addKeys
 

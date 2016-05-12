@@ -112,8 +112,8 @@
       value: function _removeTag(index) {
         var value = this.props.value.concat([]);
         if (index > -1 && index < value.length) {
-          value.splice(index, 1);
-          this.props.onChange(value);
+          var changed = value.splice(index, 1);
+          this.props.onChange(value, changed);
         }
       }
     }, {
@@ -156,7 +156,7 @@
         // 4. Add remaining tags to value
         if (tags.length > 0) {
           var newValue = value.concat(tags);
-          onChange(newValue);
+          onChange(newValue, tags);
           this._clearInput();
         }
       }

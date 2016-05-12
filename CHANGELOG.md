@@ -1,3 +1,7 @@
+### 3.6.2 (2016-05-12)
+
+* Add `changed` and `changedIndexes` argument to `onChange`.
+
 ### 3.6.1 (2016-05-06)
 
 * Regression from 1.4.6 when blocking tab.

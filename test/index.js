@@ -26,7 +26,10 @@ class TestComponent extends React.Component {
     return this.refs.tagsinput;
   }
 
-  change(tags) {
+  change(tags, changed, changedIndexes) {
+    if (this.props.onChange) {
+      this.props.onChange.call(this, tags, changed, changedIndexes);
+    }
     this.setState({tags});
   }
 
@@ -39,7 +42,8 @@ class TestComponent extends React.Component {
   }
 
   render() {
-    return <TagsInput ref="tagsinput" value={this.state.tags} onChange={this.change} {...this.props} />
+    let {onChange, ...other} = this.props;
+    return <TagsInput ref="tagsinput" value={this.state.tags} onChange={this.change} {...other} />
   }
 }
 
@@ -367,6 +371,39 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), 0, "there should be no tags");
       add(comp, 'a');
       assert.equal(comp.len(), 1, "there should be one tag");
+    });
+
+    it("should add pass changed value to onChange", () => {
+      let onChange = function (tags, changed, changedIndexes) {
+        let oldTags = this.state.tags;
+        if (oldTags.length < tags.length) {
+          let newTags = oldTags.concat(changed)
+          assert.deepEqual(newTags, tags, "the old tags plus changed should be the new tags");
+          changedIndexes.forEach((i) => {
+            assert.equal(newTags[i], changed[i - oldTags.length])
+          })
+        } else {
+          let indexes = [];
+          let newTags = oldTags.filter((t, i) => {
+            let notRemoved = changed.indexOf(t) === -1;
+            if (!notRemoved) {
+              indexes.push(i);
+            }
+            return notRemoved;
+          });
+          assert.deepEqual(indexes, changedIndexes, "indexes should be the same");
+          assert.deepEqual(newTags, tags, "the old tags minus changed should be the new tags");
+        }
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} onChange={onChange} />);
+      add(comp, 'a');
+      add(comp, 'b');
+      add(comp, 'c');
+      paste(comp, 'd e f');
+      remove(comp);
+      remove(comp);
+      remove(comp);
     });
   });
 

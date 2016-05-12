@@ -100,8 +100,8 @@ class TagsInput extends React.Component {
   _removeTag (index) {
     let value = this.props.value.concat([])
     if (index > -1 && index < value.length) {
-      value.splice(index, 1)
-      this.props.onChange(value)
+      let changed = value.splice(index, 1)
+      this.props.onChange(value, changed, [index])
     }
   }
 
@@ -131,7 +131,11 @@ class TagsInput extends React.Component {
     // 4. Add remaining tags to value
     if (tags.length > 0) {
       let newValue = value.concat(tags)
-      onChange(newValue)
+      let indexes = []
+      for (let i = 0; i < tags.length; i++) {
+        indexes.push(value.length + i)
+      }
+      onChange(newValue, tags, indexes)
       this._clearInput()
     }
   }
