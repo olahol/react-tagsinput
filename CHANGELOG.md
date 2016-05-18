@@ -1,3 +1,7 @@
+### 3.7.0 (2016-05-18)
+
+* Add `accept` method.
+
 ### 3.6.2 (2016-05-12)
 
 * Add `changed` and `changedIndexes` argument to `onChange`.

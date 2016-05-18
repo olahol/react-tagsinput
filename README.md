@@ -30,7 +30,7 @@ bower install react-tagsinput --save
 ```javascript
 import TagsInput from 'react-tagsinput'
 
-class TestComponent extends React.Component {
+class Example extends React.Component {
   constructor() {
     super()
     this.state = {tags: []}
@@ -149,6 +149,20 @@ function defaultRenderLayout (tagComponents, inputComponent) {
   )
 }
 ```
+
+### Methods
+
+##### focus()
+
+Focus on input element.
+
+##### blur()
+
+Blur input element.
+
+##### accept()
+
+Try to add whatever value is currently in input element.
 
 ## Styling
 

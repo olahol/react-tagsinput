@@ -148,6 +148,13 @@ class TagsInput extends React.Component {
     this.refs.input.focus()
   }
 
+  accept () {
+    let {tag} = this.state
+    if (tag !== '') {
+      this._addTags([tag])
+    }
+  }
+
   handlePaste (e) {
     let {addOnPaste, pasteSplit} = this.props
 
@@ -170,9 +177,9 @@ class TagsInput extends React.Component {
     let add = addKeys.indexOf(e.keyCode) !== -1
     let remove = removeKeys.indexOf(e.keyCode) !== -1
 
-    if (add && !empty) {
+    if (add) {
       e.preventDefault()
-      this._addTags([tag])
+      this.accept()
     }
 
     if (remove && value.length > 0 && empty) {

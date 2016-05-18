@@ -175,6 +175,15 @@
         this.refs.input.focus();
       }
     }, {
+      key: 'accept',
+      value: function accept() {
+        var tag = this.state.tag;
+
+        if (tag !== '') {
+          this._addTags([tag]);
+        }
+      }
+    }, {
       key: 'handlePaste',
       value: function handlePaste(e) {
         var _props2 = this.props;
@@ -205,9 +214,9 @@
         var add = addKeys.indexOf(e.keyCode) !== -1;
         var remove = removeKeys.indexOf(e.keyCode) !== -1;
 
-        if (add && !empty) {
+        if (add) {
           e.preventDefault();
-          this._addTags([tag]);
+          this.accept();
         }
 
         if (remove && value.length > 0 && empty) {
