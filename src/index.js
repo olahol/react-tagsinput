@@ -216,11 +216,13 @@ class TagsInput extends React.Component {
   }
 
   inputProps () {
+    // eslint-disable-next-line
     let {onChange, ...otherInputProps} = this.props.inputProps
     return otherInputProps
   }
 
   render () {
+    // eslint-disable-next-line
     let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, ...other} = this.props
     let {tag} = this.state
 
