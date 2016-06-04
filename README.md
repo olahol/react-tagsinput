@@ -193,6 +193,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 * Jorge (@JorgeAguirreLeon)
 * khawerrind (@khawerrind)
 * Juho Vepsäläinen (@bebraw)
+* Timber Qin (@qinxij)
 
 
 ---
