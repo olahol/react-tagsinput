@@ -245,7 +245,7 @@
     }, {
       key: 'blur',
       value: function blur() {
-        this.refs.input.focus();
+        this.refs.input.blur();
       }
     }, {
       key: 'accept',
