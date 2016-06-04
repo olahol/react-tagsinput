@@ -4,22 +4,57 @@
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coverage-image]][coverage-url]
 [![Dependency Status][dep-image]][dep-url]
+[![Size][size-image]][size-url]
 [![Download Count][downloads-image]][downloads-url]
 [![js-standard-style][standard-image]][standard-url]
 
-> Simple [React](http://facebook.github.io/react/index.html) component for inputing tags.
+Highly customizable [React](http://facebook.github.io/react/index.html) component for inputing tags.
 
-### [Demo](https://olahol.github.io/react-tagsinput)
+## Table of Contents
+
+  * [react-tagsinput](#react-tagsinput)
+    * [Demo](#demo)
+    * [Install](#install)
+    * [Example](#example)
+    * [FAQ](#faq)
+      * [How do I make the input dynamically grow in size?](#how-do-i-make-the-input-dynamically-grow-in-size)
+    * [Component Interface](#component-interface)
+      * [Props](#props)
+        * [value (required)](#value-required)
+        * [onChange (required)](#onchange-required)
+        * [addKeys](#addkeys)
+        * [onlyUnique](#onlyunique)
+        * [validationRegex](#validationregex)
+        * [maxTags](#maxtags)
+        * [addOnBlur](#addonblur)
+        * [addOnPaste](#addonpaste)
+        * [pasteSplit](#pastesplit)
+        * [removeKeys](#removekeys)
+        * [tagProps](#tagprops)
+        * [inputProps](#inputprops)
+        * [renderTag](#rendertag)
+        * [renderInput](#renderinput)
+        * [renderLayout](#renderlayout)
+      * [Methods](#methods)
+        * [focus()](#focus)
+        * [blur()](#blur)
+        * [accept()](#accept)
+    * [Styling](#styling)
+    * [Contributors](#contributors)
+    * [Changelog](#changelog)
+    * [License](#license)
+
+## Demo
 
 [![Demo](./example/demo.gif)][demo-url]
+
+### [Interactive Demo](https://olahol.github.io/react-tagsinput)
 
 ## Install
 
 ```bash
 npm install react-tagsinput --save
 ```
-
-or
 
 ```bash
 bower install react-tagsinput --save
@@ -45,8 +80,22 @@ class Example extends React.Component {
   }
 }
 ```
+## FAQ
 
-## Interface
+##### How do I make the input dynamically grow in size?
+
+Install [`react-input-autosize`](https://github.com/JedWatson/react-input-autosize) and change the `renderInput` prop to:
+
+```js
+function autosizingRenderInput (props) {
+  let {onChange, value, ...other} = props
+  return (
+    <AutosizeInput type='text' onChange={onChange} value={value} {...other} />
+  )
+}
+```
+
+## Component Interface
 
 ### Props
 
@@ -168,33 +217,11 @@ Try to add whatever value is currently in input element.
 
 Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 
-## Contributors
+## [Contributors](./CONTRIBUTORS.md)
 
-* Ola Holmström (@olahol)
-* Dmitri Voronianski (@voronianski)
-* Artem Vovsya (@avovsya)
-* scott c (@scoarescoare)
-* junk (@jedverity)
-* Buz Carter (@buzcarter)
-* Garbin Huang (@garbin)
-* Will Washburn (@willwashburn)
-* Kristján Oddsson (@koddsson)
-* Vojtěch Bartoš (@VojtechBartos)
-* Ming Fang (@mingfang)
-* Chris Adams (@thecadams)
-* Domenico Matteo (@dmatteo)
-* Kevin Smith (@ksmth)
-* Gaurav Tiwari (@gauravtiwari)
-* Tay Yang Shun (@yangshun)
-* Trevor Hutto (@huttotw)
-* David L. Goldberg (@DavidLGoldberg)
-* Pedro J. Parra (@pedroparra)
-* Kasper Nilsson (@k-nilsson)
-* Jorge (@JorgeAguirreLeon)
-* khawerrind (@khawerrind)
-* Juho Vepsäläinen (@bebraw)
-* Timber Qin (@qinxij)
+## [Changelog](./CHANGELOG.md)
 
+## [License](./LICENSE)
 
 ---
 
@@ -214,3 +241,6 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 [dep-url]: https://david-dm.org/olahol/react-tagsinput
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: https://github.com/feross/standard
+[size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/react-tagsinput.js?style=flat-square
+[size-url]: https://github.com/olahol/react-tagsinput/react-tagsinput.js
+
