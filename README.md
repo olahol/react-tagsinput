@@ -241,6 +241,6 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 [dep-url]: https://david-dm.org/olahol/react-tagsinput
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: https://github.com/feross/standard
-[size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/react-tagsinput.js?style=flat-square
-[size-url]: https://github.com/olahol/react-tagsinput/react-tagsinput.js
+[size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/src/index.js?style=flat-square
+[size-url]: https://github.com/olahol/react-tagsinput/blob/master/src/index.js
 
