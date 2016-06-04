@@ -145,7 +145,7 @@ class TagsInput extends React.Component {
   }
 
   blur () {
-    this.refs.input.focus()
+    this.refs.input.blur()
   }
 
   accept () {
