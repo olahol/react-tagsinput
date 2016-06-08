@@ -153,6 +153,11 @@ An array of key codes that remove a tag, default is `[8]` (Backspace).
 Specify the wrapper className. Default is `react-tagsinput`.
 
 
+##### focusedClassName
+
+Specify the class to add to the wrapper when the component is focused. Default is `react-tagsinput--focused`.
+
+
 ##### tagProps
 
 Props passed down to every tag component. Defualt is: `{className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'}`.
