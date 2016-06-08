@@ -322,16 +322,30 @@
       }
     }, {
       key: 'handleOnFocus',
-      value: function handleOnFocus() {
+      value: function handleOnFocus(e) {
+        var onFocus = this.props.inputProps.onFocus;
+
+
+        if (onFocus) {
+          onFocus(e);
+        }
+
         this.setState({ isFocused: true });
       }
     }, {
       key: 'handleOnBlur',
       value: function handleOnBlur(e) {
+        var onBlur = this.props.inputProps.onBlur;
+
+
         this.setState({ isFocused: false });
 
         if (e == null) {
           return;
+        }
+
+        if (onBlur) {
+          onBlur(e);
         }
 
         if (this.props.addOnBlur) {

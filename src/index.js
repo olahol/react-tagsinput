@@ -209,15 +209,27 @@ class TagsInput extends React.Component {
     this.setState({tag})
   }
 
-  handleOnFocus () {
+  handleOnFocus (e) {
+    let {onFocus} = this.props.inputProps
+
+    if (onFocus) {
+      onFocus(e)
+    }
+
     this.setState({isFocused: true})
   }
 
   handleOnBlur (e) {
+    let {onBlur} = this.props.inputProps
+
     this.setState({isFocused: false})
 
     if (e == null) {
       return
+    }
+
+    if (onBlur) {
+      onBlur(e)
     }
 
     if (this.props.addOnBlur) {
