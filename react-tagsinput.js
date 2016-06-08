@@ -173,7 +173,7 @@
 
       var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TagsInput).call(this));
 
-      _this.state = { tag: '' };
+      _this.state = { tag: '', isFocused: false };
       _this.focus = _this.focus.bind(_this);
       _this.blur = _this.blur.bind(_this);
       return _this;
@@ -241,11 +241,13 @@
       key: 'focus',
       value: function focus() {
         this.refs.input.focus();
+        this.handleOnFocus();
       }
     }, {
       key: 'blur',
       value: function blur() {
         this.refs.input.blur();
+        this.handleOnBlur();
       }
     }, {
       key: 'accept',
@@ -319,8 +321,19 @@
         this.setState({ tag: tag });
       }
     }, {
+      key: 'handleOnFocus',
+      value: function handleOnFocus() {
+        this.setState({ isFocused: true });
+      }
+    }, {
       key: 'handleOnBlur',
       value: function handleOnBlur(e) {
+        this.setState({ isFocused: false });
+
+        if (e == null) {
+          return;
+        }
+
         if (this.props.addOnBlur) {
           this._addTags([e.target.value]);
         }
@@ -359,11 +372,19 @@
         var renderInput = _props4.renderInput;
         var addKeys = _props4.addKeys;
         var removeKeys = _props4.removeKeys;
+        var className = _props4.className;
+        var focusedClassName = _props4.focusedClassName;
 
-        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys']);
+        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName']);
 
-        var tag = this.state.tag;
+        var _state = this.state;
+        var tag = _state.tag;
+        var isFocused = _state.isFocused;
 
+
+        if (isFocused) {
+          className += ' ' + focusedClassName;
+        }
 
         var tagComponents = value.map(function (tag, index) {
           return renderTag(_extends({ key: index, tag: tag, onRemove: _this2.handleRemove.bind(_this2) }, tagProps));
@@ -375,12 +396,13 @@
           onPaste: this.handlePaste.bind(this),
           onKeyDown: this.handleKeyDown.bind(this),
           onChange: this.handleChange.bind(this),
+          onFocus: this.handleOnFocus.bind(this),
           onBlur: this.handleOnBlur.bind(this)
         }, this.inputProps()));
 
         return _react2.default.createElement(
           'div',
-          _extends({ ref: 'div', onClick: this.handleClick.bind(this) }, other),
+          _extends({ ref: 'div', onClick: this.handleClick.bind(this), className: className }, other),
           renderLayout(tagComponents, inputComponent)
         );
       }
@@ -390,6 +412,7 @@
   }(_react2.default.Component);
 
   TagsInput.propTypes = {
+    focusedClassName: _react2.default.PropTypes.string,
     addKeys: _react2.default.PropTypes.array,
     addOnBlur: _react2.default.PropTypes.bool,
     addOnPaste: _react2.default.PropTypes.bool,
@@ -408,6 +431,7 @@
   };
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
+    focusedClassName: 'react-tagsinput--focused',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,

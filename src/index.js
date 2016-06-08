@@ -57,12 +57,13 @@ function defaultPasteSplit (data) {
 class TagsInput extends React.Component {
   constructor () {
     super()
-    this.state = {tag: ''}
+    this.state = {tag: '', isFocused: false}
     this.focus = ::this.focus
     this.blur = ::this.blur
   }
 
   static propTypes = {
+    focusedClassName: React.PropTypes.string,
     addKeys: React.PropTypes.array,
     addOnBlur: React.PropTypes.bool,
     addOnPaste: React.PropTypes.bool,
@@ -82,6 +83,7 @@ class TagsInput extends React.Component {
 
   static defaultProps = {
     className: 'react-tagsinput',
+    focusedClassName: 'react-tagsinput--focused',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
@@ -142,10 +144,12 @@ class TagsInput extends React.Component {
 
   focus () {
     this.refs.input.focus()
+    this.handleOnFocus()
   }
 
   blur () {
     this.refs.input.blur()
+    this.handleOnBlur()
   }
 
   accept () {
@@ -205,7 +209,17 @@ class TagsInput extends React.Component {
     this.setState({tag})
   }
 
+  handleOnFocus () {
+    this.setState({isFocused: true})
+  }
+
   handleOnBlur (e) {
+    this.setState({isFocused: false})
+
+    if (e == null) {
+      return
+    }
+
     if (this.props.addOnBlur) {
       this._addTags([e.target.value])
     }
@@ -223,8 +237,12 @@ class TagsInput extends React.Component {
 
   render () {
     // eslint-disable-next-line
-    let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, ...other} = this.props
-    let {tag} = this.state
+    let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, ...other} = this.props
+    let {tag, isFocused} = this.state
+
+    if (isFocused) {
+      className += ' ' + focusedClassName
+    }
 
     let tagComponents = value.map((tag, index) => {
       return renderTag({key: index, tag, onRemove: ::this.handleRemove, ...tagProps})
@@ -236,12 +254,13 @@ class TagsInput extends React.Component {
       onPaste: ::this.handlePaste,
       onKeyDown: ::this.handleKeyDown,
       onChange: ::this.handleChange,
+      onFocus: ::this.handleOnFocus,
       onBlur: ::this.handleOnBlur,
       ...this.inputProps()
     })
 
     return (
-      <div ref='div' onClick={::this.handleClick} {...other}>
+      <div ref='div' onClick={::this.handleClick} className={className} {...other}>
         {renderLayout(tagComponents, inputComponent)}
       </div>
     )

@@ -214,6 +214,14 @@ describe("TagsInput", () => {
   });
 
   describe("props", () => {
+    let defaultClassName;
+    let defaultFocusedClassName;
+
+    beforeEach(() => {
+      defaultClassName = "react-tagsinput";
+      defaultFocusedClassName = "react-tagsinput--focused";
+    });
+
     it("should not add a tag twice if onlyUnique is true", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} />);
       let tag = randstring();
@@ -309,6 +317,41 @@ describe("TagsInput", () => {
         add(comp, tag);
         add(comp, tag);
         assert.equal(comp.len(), 1, "there should be 1 tags");
+    });
+
+    it("should add a default className to host", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      assert.equal(allClass(comp, defaultClassName).length, 1);
+    });
+
+    it("should add a custom className to host", () => {
+      let customClassName = "custom-class";
+      let comp = TestUtils.renderIntoDocument(<TestComponent className={customClassName} />);
+      assert.equal(allClass(comp, defaultClassName).length, 0);
+      assert.equal(allClass(comp, customClassName).length, 1);
+    });
+
+    it("should add a default className to host on focus", () => {
+      let className = `${defaultClassName} ${defaultFocusedClassName}`;
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+
+      comp.tagsinput().focus();
+      assert.equal(allClass(comp, className).length, 1, "on focus");
+
+      comp.tagsinput().blur();
+      assert.equal(allClass(comp, className).length, 0, "on blur");
+    });
+
+    it("should add a custom className to host on focus", () => {
+      let customFocusedClassName = "custom-focus";
+      let className = `${defaultClassName} ${customFocusedClassName}`;
+      let comp = TestUtils.renderIntoDocument(<TestComponent focusedClassName={customFocusedClassName} />);
+
+      comp.tagsinput().focus();
+      assert.equal(allClass(comp, className).length, 1, "on focus");
+
+      comp.tagsinput().blur();
+      assert.equal(allClass(comp, className).length, 0, "on blur");
     });
 
     it("should add props to tag", () => {
