@@ -165,6 +165,11 @@
     });
   }
 
+  var defaultInputProps = {
+    className: 'react-tagsinput-input',
+    placeholder: 'Add a tag'
+  };
+
   var TagsInput = function (_React$Component) {
     _inherits(TagsInput, _React$Component);
 
@@ -364,10 +369,12 @@
         var
         // eslint-disable-next-line
         onChange = _props$inputProps.onChange;
+        var onFocus = _props$inputProps.onFocus;
+        var onBlur = _props$inputProps.onBlur;
 
-        var otherInputProps = _objectWithoutProperties(_props$inputProps, ['onChange']);
+        var otherInputProps = _objectWithoutProperties(_props$inputProps, ['onChange', 'onFocus', 'onBlur']);
 
-        return otherInputProps;
+        return _extends({}, defaultInputProps, otherInputProps);
       }
     }, {
       key: 'render',
@@ -379,7 +386,6 @@
         // eslint-disable-next-line
         value = _props4.value;
         var onChange = _props4.onChange;
-        var inputProps = _props4.inputProps;
         var tagProps = _props4.tagProps;
         var renderLayout = _props4.renderLayout;
         var renderTag = _props4.renderTag;
@@ -389,7 +395,7 @@
         var className = _props4.className;
         var focusedClassName = _props4.focusedClassName;
 
-        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'inputProps', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName']);
+        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName']);
 
         var _state = this.state;
         var tag = _state.tag;
@@ -449,7 +455,7 @@
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
-    inputProps: { className: 'react-tagsinput-input' },
+    inputProps: {},
     removeKeys: [8],
     renderInput: defaultRenderInput,
     renderTag: defaultRenderTag,
