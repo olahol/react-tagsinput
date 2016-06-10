@@ -479,5 +479,17 @@ describe("TagsInput", () => {
       add(comp, '');
       assert.equal(comp.len(), 0, "there should be no tags");
     });
+
+    it("should not override default input props", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent inputProps={{placeholder: "test"}}/>);
+
+      assert.equal(comp.tagsinput().inputProps().className, "react-tagsinput-input", "should have the default className");
+    });
+
+    it("should override default input props", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent inputProps={{className: "test"}}/>);
+
+      assert.equal(comp.tagsinput().inputProps().className, "test", "should not have the default className");
+    });
   });
 });

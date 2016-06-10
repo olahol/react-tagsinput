@@ -54,6 +54,11 @@ function defaultPasteSplit (data) {
   return data.split(' ').map(d => d.trim())
 }
 
+const defaultInputProps = {
+  className: 'react-tagsinput-input',
+  placeholder: 'Add a tag'
+}
+
 class TagsInput extends React.Component {
   constructor () {
     super()
@@ -87,7 +92,7 @@ class TagsInput extends React.Component {
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
-    inputProps: {className: 'react-tagsinput-input'},
+    inputProps: {},
     removeKeys: [8],
     renderInput: defaultRenderInput,
     renderTag: defaultRenderTag,
@@ -243,13 +248,16 @@ class TagsInput extends React.Component {
 
   inputProps () {
     // eslint-disable-next-line
-    let {onChange, ...otherInputProps} = this.props.inputProps
-    return otherInputProps
+    let {onChange, onFocus, onBlur, ...otherInputProps} = this.props.inputProps
+    return {
+      ...defaultInputProps,
+      ...otherInputProps
+    }
   }
 
   render () {
     // eslint-disable-next-line
-    let {value, onChange, inputProps, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, ...other} = this.props
+    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, ...other} = this.props
     let {tag, isFocused} = this.state
 
     if (isFocused) {

@@ -1,3 +1,11 @@
+### 3.8.1 (2016-06-10)
+
+* Retain the default `inputProps`.
+
+### 3.8.0 (2016-06-08)
+
+* Add `focusedClassName` prop.
+
 ### 3.7.0 (2016-05-18)
 
 * Add `accept` method.
