@@ -261,7 +261,10 @@
 
         if (tag !== '') {
           this._addTags([tag]);
+          return true;
         }
+
+        return false;
       }
     }, {
       key: 'handlePaste',
@@ -295,9 +298,8 @@
         var add = addKeys.indexOf(e.keyCode) !== -1;
         var remove = removeKeys.indexOf(e.keyCode) !== -1;
 
-        if (add) {
+        if (add && this.accept()) {
           e.preventDefault();
-          this.accept();
         }
 
         if (remove && value.length > 0 && empty) {
