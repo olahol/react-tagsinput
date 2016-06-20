@@ -71,6 +71,10 @@ function blur(comp) {
   TestUtils.Simulate.blur(comp.input());
 }
 
+function focus(comp) {
+  TestUtils.Simulate.focus(comp.input());
+}
+
 function click(comp) {
   TestUtils.Simulate.click(comp);
 }
@@ -369,6 +373,27 @@ describe("TagsInput", () => {
       let inputs = allTag(comp, "input");
 
       assert.equal(inputs[0].className, "test", "class name should be test");
+    });
+
+    it("should add trigger onFocus and onBlur on input", () => {
+      let focused = false;
+      let blurred = false;
+
+      function onFocus() {
+        focused = true;
+      }
+
+      function onBlur() {
+        blurred = true;
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent inputProps={{onFocus: onFocus, onBlur: onBlur}}/>);
+
+      focus(comp);
+      blur(comp);
+
+      assert.ok(focused, "should have focused");
+      assert.ok(blurred, "should have blurred");
     });
 
     it("should fire onChange on input", (done) => {

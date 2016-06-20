@@ -144,7 +144,10 @@ class TagsInput extends React.Component {
       }
       onChange(newValue, tags, indexes)
       this._clearInput()
+      return true
     }
+
+    return false
   }
 
   focus () {
@@ -159,9 +162,9 @@ class TagsInput extends React.Component {
 
   accept () {
     let {tag} = this.state
+
     if (tag !== '') {
-      this._addTags([tag])
-      return true
+      return this._addTags([tag])
     }
 
     return false

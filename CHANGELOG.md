@@ -1,3 +1,7 @@
+### 3.8.2 (2016-06-20)
+
+* Fix tab behaviour, only prevent default if `onChange` was called.
+
 ### 3.8.1 (2016-06-10)
 
 * Retain the default `inputProps`.

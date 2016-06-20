@@ -62,7 +62,7 @@
       render: function () {
         return (
           React.createElement("div", null,
-            React.createElement(ReactTagsInput, {value: this.state.tags, onChange: this.handleChange, addOnPaste: true}),
+            React.createElement(ReactTagsInput, {value: this.state.tags, onlyUnique: true, onChange: this.handleChange, addOnPaste: true}),
             React.createElement("button", {onClick: this.saveTags}, "Save")
           )
         );

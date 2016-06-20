@@ -240,7 +240,10 @@
           }
           onChange(newValue, tags, indexes);
           this._clearInput();
+          return true;
         }
+
+        return false;
       }
     }, {
       key: 'focus',
@@ -259,9 +262,9 @@
       value: function accept() {
         var tag = this.state.tag;
 
+
         if (tag !== '') {
-          this._addTags([tag]);
-          return true;
+          return this._addTags([tag]);
         }
 
         return false;
