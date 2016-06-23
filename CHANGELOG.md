@@ -1,3 +1,7 @@
+### 3.9.0 (2016-06-23)
+
+* Add methods `addTag` and `clearInput` methods.
+
 ### 3.8.2 (2016-06-20)
 
 * Fix tab behaviour, only prevent default if `onChange` was called.

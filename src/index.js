@@ -170,6 +170,14 @@ class TagsInput extends React.Component {
     return false
   }
 
+  addTag (tag) {
+    return this._addTags([tag])
+  }
+
+  clearInput () {
+    this._clearInput()
+  }
+
   handlePaste (e) {
     let {addOnPaste, pasteSplit} = this.props
 

@@ -270,6 +270,16 @@
         return false;
       }
     }, {
+      key: 'addTag',
+      value: function addTag(tag) {
+        return this._addTags([tag]);
+      }
+    }, {
+      key: 'clearInput',
+      value: function clearInput() {
+        this._clearInput();
+      }
+    }, {
       key: 'handlePaste',
       value: function handlePaste(e) {
         var _props2 = this.props;

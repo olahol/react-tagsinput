@@ -1,6 +1,6 @@
 {
   "name": "react-tagsinput",
-  "version": "3.8.2",
+  "version": "3.9.0",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
@@ -21,12 +21,17 @@
     "mocha": "^2.3.3",
     "react": "^15.0.2",
     "react-addons-test-utils": "^15.0.0",
+    "react-autosuggest": "^3.7.4",
     "react-dom": "^15.0.2",
+    "react-input-autosize": "^1.0.0",
+    "reactpack": "^0.7.2",
     "standard": "^7.0.1"
   },
   "scripts": {
     "test": "standard src/index.js && mocha --compilers js:babel-register",
     "build": "babel --module-id ReactTagsInput -m umd src/index.js > react-tagsinput.js",
+    "build-example": "reactpack --no-extract --no-source-map --no-html example/index.js example/",
+    "build-example-watch": "reactpack -w --no-extract --no-source-map --no-html example/index.js example/",
     "coverage": "./node_modules/.bin/babel-node node_modules/.bin/isparta cover --report text --report html node_modules/.bin/_mocha -- --reporter dot",
     "prepublish": "npm run build"
   },

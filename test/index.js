@@ -487,6 +487,21 @@ describe("TagsInput", () => {
 
       comp.tagsinput().blur();
     });
+
+    it("should clear input", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+
+      change(comp, "test");
+      comp.tagsinput().clearInput();
+      assert.equal(comp.tagsinput().state.tag, '', "there should be no tag value")
+    });
+
+    it("should add a tag with addTag", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+
+      comp.tagsinput().addTag("test");
+      assert.equal(comp.len(), 1, "there should be one tag")
+    });
   });
 
   describe("coverage", () => {

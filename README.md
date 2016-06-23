@@ -18,6 +18,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
     * [Example](#example)
     * [FAQ](#faq)
       * [How do I make the input dynamically grow in size?](#how-do-i-make-the-input-dynamically-grow-in-size)
+      * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
     * [Component Interface](#component-interface)
       * [Props](#props)
         * [value (required)](#value-required)
@@ -65,6 +66,8 @@ bower install react-tagsinput --save
 ```javascript
 import TagsInput from 'react-tagsinput'
 
+import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
+
 class Example extends React.Component {
   constructor() {
     super()
@@ -94,6 +97,31 @@ function autosizingRenderInput (props) {
   )
 }
 ```
+
+##### How do I add auto suggestion?
+
+Use [`react-autosuggest`](https://github.com/moroshko/react-autosuggest) and change the `renderInput` prop to
+something like:
+
+```js
+function autosuggestRenderInput (props) {
+  return (
+    <Autosuggest
+      ref={props.ref}
+      suggestions={suggestions}
+      shouldRenderSuggestions={(value) => value && value.trim().length > 0}
+      getSuggestionValue={(suggestion) => suggestion.name}
+      renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
+      inputProps={props}
+      onSuggestionSelected={(e, {suggestion}) => {
+        this.refs.tagsinput.addTag(suggestion.name)
+      }}
+    />
+  )
+}
+```
+
+A full example can be found in [`example/index.js`](https://github.com/olahol/react-tagsinput/blob/master/example/index.js).
 
 ## Component Interface
 
@@ -223,6 +251,14 @@ Blur input element.
 ##### accept()
 
 Try to add whatever value is currently in input element.
+
+##### addTag(tag)
+
+Convenience method that adds a tag.
+
+##### clearInput()
+
+Clears the input value.
 
 ## Styling
 
