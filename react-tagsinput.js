@@ -111,6 +111,19 @@
     return out;
   }
 
+  /* istanbul ignore next */
+  function getClipboardData(e) {
+    if (window.clipboardData) {
+      return window.clipboardData.getData('Text');
+    }
+
+    if (e.clipboardData) {
+      return e.clipboardData.getData('text/plain');
+    }
+
+    return '';
+  }
+
   function defaultRenderTag(props) {
     var tag = props.tag;
     var key = props.key;
@@ -293,7 +306,7 @@
 
         e.preventDefault();
 
-        var data = e.clipboardData.getData('text/plain');
+        var data = getClipboardData(e);
         var tags = pasteSplit(data);
 
         this._addTags(tags);

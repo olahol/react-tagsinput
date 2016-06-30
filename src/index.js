@@ -12,6 +12,19 @@ function uniq (arr) {
   return out
 }
 
+/* istanbul ignore next */
+function getClipboardData (e) {
+  if (window.clipboardData) {
+    return window.clipboardData.getData('Text')
+  }
+
+  if (e.clipboardData) {
+    return e.clipboardData.getData('text/plain')
+  }
+
+  return ''
+}
+
 function defaultRenderTag (props) {
   let {tag, key, onRemove, classNameRemove, ...other} = props
   return (
@@ -187,7 +200,7 @@ class TagsInput extends React.Component {
 
     e.preventDefault()
 
-    let data = e.clipboardData.getData('text/plain')
+    let data = getClipboardData(e)
     let tags = pasteSplit(data)
 
     this._addTags(tags)

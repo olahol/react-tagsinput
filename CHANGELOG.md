@@ -1,3 +1,7 @@
+### 3.9.1 (2016-06-30)
+
+* Fix clipboardData on IE.
+
 ### 3.9.0 (2016-06-23)
 
 * Add methods `addTag` and `clearInput` methods.
