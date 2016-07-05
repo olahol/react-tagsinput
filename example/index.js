@@ -1,9 +1,8 @@
 import React from 'react'
 import TagsInput from '../src'
 import {findDOMNode, render} from 'react-dom'
-import AutosizeInput from 'react-input-autosize'
-import AutocompleteInput from 'react-autocomplete'
 import Autosuggest from 'react-autosuggest'
+import AutosizeInput from 'react-input-autosize'
 
 import '../react-tagsinput.css'
 

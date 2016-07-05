@@ -26,6 +26,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [addKeys](#addkeys)
         * [onlyUnique](#onlyunique)
         * [validationRegex](#validationregex)
+        * [disabled](#disabled)
         * [maxTags](#maxtags)
         * [addOnBlur](#addonblur)
         * [addOnPaste](#addonpaste)
@@ -148,6 +149,11 @@ Allow only unique tags, default is `false`.
 ##### validationRegex
 
 Allow only tags that pass this regex to be added. Default is `/.*/`.
+
+##### disabled
+
+Passes the disabled prop to `renderInput` and `renderTag`, by default this
+will "disable" the component.
 
 ##### maxTags
 

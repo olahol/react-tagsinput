@@ -473,6 +473,11 @@ describe("TagsInput", () => {
       remove(comp);
       remove(comp);
     });
+
+    it("should disable input when component is disabled", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent disabled={true} />);
+      assert.ok(comp.tagsinput().refs.input.disabled, "input should be disabled");
+    });
   });
 
   describe("methods", () => {

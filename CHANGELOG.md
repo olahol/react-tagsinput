@@ -1,3 +1,8 @@
+### 3.10.0 (2016-07-06)
+
+* Add `disabled` prop.
+* Fix warnings in React 15.2.x.
+
 ### 3.9.1 (2016-06-30)
 
 * Fix clipboardData on IE.

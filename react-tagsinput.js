@@ -127,16 +127,17 @@
   function defaultRenderTag(props) {
     var tag = props.tag;
     var key = props.key;
+    var disabled = props.disabled;
     var onRemove = props.onRemove;
     var classNameRemove = props.classNameRemove;
 
-    var other = _objectWithoutProperties(props, ['tag', 'key', 'onRemove', 'classNameRemove']);
+    var other = _objectWithoutProperties(props, ['tag', 'key', 'disabled', 'onRemove', 'classNameRemove']);
 
     return _react2.default.createElement(
       'span',
       _extends({ key: key }, other),
       tag,
-      _react2.default.createElement('a', { className: classNameRemove, onClick: function onClick(e) {
+      !disabled && _react2.default.createElement('a', { className: classNameRemove, onClick: function onClick(e) {
           return onRemove(key);
         } })
     );
@@ -394,15 +395,19 @@
       key: 'inputProps',
       value: function inputProps() {
         var _props$inputProps = this.props.inputProps;
-        var
-        // eslint-disable-next-line
-        onChange = _props$inputProps.onChange;
+        var onChange = _props$inputProps.onChange;
         var onFocus = _props$inputProps.onFocus;
         var onBlur = _props$inputProps.onBlur;
 
         var otherInputProps = _objectWithoutProperties(_props$inputProps, ['onChange', 'onFocus', 'onBlur']);
 
-        return _extends({}, defaultInputProps, otherInputProps);
+        var props = _extends({}, defaultInputProps, otherInputProps);
+
+        if (this.props.disabled) {
+          props.disabled = true;
+        }
+
+        return props;
       }
     }, {
       key: 'render',
@@ -410,9 +415,7 @@
         var _this2 = this;
 
         var _props4 = this.props;
-        var
-        // eslint-disable-next-line
-        value = _props4.value;
+        var value = _props4.value;
         var onChange = _props4.onChange;
         var tagProps = _props4.tagProps;
         var renderLayout = _props4.renderLayout;
@@ -422,8 +425,16 @@
         var removeKeys = _props4.removeKeys;
         var className = _props4.className;
         var focusedClassName = _props4.focusedClassName;
+        var addOnBlur = _props4.addOnBlur;
+        var addOnPaste = _props4.addOnPaste;
+        var inputProps = _props4.inputProps;
+        var pasteSplit = _props4.pasteSplit;
+        var onlyUnique = _props4.onlyUnique;
+        var maxTags = _props4.maxTags;
+        var validationRegex = _props4.validationRegex;
+        var disabled = _props4.disabled;
 
-        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName']);
+        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled']);
 
         var _state = this.state;
         var tag = _state.tag;
@@ -435,7 +446,8 @@
         }
 
         var tagComponents = value.map(function (tag, index) {
-          return renderTag(_extends({ key: index, tag: tag, onRemove: _this2.handleRemove.bind(_this2) }, tagProps));
+          return renderTag(_extends({
+            key: index, tag: tag, onRemove: _this2.handleRemove.bind(_this2), disabled: disabled }, tagProps));
         });
 
         var inputComponent = renderInput(_extends({
@@ -475,7 +487,8 @@
     onlyUnique: _react2.default.PropTypes.bool,
     value: _react2.default.PropTypes.array.isRequired,
     maxTags: _react2.default.PropTypes.number,
-    validationRegex: _react2.default.PropTypes.instanceOf(RegExp)
+    validationRegex: _react2.default.PropTypes.instanceOf(RegExp),
+    disabled: _react2.default.PropTypes.bool
   };
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
@@ -492,7 +505,8 @@
     tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
     onlyUnique: false,
     maxTags: -1,
-    validationRegex: /.*/
+    validationRegex: /.*/,
+    disabled: false
   };
   exports.default = TagsInput;
   module.exports = exports['default'];

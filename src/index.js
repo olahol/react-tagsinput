@@ -26,11 +26,13 @@ function getClipboardData (e) {
 }
 
 function defaultRenderTag (props) {
-  let {tag, key, onRemove, classNameRemove, ...other} = props
+  let {tag, key, disabled, onRemove, classNameRemove, ...other} = props
   return (
     <span key={key} {...other}>
       {tag}
-      <a className={classNameRemove} onClick={(e) => onRemove(key)} />
+      {!disabled &&
+        <a className={classNameRemove} onClick={(e) => onRemove(key)} />
+      }
     </span>
   )
 }
@@ -96,7 +98,8 @@ class TagsInput extends React.Component {
     onlyUnique: React.PropTypes.bool,
     value: React.PropTypes.array.isRequired,
     maxTags: React.PropTypes.number,
-    validationRegex: React.PropTypes.instanceOf(RegExp)
+    validationRegex: React.PropTypes.instanceOf(RegExp),
+    disabled: React.PropTypes.bool
   }
 
   static defaultProps = {
@@ -114,7 +117,8 @@ class TagsInput extends React.Component {
     tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
     onlyUnique: false,
     maxTags: -1,
-    validationRegex: /.*/
+    validationRegex: /.*/,
+    disabled: false
   }
 
   _removeTag (index) {
@@ -275,15 +279,22 @@ class TagsInput extends React.Component {
   inputProps () {
     // eslint-disable-next-line
     let {onChange, onFocus, onBlur, ...otherInputProps} = this.props.inputProps
-    return {
+
+    let props = {
       ...defaultInputProps,
       ...otherInputProps
     }
+
+    if (this.props.disabled) {
+      props.disabled = true
+    }
+
+    return props
   }
 
   render () {
     // eslint-disable-next-line
-    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, ...other} = this.props
+    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, ...other} = this.props
     let {tag, isFocused} = this.state
 
     if (isFocused) {
@@ -291,7 +302,9 @@ class TagsInput extends React.Component {
     }
 
     let tagComponents = value.map((tag, index) => {
-      return renderTag({key: index, tag, onRemove: ::this.handleRemove, ...tagProps})
+      return renderTag({
+        key: index, tag, onRemove: ::this.handleRemove, disabled, ...tagProps
+      })
     })
 
     let inputComponent = renderInput({
