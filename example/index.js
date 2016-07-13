@@ -23,6 +23,8 @@ class Examples extends React.Component {
         <hr />
         <h2>Email</h2>
         <EmailExample />
+        <h2>Form</h2>
+        <FormExample />
       </div>
     )
   }
@@ -56,7 +58,7 @@ class AutosizeExample extends React.Component {
 
   render () {
     function autosizingRenderInput (props) {
-      let {onChange, value, ...other} = props
+      let {onChange, value, addTag, ...other} = props
       return (
         <AutosizeInput type='text' onChange={onChange} value={value} {...other} />
       )
@@ -133,6 +135,7 @@ class AutocompleteExample extends React.Component {
 
   render () {
     const autocompleteRenderInput = (props) => {
+      const {addTag, ...other} = props
 			const inputValue = (props.value && props.value.trim().toLowerCase()) || ""
 			const inputLength = inputValue.length
       let {tags} = this.state
@@ -147,9 +150,9 @@ class AutocompleteExample extends React.Component {
           shouldRenderSuggestions={(value) => value && value.trim().length > 0}
           getSuggestionValue={(suggestion) => suggestion.name}
           renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
-          inputProps={props}
+          inputProps={other}
           onSuggestionSelected={(e, {suggestion}) => {
-            this.refs.tags.add(suggestion.name)
+            props.addTag(suggestion.name)
           }}
         />
       )
@@ -184,6 +187,25 @@ class EmailExample extends React.Component {
 				}}
 				onChange={::this.handleChange}
 			/>
+    )
+  }
+}
+
+class FormExample extends React.Component {
+  constructor () {
+    super()
+    this.state = {tags: []}
+  }
+
+  handleChange (tags) {
+    this.setState({tags})
+  }
+
+  render () {
+    return (
+      <form>
+        <TagsInput name="form" onlyUnique={true} value={this.state.tags} onChange={::this.handleChange} />
+      </form>
     )
   }
 }

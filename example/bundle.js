@@ -203,7 +203,13 @@
 	              null,
 	              'Email'
 	            ),
-	            _react2.default.createElement(EmailExample, null)
+	            _react2.default.createElement(EmailExample, null),
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'Form'
+	            ),
+	            _react2.default.createElement(FormExample, null)
 	          );
 	        }
 	      }]);
@@ -261,8 +267,9 @@
 	          function autosizingRenderInput(props) {
 	            var onChange = props.onChange;
 	            var value = props.value;
+	            var addTag = props.addTag;
 
-	            var other = _objectWithoutProperties(props, ['onChange', 'value']);
+	            var other = _objectWithoutProperties(props, ['onChange', 'value', 'addTag']);
 
 	            return _react2.default.createElement(_reactInputAutosize2.default, _extends({ type: 'text', onChange: onChange, value: value }, other));
 	          }
@@ -301,6 +308,10 @@
 	          var _this5 = this;
 
 	          var autocompleteRenderInput = function autocompleteRenderInput(props) {
+	            var addTag = props.addTag;
+
+	            var other = _objectWithoutProperties(props, ['addTag']);
+
 	            var inputValue = props.value && props.value.trim().toLowerCase() || "";
 	            var inputLength = inputValue.length;
 	            var tags = _this5.state.tags;
@@ -325,11 +336,11 @@
 	                  suggestion.name
 	                );
 	              },
-	              inputProps: props,
+	              inputProps: other,
 	              onSuggestionSelected: function onSuggestionSelected(e, _ref) {
 	                var suggestion = _ref.suggestion;
 
-	                _this5.refs.tags.add(suggestion.name);
+	                props.addTag(suggestion.name);
 	              }
 	            });
 	          };
@@ -380,6 +391,37 @@
 	      }]);
 
 	      return EmailExample;
+	    }(_react2.default.Component);
+
+	    var FormExample = function (_React$Component6) {
+	      _inherits(FormExample, _React$Component6);
+
+	      function FormExample() {
+	        _classCallCheck(this, FormExample);
+
+	        var _this7 = _possibleConstructorReturn(this, Object.getPrototypeOf(FormExample).call(this));
+
+	        _this7.state = { tags: [] };
+	        return _this7;
+	      }
+
+	      _createClass(FormExample, [{
+	        key: 'handleChange',
+	        value: function handleChange(tags) {
+	          this.setState({ tags: tags });
+	        }
+	      }, {
+	        key: 'render',
+	        value: function render() {
+	          return _react2.default.createElement(
+	            'form',
+	            null,
+	            _react2.default.createElement(_src2.default, { name: 'form', onlyUnique: true, value: this.state.tags, onChange: this.handleChange.bind(this) })
+	          );
+	        }
+	      }]);
+
+	      return FormExample;
 	    }(_react2.default.Component);
 
 	    (0, _reactDom.render)(_react2.default.createElement(Examples, null), document.getElementById('react-app'));
@@ -24860,15 +24902,17 @@
 	    function defaultRenderInput(props) {
 	      var onChange = props.onChange;
 	      var value = props.value;
+	      var addTag = props.addTag;
 
-	      var other = _objectWithoutProperties(props, ['onChange', 'value']);
+	      var other = _objectWithoutProperties(props, ['onChange', 'value', 'addTag']);
 
 	      return _react2.default.createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
 	    }
 
 	    defaultRenderInput.propTypes = {
 	      value: _react2.default.PropTypes.string,
-	      onChange: _react2.default.PropTypes.func
+	      onChange: _react2.default.PropTypes.func,
+	      addTag: _react2.default.PropTypes.func
 	    };
 
 	    function defaultRenderLayout(tagComponents, inputComponent) {
@@ -24930,7 +24974,6 @@
 	          var value = _props.value;
 
 
-	          // 1. Strip non-unique tags
 	          if (onlyUnique) {
 	            tags = uniq(tags);
 	            tags = tags.filter(function (tag) {
@@ -24938,7 +24981,6 @@
 	            });
 	          }
 
-	          // 2. Strip invalid tags
 	          tags = tags.filter(function (tag) {
 	            return validationRegex.test(tag);
 	          });
@@ -24946,13 +24988,11 @@
 	            return tag.trim().length > 0;
 	          });
 
-	          // 3. Strip extras based on limit
 	          if (maxTags >= 0) {
 	            var remainingLimit = Math.max(maxTags - value.length, 0);
 	            tags = tags.slice(0, remainingLimit);
 	          }
 
-	          // 4. Add remaining tags to value
 	          if (tags.length > 0) {
 	            var newValue = value.concat(tags);
 	            var indexes = [];
@@ -25029,11 +25069,16 @@
 	          var tag = this.state.tag;
 
 	          var empty = tag === '';
-	          var add = addKeys.indexOf(e.keyCode) !== -1;
-	          var remove = removeKeys.indexOf(e.keyCode) !== -1;
+	          var keyCode = e.keyCode;
+	          var add = addKeys.indexOf(keyCode) !== -1;
+	          var remove = removeKeys.indexOf(keyCode) !== -1;
 
-	          if (add && this.accept()) {
-	            e.preventDefault();
+	          if (add) {
+	            var added = this.accept();
+	            // Special case for preventing forms submitting.
+	            if (added || keyCode === 13) {
+	              e.preventDefault();
+	            }
 	          }
 
 	          if (remove && value.length > 0 && empty) {
@@ -25164,7 +25209,8 @@
 	            onKeyDown: this.handleKeyDown.bind(this),
 	            onChange: this.handleChange.bind(this),
 	            onFocus: this.handleOnFocus.bind(this),
-	            onBlur: this.handleOnBlur.bind(this)
+	            onBlur: this.handleOnBlur.bind(this),
+	            addTag: this.addTag.bind(this)
 	          }, this.inputProps()));
 
 	          return _react2.default.createElement(

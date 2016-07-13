@@ -212,11 +212,16 @@ class TagsInput extends React.Component {
     let {value, removeKeys, addKeys} = this.props
     let {tag} = this.state
     let empty = tag === ''
-    let add = addKeys.indexOf(e.keyCode) !== -1
-    let remove = removeKeys.indexOf(e.keyCode) !== -1
+    let keyCode = e.keyCode
+    let add = addKeys.indexOf(keyCode) !== -1
+    let remove = removeKeys.indexOf(keyCode) !== -1
 
-    if (add && this.accept()) {
-      e.preventDefault()
+    if (add) {
+      let added = this.accept()
+      // Special case for preventing forms submitting.
+      if (added || keyCode === 13) {
+        e.preventDefault()
+      }
     }
 
     if (remove && value.length > 0 && empty) {
