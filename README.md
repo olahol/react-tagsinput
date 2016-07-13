@@ -222,7 +222,7 @@ Render function for input. Default is:
 
 ```javascript
 function defaultRenderInput (props) {
-  let {onChange, value, ...other} = props
+  let {onChange, value, addTag, ...other} = props
   return (
     <input type='text' onChange={onChange} value={value} {...other} />
   )

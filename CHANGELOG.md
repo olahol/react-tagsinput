@@ -1,3 +1,8 @@
+### 3.11.0 (2016-07-14)
+
+* Add `addTag` to inputProps.
+* Prevent enter key down on input submitting forms.
+
 ### 3.10.0 (2016-07-06)
 
 * Add `disabled` prop.

@@ -153,8 +153,9 @@
   function defaultRenderInput(props) {
     var onChange = props.onChange;
     var value = props.value;
+    var addTag = props.addTag;
 
-    var other = _objectWithoutProperties(props, ['onChange', 'value']);
+    var other = _objectWithoutProperties(props, ['onChange', 'value', 'addTag']);
 
     return _react2.default.createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
   }
@@ -224,7 +225,6 @@
         var value = _props.value;
 
 
-        // 1. Strip non-unique tags
         if (onlyUnique) {
           tags = uniq(tags);
           tags = tags.filter(function (tag) {
@@ -232,7 +232,6 @@
           });
         }
 
-        // 2. Strip invalid tags
         tags = tags.filter(function (tag) {
           return validationRegex.test(tag);
         });
@@ -240,13 +239,11 @@
           return tag.trim().length > 0;
         });
 
-        // 3. Strip extras based on limit
         if (maxTags >= 0) {
           var remainingLimit = Math.max(maxTags - value.length, 0);
           tags = tags.slice(0, remainingLimit);
         }
 
-        // 4. Add remaining tags to value
         if (tags.length > 0) {
           var newValue = value.concat(tags);
           var indexes = [];
@@ -323,11 +320,16 @@
         var tag = this.state.tag;
 
         var empty = tag === '';
-        var add = addKeys.indexOf(e.keyCode) !== -1;
-        var remove = removeKeys.indexOf(e.keyCode) !== -1;
+        var keyCode = e.keyCode;
+        var add = addKeys.indexOf(keyCode) !== -1;
+        var remove = removeKeys.indexOf(keyCode) !== -1;
 
-        if (add && this.accept()) {
-          e.preventDefault();
+        if (add) {
+          var added = this.accept();
+          // Special case for preventing forms submitting.
+          if (added || keyCode === 13) {
+            e.preventDefault();
+          }
         }
 
         if (remove && value.length > 0 && empty) {
