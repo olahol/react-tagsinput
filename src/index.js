@@ -45,7 +45,8 @@ defaultRenderTag.propTypes = {
 }
 
 function defaultRenderInput (props) {
-  let {onChange, value, ...other} = props
+  // eslint-disable-next-line
+  let {onChange, value, addTag, ...other} = props
   return (
     <input type='text' onChange={onChange} value={value} {...other} />
   )
@@ -137,23 +138,19 @@ class TagsInput extends React.Component {
   _addTags (tags) {
     let {validationRegex, onChange, onlyUnique, maxTags, value} = this.props
 
-    // 1. Strip non-unique tags
     if (onlyUnique) {
       tags = uniq(tags)
       tags = tags.filter(tag => value.indexOf(tag) === -1)
     }
 
-    // 2. Strip invalid tags
     tags = tags.filter(tag => validationRegex.test(tag))
     tags = tags.filter(tag => tag.trim().length > 0)
 
-    // 3. Strip extras based on limit
     if (maxTags >= 0) {
       let remainingLimit = Math.max(maxTags - value.length, 0)
       tags = tags.slice(0, remainingLimit)
     }
 
-    // 4. Add remaining tags to value
     if (tags.length > 0) {
       let newValue = value.concat(tags)
       let indexes = []
