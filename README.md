@@ -229,6 +229,8 @@ function defaultRenderInput (props) {
 }
 ```
 
+*Note: renderInput also receives `addTag` as a prop.*
+
 ##### renderLayout
 
 Renders the layout of the component. Takes `tagComponents` and `inputComponent` as args. Default is:

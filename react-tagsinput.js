@@ -161,7 +161,8 @@
 
   defaultRenderInput.propTypes = {
     value: _react2.default.PropTypes.string,
-    onChange: _react2.default.PropTypes.func
+    onChange: _react2.default.PropTypes.func,
+    addTag: _react2.default.PropTypes.func
   };
 
   function defaultRenderLayout(tagComponents, inputComponent) {
@@ -457,7 +458,8 @@
           onKeyDown: this.handleKeyDown.bind(this),
           onChange: this.handleChange.bind(this),
           onFocus: this.handleOnFocus.bind(this),
-          onBlur: this.handleOnBlur.bind(this)
+          onBlur: this.handleOnBlur.bind(this),
+          addTag: this.addTag.bind(this)
         }, this.inputProps()));
 
         return _react2.default.createElement(
