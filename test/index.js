@@ -423,6 +423,14 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), tags.length, "there should be one tag");
     });
 
+    it("should use tagDisplayProp to deal with objects", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent tagDisplayProp={'name'} />);
+
+      add(comp, 'foo');
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.deepEqual(comp.tag(0), {name:'foo'}, "should be {name: 'foo'}");
+    });
+
     it("should render input with renderInput", () => {
       let renderInput = (props) => {
         return <input key={props.key} className="test" />;

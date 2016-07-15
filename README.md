@@ -200,16 +200,20 @@ Props passed down to every tag component. Defualt is: `{className: 'react-tagsin
 
 Props passed down to input. Default is: `{className: 'react-tagsinput-input'}`
 
+##### tagDisplayProp
+
+The tags' property to be used when displaying/adding one. Default is: `null` which causes the tags to be an array of strings.
+
 ##### renderTag
 
 Render function for every tag. Default is:
 
 ```javascript
 function defaultRenderTag (props) {
-  let {tag, key, onRemove, ...other} = props
+  let {tag, key, onRemove, getTagDisplayValue, ...other} = props
   return (
     <span key={key} {...other}>
-      {tag}
+      {getTagDisplayValue(tag)}
       <a onClick={(e) => onRemove(key)} />
     </span>
   )

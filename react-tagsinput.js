@@ -25,6 +25,21 @@
     };
   }
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -130,13 +145,14 @@
     var disabled = props.disabled;
     var onRemove = props.onRemove;
     var classNameRemove = props.classNameRemove;
+    var getTagDisplayValue = props.getTagDisplayValue;
 
-    var other = _objectWithoutProperties(props, ['tag', 'key', 'disabled', 'onRemove', 'classNameRemove']);
+    var other = _objectWithoutProperties(props, ['tag', 'key', 'disabled', 'onRemove', 'classNameRemove', 'getTagDisplayValue']);
 
     return _react2.default.createElement(
       'span',
       _extends({ key: key }, other),
-      tag,
+      getTagDisplayValue(tag),
       !disabled && _react2.default.createElement('a', { className: classNameRemove, onClick: function onClick(e) {
           return onRemove(key);
         } })
@@ -147,7 +163,8 @@
     key: _react2.default.PropTypes.number,
     tag: _react2.default.PropTypes.string,
     onRemove: _react2.default.PropTypes.func,
-    classNameRemove: _react2.default.PropTypes.string
+    classNameRemove: _react2.default.PropTypes.string,
+    getTagDisplayValue: _react2.default.PropTypes.func
   };
 
   function defaultRenderInput(props) {
@@ -201,6 +218,30 @@
     }
 
     _createClass(TagsInput, [{
+      key: '_getTagDisplayValue',
+      value: function _getTagDisplayValue(tag) {
+        var tagDisplayProp = this.props.tagDisplayProp;
+
+
+        if (tagDisplayProp) {
+          return tag[tagDisplayProp];
+        }
+
+        return tag;
+      }
+    }, {
+      key: '_makeTag',
+      value: function _makeTag(tag) {
+        var tagDisplayProp = this.props.tagDisplayProp;
+
+
+        if (tagDisplayProp) {
+          return _defineProperty({}, tagDisplayProp, tag);
+        }
+
+        return tag;
+      }
+    }, {
       key: '_removeTag',
       value: function _removeTag(index) {
         var value = this.props.value.concat([]);
@@ -217,6 +258,8 @@
     }, {
       key: '_addTags',
       value: function _addTags(tags) {
+        var _this2 = this;
+
         var _props = this.props;
         var validationRegex = _props.validationRegex;
         var onChange = _props.onChange;
@@ -228,15 +271,17 @@
         if (onlyUnique) {
           tags = uniq(tags);
           tags = tags.filter(function (tag) {
-            return value.indexOf(tag) === -1;
+            return value.every(function (currentTag) {
+              return _this2._getTagDisplayValue(currentTag) !== _this2._getTagDisplayValue(tag);
+            });
           });
         }
 
         tags = tags.filter(function (tag) {
-          return validationRegex.test(tag);
+          return validationRegex.test(_this2._getTagDisplayValue(tag));
         });
         tags = tags.filter(function (tag) {
-          return tag.trim().length > 0;
+          return _this2._getTagDisplayValue(tag).trim().length > 0;
         });
 
         if (maxTags >= 0) {
@@ -276,6 +321,7 @@
 
 
         if (tag !== '') {
+          tag = this._makeTag(tag);
           return this._addTags([tag]);
         }
 
@@ -294,6 +340,8 @@
     }, {
       key: 'handlePaste',
       value: function handlePaste(e) {
+        var _this3 = this;
+
         var _props2 = this.props;
         var addOnPaste = _props2.addOnPaste;
         var pasteSplit = _props2.pasteSplit;
@@ -306,7 +354,9 @@
         e.preventDefault();
 
         var data = getClipboardData(e);
-        var tags = pasteSplit(data);
+        var tags = pasteSplit(data).map(function (tag) {
+          return _this3._makeTag(tag);
+        });
 
         this._addTags(tags);
       }
@@ -386,7 +436,8 @@
         }
 
         if (this.props.addOnBlur) {
-          this._addTags([e.target.value]);
+          var tag = this._makeTag(e.target.value);
+          this._addTags([tag]);
         }
       }
     }, {
@@ -415,7 +466,7 @@
     }, {
       key: 'render',
       value: function render() {
-        var _this2 = this;
+        var _this4 = this;
 
         var _props4 = this.props;
         var value = _props4.value;
@@ -436,8 +487,9 @@
         var maxTags = _props4.maxTags;
         var validationRegex = _props4.validationRegex;
         var disabled = _props4.disabled;
+        var tagDisplayProp = _props4.tagDisplayProp;
 
-        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled']);
+        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled', 'tagDisplayProp']);
 
         var _state = this.state;
         var tag = _state.tag;
@@ -450,7 +502,7 @@
 
         var tagComponents = value.map(function (tag, index) {
           return renderTag(_extends({
-            key: index, tag: tag, onRemove: _this2.handleRemove.bind(_this2), disabled: disabled }, tagProps));
+            key: index, tag: tag, onRemove: _this4.handleRemove.bind(_this4), disabled: disabled, getTagDisplayValue: _this4._getTagDisplayValue.bind(_this4) }, tagProps));
         });
 
         var inputComponent = renderInput(_extends({
@@ -492,7 +544,8 @@
     value: _react2.default.PropTypes.array.isRequired,
     maxTags: _react2.default.PropTypes.number,
     validationRegex: _react2.default.PropTypes.instanceOf(RegExp),
-    disabled: _react2.default.PropTypes.bool
+    disabled: _react2.default.PropTypes.bool,
+    tagDisplayProp: _react2.default.PropTypes.string
   };
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
@@ -510,7 +563,8 @@
     onlyUnique: false,
     maxTags: -1,
     validationRegex: /.*/,
-    disabled: false
+    disabled: false,
+    tagDisplayProp: null
   };
   exports.default = TagsInput;
   module.exports = exports['default'];

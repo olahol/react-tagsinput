@@ -26,10 +26,10 @@ function getClipboardData (e) {
 }
 
 function defaultRenderTag (props) {
-  let {tag, key, disabled, onRemove, classNameRemove, ...other} = props
+  let {tag, key, disabled, onRemove, classNameRemove, getTagDisplayValue, ...other} = props
   return (
     <span key={key} {...other}>
-      {tag}
+      {getTagDisplayValue(tag)}
       {!disabled &&
         <a className={classNameRemove} onClick={(e) => onRemove(key)} />
       }
@@ -41,7 +41,8 @@ defaultRenderTag.propTypes = {
   key: React.PropTypes.number,
   tag: React.PropTypes.string,
   onRemove: React.PropTypes.func,
-  classNameRemove: React.PropTypes.string
+  classNameRemove: React.PropTypes.string,
+  getTagDisplayValue: React.PropTypes.func
 }
 
 function defaultRenderInput (props) {
@@ -101,7 +102,8 @@ class TagsInput extends React.Component {
     value: React.PropTypes.array.isRequired,
     maxTags: React.PropTypes.number,
     validationRegex: React.PropTypes.instanceOf(RegExp),
-    disabled: React.PropTypes.bool
+    disabled: React.PropTypes.bool,
+    tagDisplayProp: React.PropTypes.string
   }
 
   static defaultProps = {
@@ -120,7 +122,30 @@ class TagsInput extends React.Component {
     onlyUnique: false,
     maxTags: -1,
     validationRegex: /.*/,
-    disabled: false
+    disabled: false,
+    tagDisplayProp: null
+  }
+
+  _getTagDisplayValue (tag) {
+    const {tagDisplayProp} = this.props
+
+    if (tagDisplayProp) {
+      return tag[tagDisplayProp]
+    }
+
+    return tag
+  }
+
+  _makeTag (tag) {
+    const {tagDisplayProp} = this.props
+
+    if (tagDisplayProp) {
+      return {
+        [tagDisplayProp]: tag
+      }
+    }
+
+    return tag
   }
 
   _removeTag (index) {
@@ -140,11 +165,12 @@ class TagsInput extends React.Component {
 
     if (onlyUnique) {
       tags = uniq(tags)
-      tags = tags.filter(tag => value.indexOf(tag) === -1)
+      tags = tags.filter(tag => value.every(currentTag => this._getTagDisplayValue(currentTag) !== this._getTagDisplayValue(tag)))
     }
 
-    tags = tags.filter(tag => validationRegex.test(tag))
-    tags = tags.filter(tag => tag.trim().length > 0)
+    // 2. Strip invalid tags
+    tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))
+    tags = tags.filter(tag => this._getTagDisplayValue(tag).trim().length > 0)
 
     if (maxTags >= 0) {
       let remainingLimit = Math.max(maxTags - value.length, 0)
@@ -179,6 +205,7 @@ class TagsInput extends React.Component {
     let {tag} = this.state
 
     if (tag !== '') {
+      tag = this._makeTag(tag)
       return this._addTags([tag])
     }
 
@@ -203,7 +230,7 @@ class TagsInput extends React.Component {
     e.preventDefault()
 
     let data = getClipboardData(e)
-    let tags = pasteSplit(data)
+    let tags = pasteSplit(data).map(tag => this._makeTag(tag))
 
     this._addTags(tags)
   }
@@ -271,7 +298,8 @@ class TagsInput extends React.Component {
     }
 
     if (this.props.addOnBlur) {
-      this._addTags([e.target.value])
+      const tag = this._makeTag(e.target.value)
+      this._addTags([tag])
     }
   }
 
@@ -297,7 +325,7 @@ class TagsInput extends React.Component {
 
   render () {
     // eslint-disable-next-line
-    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, ...other} = this.props
+    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, tagDisplayProp, ...other} = this.props
     let {tag, isFocused} = this.state
 
     if (isFocused) {
@@ -306,7 +334,7 @@ class TagsInput extends React.Component {
 
     let tagComponents = value.map((tag, index) => {
       return renderTag({
-        key: index, tag, onRemove: ::this.handleRemove, disabled, ...tagProps
+        key: index, tag, onRemove: ::this.handleRemove, disabled, getTagDisplayValue: ::this._getTagDisplayValue, ...tagProps
       })
     })
 
