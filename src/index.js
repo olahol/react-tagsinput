@@ -168,7 +168,6 @@ class TagsInput extends React.Component {
       tags = tags.filter(tag => value.every(currentTag => this._getTagDisplayValue(currentTag) !== this._getTagDisplayValue(tag)))
     }
 
-    // 2. Strip invalid tags
     tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))
     tags = tags.filter(tag => this._getTagDisplayValue(tag).trim().length > 0)
 

@@ -1,3 +1,7 @@
+### 3.12.0 (2016-07-19)
+
+* Add `tagDisplayProp`.
+
 ### 3.11.0 (2016-07-14)
 
 * Add `addTag` to inputProps.
