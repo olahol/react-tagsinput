@@ -79,9 +79,9 @@ function click(comp) {
   TestUtils.Simulate.click(comp);
 }
 
-function add(comp, tag) {
+function add(comp, tag, keyCode) {
   change(comp, tag);
-  keyDown(comp, 13);
+  keyDown(comp, keyCode || 13);
 }
 
 function remove(comp) {
@@ -522,6 +522,12 @@ describe("TagsInput", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
 
       comp.tagsinput()._removeTag(1);
+    });
+
+    it("should test prevent default", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} value={["test"]} />);
+
+      add(comp, "test", 9);
     });
   });
 
