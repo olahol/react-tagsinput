@@ -90,6 +90,7 @@ class TagsInput extends React.Component {
     addKeys: React.PropTypes.array,
     addOnBlur: React.PropTypes.bool,
     addOnPaste: React.PropTypes.bool,
+    currentValue: React.PropTypes.string,
     inputProps: React.PropTypes.object,
     onChange: React.PropTypes.func.isRequired,
     removeKeys: React.PropTypes.array,
@@ -109,6 +110,7 @@ class TagsInput extends React.Component {
   static defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
+    currentValue: '',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
@@ -322,6 +324,18 @@ class TagsInput extends React.Component {
     return props
   }
 
+  componentDidMount () {
+    this.setState({
+      tag: this.props.currentValue
+    })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    this.setState({
+      tag: nextProps.currentValue
+    })
+  }
+
   render () {
     // eslint-disable-next-line
     let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, tagDisplayProp, ...other} = this.props
@@ -350,7 +364,7 @@ class TagsInput extends React.Component {
     })
 
     return (
-      <div ref='div' onClick={::this.handleClick} className={className} {...other}>
+      <div ref='div' onClick={::this.handleClick} className={className}>
         {renderLayout(tagComponents, inputComponent)}
       </div>
     )

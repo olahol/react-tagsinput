@@ -145,6 +145,11 @@ describe("TagsInput", () => {
       keyDown(comp, 13);
       assert.equal(comp.len(), 0, "there should be no tag");
     });
+
+    it("should set a default value for the input", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent currentValue="Default Value" />);
+      assert.equal(comp.input()._value, "Default Value", "there should be no tag");
+    });
   });
 
   describe("paste", () => {

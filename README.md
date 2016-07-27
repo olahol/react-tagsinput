@@ -24,6 +24,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [value (required)](#value-required)
         * [onChange (required)](#onchange-required)
         * [addKeys](#addkeys)
+        * [currentValue](#currentValue)
         * [onlyUnique](#onlyunique)
         * [validationRegex](#validationregex)
         * [disabled](#disabled)
@@ -141,6 +142,10 @@ tag array, `changed` which is an array of the tags that have changed and
 ##### addKeys
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
+
+##### currentValue
+
+A string to set a value on the input.
 
 ##### onlyUnique
 
@@ -302,4 +307,3 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 [standard-url]: https://github.com/feross/standard
 [size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/src/index.js?style=flat-square
 [size-url]: https://github.com/olahol/react-tagsinput/blob/master/src/index.js
-

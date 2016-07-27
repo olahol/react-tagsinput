@@ -532,6 +532,7 @@
     addKeys: _react2.default.PropTypes.array,
     addOnBlur: _react2.default.PropTypes.bool,
     addOnPaste: _react2.default.PropTypes.bool,
+    tag: _react2.default.PropTypes.string,
     inputProps: _react2.default.PropTypes.object,
     onChange: _react2.default.PropTypes.func.isRequired,
     removeKeys: _react2.default.PropTypes.array,
@@ -550,6 +551,7 @@
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
+    tag: '',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
