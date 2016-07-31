@@ -1,3 +1,7 @@
+### 3.13.0 (2016-07-31)
+
+* Add `currentValue`.
+
 ### 3.12.0 (2016-07-19)
 
 * Add `tagDisplayProp`.

@@ -464,6 +464,20 @@
         return props;
       }
     }, {
+      key: 'componentDidMount',
+      value: function componentDidMount() {
+        this.setState({
+          tag: this.props.currentValue
+        });
+      }
+    }, {
+      key: 'componentWillReceiveProps',
+      value: function componentWillReceiveProps(nextProps) {
+        this.setState({
+          tag: nextProps.currentValue
+        });
+      }
+    }, {
       key: 'render',
       value: function render() {
         var _this4 = this;
@@ -518,7 +532,7 @@
 
         return _react2.default.createElement(
           'div',
-          _extends({ ref: 'div', onClick: this.handleClick.bind(this), className: className }, other),
+          { ref: 'div', onClick: this.handleClick.bind(this), className: className },
           renderLayout(tagComponents, inputComponent)
         );
       }
@@ -532,7 +546,7 @@
     addKeys: _react2.default.PropTypes.array,
     addOnBlur: _react2.default.PropTypes.bool,
     addOnPaste: _react2.default.PropTypes.bool,
-    tag: _react2.default.PropTypes.string,
+    currentValue: _react2.default.PropTypes.string,
     inputProps: _react2.default.PropTypes.object,
     onChange: _react2.default.PropTypes.func.isRequired,
     removeKeys: _react2.default.PropTypes.array,
@@ -551,7 +565,7 @@
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
-    tag: '',
+    currentValue: '',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
