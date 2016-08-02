@@ -4,7 +4,7 @@
     "react-tagsinput.js",
     "react-tagsinput.css"
   ],
-  "version": "3.13.0",
+  "version": "3.13.1",
   "homepage": "https://github.com/olahol/react-tagsinput",
   "description": "Simple react.js component for inputing tags",
   "keywords": [

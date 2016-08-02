@@ -1,3 +1,7 @@
+### 3.13.1 (2016-08-02)
+
+* Fix for `currentValue`.
+
 ### 3.13.0 (2016-07-31)
 
 * Add `currentValue`.
