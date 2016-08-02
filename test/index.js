@@ -520,6 +520,49 @@ describe("TagsInput", () => {
       comp.tagsinput().addTag("test");
       assert.equal(comp.len(), 1, "there should be one tag")
     });
+
+    describe("componentWillReceiveProps", () => {
+      it("updates the state", () => {
+        const TestParent = React.createFactory(React.createClass({
+          getInitialState() {
+            return {
+              currentValue: "init"
+            };
+          },
+          render() {
+            return <TestComponent ref="testComp" currentValue={this.state.currentValue} />
+          }
+        }));
+
+        let parent = TestUtils.renderIntoDocument(TestParent());
+        parent.setState({
+          currentValue: "test"
+        });
+
+        assert.equal(parent.refs.testComp.props.currentValue, "test", "sets the correct value for currentValue")
+      })
+
+      it("does not modify the state", () => {
+        const TestParent = React.createFactory(React.createClass({
+          getInitialState() {
+            return {
+              currentValue: "init",
+              fake: "fake"
+            };
+          },
+          render() {
+            return <TestComponent ref="testComp" fake={this.state.fake} currentValue={this.state.currentValue} />
+          }
+        }));
+
+        let parent = TestUtils.renderIntoDocument(TestParent());
+        parent.setState({
+          fake: "test"
+        });
+
+        assert.equal(parent.refs.testComp.props.currentValue, "init", "does not modify currentValue")
+      })
+    });
   });
 
   describe("coverage", () => {

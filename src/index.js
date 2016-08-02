@@ -331,6 +331,10 @@ class TagsInput extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (!nextProps.currentValue) {
+      return
+    }
+
     this.setState({
       tag: nextProps.currentValue
     })
