@@ -24,7 +24,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [value (required)](#value-required)
         * [onChange (required)](#onchange-required)
         * [addKeys](#addkeys)
-        * [currentValue](#currentValue)
+        * [currentValue](#currentvalue)
         * [onlyUnique](#onlyunique)
         * [validationRegex](#validationregex)
         * [disabled](#disabled)
