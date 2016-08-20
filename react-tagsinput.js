@@ -363,6 +363,9 @@
     }, {
       key: 'handleKeyDown',
       value: function handleKeyDown(e) {
+        if (e.defaultPrevented) {
+          return;
+        }
         var _props3 = this.props;
         var value = _props3.value;
         var removeKeys = _props3.removeKeys;
@@ -473,6 +476,10 @@
     }, {
       key: 'componentWillReceiveProps',
       value: function componentWillReceiveProps(nextProps) {
+        if (!nextProps.currentValue) {
+          return;
+        }
+
         this.setState({
           tag: nextProps.currentValue
         });
