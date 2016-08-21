@@ -193,12 +193,18 @@ class TagsInput extends React.Component {
   }
 
   focus () {
-    this.refs.input.focus()
+    if (typeof this.refs.input.focus === 'function') {
+      this.refs.input.focus()
+    }
+
     this.handleOnFocus()
   }
 
   blur () {
-    this.refs.input.blur()
+    if (typeof this.refs.input.blur === 'function') {
+      this.refs.input.blur()
+    }
+
     this.handleOnBlur()
   }
 

@@ -22,6 +22,10 @@ class TestComponent extends React.Component {
     return this.refs.tagsinput.refs.input;
   }
 
+  div() {
+    return this.refs.tagsinput.refs.div;
+  }
+
   tagsinput() {
     return this.refs.tagsinput;
   }
@@ -594,6 +598,33 @@ describe("TagsInput", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent renderInput={renderInput} />);
 
       add(comp, "test", 13);
+    });
+
+    it("should not focus on an input that does not have focus method", () => {
+      let Empty = React.createClass({
+        render: function () {
+          return (
+            <span>
+              {this.props.children}
+            </span>
+          );
+        }
+      })
+
+      function renderInput (props) {
+        let {onChange, value, addTag, ref, ...other} = props
+
+        return (
+          <Empty ref={ref}>
+            <input type='text' onChange={onChange} value={value} {...other} />
+          </Empty>
+        )
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent renderInput={renderInput} />);
+
+      comp.tagsinput().blur();
+      comp.tagsinput().focus();
     });
   });
 

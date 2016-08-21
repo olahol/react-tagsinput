@@ -1,4 +1,8 @@
-### 3.13.1 (2016-08-22)
+### 3.13.3 (2016-08-22)
+
+* Add guards to focus and blur methods so they are not called on elements that do not have them.
+
+### 3.13.2 (2016-08-22)
 
 * Fix auto suggest behaviour.
 
