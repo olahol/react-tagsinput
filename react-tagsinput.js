@@ -366,6 +366,7 @@
         if (e.defaultPrevented) {
           return;
         }
+
         var _props3 = this.props;
         var value = _props3.value;
         var removeKeys = _props3.removeKeys;

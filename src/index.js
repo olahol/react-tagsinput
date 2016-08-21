@@ -240,6 +240,7 @@ class TagsInput extends React.Component {
     if (e.defaultPrevented) {
       return
     }
+
     let {value, removeKeys, addKeys} = this.props
     let {tag} = this.state
     let empty = tag === ''

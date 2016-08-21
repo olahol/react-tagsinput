@@ -1,3 +1,7 @@
+### 3.13.1 (2016-08-22)
+
+* Fix auto suggest behaviour.
+
 ### 3.13.1 (2016-08-02)
 
 * Fix for `currentValue`.

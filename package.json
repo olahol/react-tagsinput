@@ -1,6 +1,6 @@
 {
   "name": "react-tagsinput",
-  "version": "3.13.1",
+  "version": "3.13.2",
   "description": "Simple react.js component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
@@ -21,7 +21,7 @@
     "mocha": "^2.3.3",
     "react": "15.x.x",
     "react-addons-test-utils": "^15.0.0",
-    "react-autosuggest": "^3.7.4",
+    "react-autosuggest": "^5.1.0",
     "react-dom": "15.x.x",
     "react-input-autosize": "^1.0.0",
     "reactpack": "^0.7.2",

@@ -577,6 +577,24 @@ describe("TagsInput", () => {
 
       add(comp, "test", 9);
     });
+
+    it("should do nothing if default is prevented on input", () => {
+      function renderInput (props) {
+        let {onChange, value, addTag, onKeyDown, ...other} = props
+        let keyDown = (e) => {
+          e.preventDefault()
+          onKeyDown(e)
+        }
+
+        return (
+          <input type='text' onChange={onChange} value={value} onKeyDown={keyDown} {...other} />
+        )
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent renderInput={renderInput} />);
+
+      add(comp, "test", 13);
+    });
   });
 
   describe("bugs", () => {

@@ -123,7 +123,7 @@ function autosuggestRenderInput (props) {
 }
 ```
 
-A full example can be found in [`example/index.js`](https://github.com/olahol/react-tagsinput/blob/master/example/index.js).
+A working example can be found in [`example/index.js`](https://github.com/olahol/react-tagsinput/blob/master/example/index.js#L137).
 
 ## Component Interface
 

@@ -136,8 +136,18 @@ class AutocompleteExample extends React.Component {
   render () {
     const autocompleteRenderInput = (props) => {
       const {addTag, ...other} = props
+
+			const handleOnChange = (e, {newValue, method}) => {
+        if (method === 'enter') {
+          e.preventDefault()
+        } else {
+          props.onChange(e)
+        }
+      }
+
 			const inputValue = (props.value && props.value.trim().toLowerCase()) || ""
 			const inputLength = inputValue.length
+
       let {tags} = this.state
       let suggestions = states().filter((state) => {
 				return state.name.toLowerCase().slice(0, inputLength) === inputValue
@@ -150,7 +160,7 @@ class AutocompleteExample extends React.Component {
           shouldRenderSuggestions={(value) => value && value.trim().length > 0}
           getSuggestionValue={(suggestion) => suggestion.name}
           renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
-          inputProps={other}
+          inputProps={{...other, onChange: handleOnChange}}
           onSuggestionSelected={(e, {suggestion}) => {
             props.addTag(suggestion.name)
           }}
@@ -158,7 +168,7 @@ class AutocompleteExample extends React.Component {
       )
     }
 
-    return <TagsInput ref='tags' renderInput={autocompleteRenderInput} value={this.state.tags} onChange={::this.handleChange} />
+    return <TagsInput renderInput={autocompleteRenderInput} value={this.state.tags} onChange={::this.handleChange} />
   }
 }
 
