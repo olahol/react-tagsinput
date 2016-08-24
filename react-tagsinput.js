@@ -281,7 +281,12 @@
           return validationRegex.test(_this2._getTagDisplayValue(tag));
         });
         tags = tags.filter(function (tag) {
-          return _this2._getTagDisplayValue(tag).trim().length > 0;
+          var tagDisplayValue = _this2._getTagDisplayValue(tag);
+          if (typeof tagDisplayValue.trim === 'function') {
+            return tagDisplayValue.trim().length > 0;
+          } else {
+            return tagDisplayValue;
+          }
         });
 
         if (maxTags >= 0) {

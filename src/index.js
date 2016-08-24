@@ -171,7 +171,14 @@ class TagsInput extends React.Component {
     }
 
     tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))
-    tags = tags.filter(tag => this._getTagDisplayValue(tag).trim().length > 0)
+    tags = tags.filter(tag => {
+      let tagDisplayValue = this._getTagDisplayValue(tag)
+      if (typeof tagDisplayValue.trim === 'function') {
+        return tagDisplayValue.trim().length > 0
+      } else {
+        return tagDisplayValue
+      }
+    })
 
     if (maxTags >= 0) {
       let remainingLimit = Math.max(maxTags - value.length, 0)
