@@ -647,5 +647,11 @@ describe("TagsInput", () => {
 
       assert.equal(comp.tagsinput().inputProps().className, "test", "should not have the default className");
     });
+
+    it("should be able to add objects to tags", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent renderTag={({key}) => <span key={key} />} />);
+
+      comp.tagsinput().addTag({name: "test"});
+    });
   });
 });

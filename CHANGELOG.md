@@ -1,3 +1,7 @@
+### 3.13.4 (2016-08-25)
+
+* Returned back ability to add non-string entities as tags.
+
 ### 3.13.3 (2016-08-22)
 
 * Add guards to focus and blur methods so they are not called on elements that do not have them.
