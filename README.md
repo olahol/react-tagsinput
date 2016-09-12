@@ -203,7 +203,14 @@ Props passed down to every tag component. Defualt is: `{className: 'react-tagsin
 
 ##### inputProps
 
-Props passed down to input. Default is: `{className: 'react-tagsinput-input'}`
+Props passed down to input. Default is:
+
+```javascript
+{
+  className: 'react-tagsinput-input',
+  placeholder: 'Add a tag'
+}
+```
 
 ##### tagDisplayProp
 
