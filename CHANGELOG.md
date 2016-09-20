@@ -1,3 +1,7 @@
+### 3.13.5 (2016-09-20)
+
+* README fix.
+
 ### 3.13.4 (2016-08-25)
 
 * Returned back ability to add non-string entities as tags.
