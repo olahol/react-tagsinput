@@ -86,6 +86,11 @@ class TagsInput extends React.Component {
   }
 
   static propTypes = {
+    style: React.PropTypes.shape({
+      container: React.PropTypes.object,
+      tag: React.PropTypes.object,
+      input: React.PropTypes.object
+    }),
     focusedClassName: React.PropTypes.string,
     addKeys: React.PropTypes.array,
     addOnBlur: React.PropTypes.bool,
@@ -108,6 +113,11 @@ class TagsInput extends React.Component {
   }
 
   static defaultProps = {
+    style: {
+      container: {},
+      tag: {},
+      input: {}
+    },
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
     currentValue: '',
@@ -359,7 +369,7 @@ class TagsInput extends React.Component {
 
   render () {
     // eslint-disable-next-line
-    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, tagDisplayProp, ...other} = this.props
+    let {style, value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, tagDisplayProp, ...other} = this.props
     let {tag, isFocused} = this.state
 
     if (isFocused) {
@@ -368,13 +378,20 @@ class TagsInput extends React.Component {
 
     let tagComponents = value.map((tag, index) => {
       return renderTag({
-        key: index, tag, onRemove: ::this.handleRemove, disabled, getTagDisplayValue: ::this._getTagDisplayValue, ...tagProps
+        key: index,
+        style: style.tag,
+        tag,
+        onRemove: ::this.handleRemove,
+        disabled,
+        getTagDisplayValue: ::this._getTagDisplayValue,
+        ...tagProps
       })
     })
 
     let inputComponent = renderInput({
       ref: 'input',
       value: tag,
+      style: style.input,
       onPaste: ::this.handlePaste,
       onKeyDown: ::this.handleKeyDown,
       onChange: ::this.handleChange,
@@ -385,7 +402,7 @@ class TagsInput extends React.Component {
     })
 
     return (
-      <div ref='div' onClick={::this.handleClick} className={className}>
+      <div ref='div' onClick={::this.handleClick} className={className} style={style.container}>
         {renderLayout(tagComponents, inputComponent)}
       </div>
     )
