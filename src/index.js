@@ -116,7 +116,7 @@ class TagsInput extends React.Component {
     style: {
       container: {},
       tag: {},
-      input: {},
+      input: {}
     },
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
