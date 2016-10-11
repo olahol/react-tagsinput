@@ -1,3 +1,7 @@
+### 3.13.6 (2016-10-11)
+
+* Fix input focusing error.
+
 ### 3.13.5 (2016-09-20)
 
 * README fix.

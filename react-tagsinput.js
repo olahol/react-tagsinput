@@ -305,12 +305,13 @@
           return true;
         }
 
+        this._clearInput();
         return false;
       }
     }, {
       key: 'focus',
       value: function focus() {
-        if (typeof this.refs.input.focus === 'function') {
+        if (this.refs.input && typeof this.refs.input.focus === 'function') {
           this.refs.input.focus();
         }
 
@@ -319,7 +320,7 @@
     }, {
       key: 'blur',
       value: function blur() {
-        if (typeof this.refs.input.blur === 'function') {
+        if (this.refs.input && typeof this.refs.input.blur === 'function') {
           this.refs.input.blur();
         }
 
