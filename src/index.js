@@ -196,7 +196,7 @@ class TagsInput extends React.Component {
       return true
     }
 
-    this._clearInput();
+    this._clearInput()
     return false
   }
 
