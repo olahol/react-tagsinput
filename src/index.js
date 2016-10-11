@@ -196,11 +196,12 @@ class TagsInput extends React.Component {
       return true
     }
 
+    this._clearInput();
     return false
   }
 
   focus () {
-    if (typeof this.refs.input.focus === 'function') {
+    if (this.refs.input && typeof this.refs.input.focus === 'function') {
       this.refs.input.focus()
     }
 
@@ -208,7 +209,7 @@ class TagsInput extends React.Component {
   }
 
   blur () {
-    if (typeof this.refs.input.blur === 'function') {
+    if (this.refs.input && typeof this.refs.input.blur === 'function') {
       this.refs.input.blur()
     }
 
