@@ -66,12 +66,13 @@ class Tag extends React.Component {
     this.setState({isEdited: false})
 
     const {index, tag, tagDisplayProp, onEdit, getTagDisplayValue} = this.props
+    const {displayValue} = this.state
 
-    if (save) {
-      onEdit(index, tagDisplayProp ? {...tag, [tagDisplayProp]: this.state.displayValue} : this.state.displayValue)
+    if (save && displayValue !== '') {
+      onEdit(index, tagDisplayProp ? {...tag, [tagDisplayProp]: displayValue} : displayValue)
     }
 
-    if (cancel) {
+    if (cancel || displayValue === '') {
       this.setState({displayValue: getTagDisplayValue(tag)})
     }
   }

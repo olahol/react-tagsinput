@@ -188,13 +188,14 @@
         var tagDisplayProp = _props.tagDisplayProp;
         var onEdit = _props.onEdit;
         var getTagDisplayValue = _props.getTagDisplayValue;
+        var displayValue = this.state.displayValue;
 
 
-        if (save) {
-          onEdit(index, tagDisplayProp ? _extends({}, tag, _defineProperty({}, tagDisplayProp, this.state.displayValue)) : this.state.displayValue);
+        if (save && displayValue !== '') {
+          onEdit(index, tagDisplayProp ? _extends({}, tag, _defineProperty({}, tagDisplayProp, displayValue)) : displayValue);
         }
 
-        if (cancel) {
+        if (cancel || displayValue === '') {
           this.setState({ displayValue: getTagDisplayValue(tag) });
         }
       }
