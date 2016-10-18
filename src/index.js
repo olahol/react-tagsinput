@@ -36,7 +36,7 @@ class Tag extends React.Component {
 
   static propTypes = {
     index: React.PropTypes.number,
-    tag: React.PropTypes.string,
+    tag: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
     onEdit: React.PropTypes.func,
     onRemove: React.PropTypes.func,
     classNameRemove: React.PropTypes.string,
@@ -111,7 +111,7 @@ function defaultRenderTag (props) {
 
 defaultRenderTag.propTypes = {
   key: React.PropTypes.number,
-  tag: React.PropTypes.string,
+  tag: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
   onEdit: React.PropTypes.func,
   onRemove: React.PropTypes.func,
   classNameRemove: React.PropTypes.string,

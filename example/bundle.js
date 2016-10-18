@@ -26107,7 +26107,7 @@
 
 	    Tag.propTypes = {
 	      index: _react2.default.PropTypes.number,
-	      tag: _react2.default.PropTypes.string,
+	      tag: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.object]),
 	      onEdit: _react2.default.PropTypes.func,
 	      onRemove: _react2.default.PropTypes.func,
 	      classNameRemove: _react2.default.PropTypes.string,
@@ -26125,7 +26125,7 @@
 
 	    defaultRenderTag.propTypes = {
 	      key: _react2.default.PropTypes.number,
-	      tag: _react2.default.PropTypes.string,
+	      tag: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.object]),
 	      onEdit: _react2.default.PropTypes.func,
 	      onRemove: _react2.default.PropTypes.func,
 	      classNameRemove: _react2.default.PropTypes.string,
