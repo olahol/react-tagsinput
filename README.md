@@ -17,6 +17,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
     * [Install](#install)
     * [Example](#example)
     * [FAQ](#faq)
+      * [How do I edit a tag?](#how-do-i-edit-a-tag)
       * [How do I make the input dynamically grow in size?](#how-do-i-make-the-input-dynamically-grow-in-size)
       * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
     * [Component Interface](#component-interface)
@@ -86,6 +87,10 @@ class Example extends React.Component {
 }
 ```
 ## FAQ
+
+##### How do I edit a tag?
+
+To edit a tag: doubleclick the tag then press <kbd>Enter</kbd> to save the new value or press <kbd>Esc</kbd> to cancel.
 
 ##### How do I make the input dynamically grow in size?
 

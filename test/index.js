@@ -83,6 +83,10 @@ function click(comp) {
   TestUtils.Simulate.click(comp);
 }
 
+function doubleClick(comp) {
+  TestUtils.Simulate.doubleClick(comp);
+}
+
 function add(comp, tag, keyCode) {
   change(comp, tag);
   keyDown(comp, keyCode || 13);
@@ -153,6 +157,30 @@ describe("TagsInput", () => {
     it("should set a default value for the input", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent currentValue="Default Value" />);
       assert.equal(comp.input()._value, "Default Value", "there should be no tag");
+    });
+
+    it("should edit a tag", () => {
+      const comp = TestUtils.renderIntoDocument(<TestComponent />);
+      const initialValue = "before";
+      const editedValue = "after";
+
+      add(comp, initialValue);
+
+      assert.equal(comp.tag(0), initialValue, "the tag should have the initial value");
+
+      const tag = TestUtils.findRenderedDOMComponentWithClass(comp, "react-tagsinput-tag");
+
+      doubleClick(tag);
+
+      setTimeout(() => {
+        const tagInput = TestUtils.findRenderedDOMComponentWithClass(comp, "react-tagsinput-tag-input");
+
+        TestUtils.Simulate.change(tagInput, {target: {value: editedValue}});
+
+        keyDown(tagInput, 13);
+
+        assert.equal(comp.tag(0), editedValue, "the tag should have the edited value");
+      });
     });
   });
 

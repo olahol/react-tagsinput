@@ -25,21 +25,94 @@ function getClipboardData (e) {
   return ''
 }
 
+class Tag extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isEdited: false,
+      displayValue: props.getTagDisplayValue(props.tag)
+    }
+  }
+
+  static propTypes = {
+    index: React.PropTypes.number,
+    tag: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
+    onEdit: React.PropTypes.func,
+    onRemove: React.PropTypes.func,
+    classNameRemove: React.PropTypes.string,
+    getTagDisplayValue: React.PropTypes.func
+  }
+
+  handleDoubleClick () {
+    this.setState({isEdited: true}, () => {
+      this.input.focus()
+      this.input.select()
+    })
+  }
+
+  handleChange (e) {
+    this.setState({displayValue: e.target.value})
+  }
+
+  handleKeyDown (e) {
+    const save = e.keyCode === 13
+    const cancel = e.keyCode === 27
+
+    if (!save && !cancel) return
+
+    e.stopPropagation()
+    e.nativeEvent.stopImmediatePropagation()
+
+    this.setState({isEdited: false})
+
+    const {index, tag, tagDisplayProp, onEdit, getTagDisplayValue} = this.props
+    const {displayValue} = this.state
+
+    if (save && displayValue !== '') {
+      onEdit(index, tagDisplayProp ? {...tag, [tagDisplayProp]: displayValue} : displayValue)
+    }
+
+    if (cancel || displayValue === '') {
+      this.setState({displayValue: getTagDisplayValue(tag)})
+    }
+  }
+
+  render () {
+    let {isEdited, displayValue} = this.state
+    let {index, disabled, onRemove, className, classNameRemove} = this.props
+
+    return (
+      <span className={className} onDoubleClick={::this.handleDoubleClick}>
+        {!isEdited && displayValue}
+        {isEdited &&
+          <input
+            type='text'
+            className={`${className}-input`}
+            ref={input => (this.input = input)}
+            value={displayValue}
+            onChange={::this.handleChange}
+            onKeyDown={::this.handleKeyDown}
+          />
+        }
+        {!disabled &&
+          <a className={classNameRemove} onClick={(e) => onRemove(index)} />
+        }
+      </span>
+    )
+  }
+}
+
 function defaultRenderTag (props) {
-  let {tag, key, disabled, onRemove, classNameRemove, getTagDisplayValue, ...other} = props
+  let {key, ...other} = props
   return (
-    <span key={key} {...other}>
-      {getTagDisplayValue(tag)}
-      {!disabled &&
-        <a className={classNameRemove} onClick={(e) => onRemove(key)} />
-      }
-    </span>
+    <Tag index={key} key={key} {...other} />
   )
 }
 
 defaultRenderTag.propTypes = {
   key: React.PropTypes.number,
-  tag: React.PropTypes.string,
+  tag: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
+  onEdit: React.PropTypes.func,
   onRemove: React.PropTypes.func,
   classNameRemove: React.PropTypes.string,
   getTagDisplayValue: React.PropTypes.func
@@ -148,6 +221,12 @@ class TagsInput extends React.Component {
     }
 
     return tag
+  }
+
+  _editTag (index, tag) {
+    const { value } = this.props
+    value[index] = tag
+    this.props.onChange(value, [tag], [index])
   }
 
   _removeTag (index) {
@@ -322,6 +401,10 @@ class TagsInput extends React.Component {
     }
   }
 
+  handleEdit (index, tag) {
+    this._editTag(index, tag)
+  }
+
   handleRemove (tag) {
     this._removeTag(tag)
   }
@@ -369,7 +452,7 @@ class TagsInput extends React.Component {
 
     let tagComponents = value.map((tag, index) => {
       return renderTag({
-        key: index, tag, onRemove: ::this.handleRemove, disabled, getTagDisplayValue: ::this._getTagDisplayValue, ...tagProps
+        key: index, tag, tagDisplayProp, onEdit: ::this.handleEdit, onRemove: ::this.handleRemove, disabled, getTagDisplayValue: ::this._getTagDisplayValue, ...tagProps
       })
     })
 
