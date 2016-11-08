@@ -222,11 +222,13 @@ Render function for every tag. Default is:
 
 ```javascript
 function defaultRenderTag (props) {
-  let {tag, key, onRemove, getTagDisplayValue, ...other} = props
+  let {tag, key, disabled, onRemove, classNameRemove, getTagDisplayValue, ...other} = props
   return (
     <span key={key} {...other}>
       {getTagDisplayValue(tag)}
-      <a onClick={(e) => onRemove(key)} />
+      {!disabled &&
+        <a className={classNameRemove} onClick={(e) => onRemove(key)} />
+      }
     </span>
   )
 }
