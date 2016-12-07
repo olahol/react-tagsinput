@@ -628,6 +628,15 @@ describe("TagsInput", () => {
     });
   });
 
+  describe("controlled", () => {
+    it("should control input", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent inputValue="" onChangeInput={() => {}} />);
+
+      add(comp, '');
+      assert.equal(comp.len(), 0, "there should be no tags");
+    });
+  });
+
   describe("bugs", () => {
     it("should not add empty tags", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);

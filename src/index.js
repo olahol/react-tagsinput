@@ -91,8 +91,10 @@ class TagsInput extends React.Component {
     addOnBlur: React.PropTypes.bool,
     addOnPaste: React.PropTypes.bool,
     currentValue: React.PropTypes.string,
+    inputValue: React.PropTypes.string,
     inputProps: React.PropTypes.object,
     onChange: React.PropTypes.func.isRequired,
+    onChangeInput: React.PropTypes.func,
     removeKeys: React.PropTypes.array,
     renderInput: React.PropTypes.func,
     renderTag: React.PropTypes.func,
@@ -110,7 +112,6 @@ class TagsInput extends React.Component {
   static defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
-    currentValue: '',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,
@@ -159,7 +160,19 @@ class TagsInput extends React.Component {
   }
 
   _clearInput () {
-    this.setState({tag: ''})
+    if (this.hasControlledInput()) {
+      this.props.onChangeInput('')
+    } else {
+      this.setState({tag: ''})
+    }
+  }
+
+  _tag () {
+    if (this.hasControlledInput()) {
+      return this.props.inputValue
+    }
+
+    return this.state.tag
   }
 
   _addTags (tags) {
@@ -217,7 +230,7 @@ class TagsInput extends React.Component {
   }
 
   accept () {
-    let {tag} = this.state
+    let tag = this._tag()
 
     if (tag !== '') {
       tag = this._makeTag(tag)
@@ -256,7 +269,7 @@ class TagsInput extends React.Component {
     }
 
     let {value, removeKeys, addKeys} = this.props
-    let {tag} = this.state
+    const tag = this._tag()
     let empty = tag === ''
     let keyCode = e.keyCode
     let add = addKeys.indexOf(keyCode) !== -1
@@ -283,6 +296,7 @@ class TagsInput extends React.Component {
   }
 
   handleChange (e) {
+    let {onChangeInput} = this.props
     let {onChange} = this.props.inputProps
     let tag = e.target.value
 
@@ -290,7 +304,11 @@ class TagsInput extends React.Component {
       onChange(e)
     }
 
-    this.setState({tag})
+    if (this.hasControlledInput()) {
+      onChangeInput(tag)
+    } else {
+      this.setState({tag})
+    }
   }
 
   handleOnFocus (e) {
@@ -342,26 +360,69 @@ class TagsInput extends React.Component {
     return props
   }
 
-  componentDidMount () {
-    this.setState({
-      tag: this.props.currentValue
-    })
+  inputValue (props) {
+    return props.currentValue || props.inputValue || ''
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (!nextProps.currentValue) {
+  hasControlledInput () {
+    const {inputValue, onChangeInput} = this.props
+
+    return typeof onChangeInput === 'function' && typeof inputValue === 'string'
+  }
+
+  componentDidMount () {
+    if (this.hasControlledInput()) {
       return
     }
 
     this.setState({
-      tag: nextProps.currentValue
+      tag: this.inputValue(this.props)
+    })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.hasControlledInput()) {
+      return
+    }
+
+    if (!this.inputValue(nextProps)) {
+      return
+    }
+
+    this.setState({
+      tag: this.inputValue(nextProps)
     })
   }
 
   render () {
-    // eslint-disable-next-line
-    let {value, onChange, tagProps, renderLayout, renderTag, renderInput, addKeys, removeKeys, className, focusedClassName, addOnBlur, addOnPaste, inputProps, pasteSplit, onlyUnique, maxTags, validationRegex, disabled, tagDisplayProp, ...other} = this.props
-    let {tag, isFocused} = this.state
+    /* eslint-disable */
+    let {
+      value,
+      onChange,
+      tagProps,
+      renderLayout,
+      renderTag,
+      renderInput,
+      addKeys,
+      removeKeys,
+      className,
+      focusedClassName,
+      addOnBlur,
+      addOnPaste,
+      inputProps,
+      pasteSplit,
+      onlyUnique,
+      maxTags,
+      validationRegex,
+      disabled,
+      tagDisplayProp,
+      inputValue,
+      onChangeInput,
+      ...other
+    } = this.props
+    /* eslint-enable */
+
+    let {isFocused} = this.state
 
     if (isFocused) {
       className += ' ' + focusedClassName
@@ -369,13 +430,18 @@ class TagsInput extends React.Component {
 
     let tagComponents = value.map((tag, index) => {
       return renderTag({
-        key: index, tag, onRemove: ::this.handleRemove, disabled, getTagDisplayValue: ::this._getTagDisplayValue, ...tagProps
+        key: index,
+        tag,
+        onRemove: ::this.handleRemove,
+        disabled,
+        getTagDisplayValue: ::this._getTagDisplayValue,
+        ...tagProps
       })
     })
 
     let inputComponent = renderInput({
       ref: 'input',
-      value: tag,
+      value: this._tag(),
       onPaste: ::this.handlePaste,
       onKeyDown: ::this.handleKeyDown,
       onChange: ::this.handleChange,

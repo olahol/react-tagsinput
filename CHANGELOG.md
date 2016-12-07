@@ -1,3 +1,7 @@
+### 3.14.0 (2016-12-07)
+
+* Add `inputValue` and `onChangeInput` which allows control of input.
+
 ### 3.13.6 (2016-10-11)
 
 * Fix input focusing error.

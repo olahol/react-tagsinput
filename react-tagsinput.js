@@ -140,14 +140,13 @@
   }
 
   function defaultRenderTag(props) {
-    var tag = props.tag;
-    var key = props.key;
-    var disabled = props.disabled;
-    var onRemove = props.onRemove;
-    var classNameRemove = props.classNameRemove;
-    var getTagDisplayValue = props.getTagDisplayValue;
-
-    var other = _objectWithoutProperties(props, ['tag', 'key', 'disabled', 'onRemove', 'classNameRemove', 'getTagDisplayValue']);
+    var tag = props.tag,
+        key = props.key,
+        disabled = props.disabled,
+        onRemove = props.onRemove,
+        classNameRemove = props.classNameRemove,
+        getTagDisplayValue = props.getTagDisplayValue,
+        other = _objectWithoutProperties(props, ['tag', 'key', 'disabled', 'onRemove', 'classNameRemove', 'getTagDisplayValue']);
 
     return _react2.default.createElement(
       'span',
@@ -168,11 +167,10 @@
   };
 
   function defaultRenderInput(props) {
-    var onChange = props.onChange;
-    var value = props.value;
-    var addTag = props.addTag;
-
-    var other = _objectWithoutProperties(props, ['onChange', 'value', 'addTag']);
+    var onChange = props.onChange,
+        value = props.value,
+        addTag = props.addTag,
+        other = _objectWithoutProperties(props, ['onChange', 'value', 'addTag']);
 
     return _react2.default.createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
   }
@@ -209,7 +207,7 @@
     function TagsInput() {
       _classCallCheck(this, TagsInput);
 
-      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TagsInput).call(this));
+      var _this = _possibleConstructorReturn(this, (TagsInput.__proto__ || Object.getPrototypeOf(TagsInput)).call(this));
 
       _this.state = { tag: '', isFocused: false };
       _this.focus = _this.focus.bind(_this);
@@ -253,19 +251,32 @@
     }, {
       key: '_clearInput',
       value: function _clearInput() {
-        this.setState({ tag: '' });
+        if (this.hasControlledInput()) {
+          this.props.onChangeInput('');
+        } else {
+          this.setState({ tag: '' });
+        }
+      }
+    }, {
+      key: '_tag',
+      value: function _tag() {
+        if (this.hasControlledInput()) {
+          return this.props.inputValue;
+        }
+
+        return this.state.tag;
       }
     }, {
       key: '_addTags',
       value: function _addTags(tags) {
         var _this2 = this;
 
-        var _props = this.props;
-        var validationRegex = _props.validationRegex;
-        var onChange = _props.onChange;
-        var onlyUnique = _props.onlyUnique;
-        var maxTags = _props.maxTags;
-        var value = _props.value;
+        var _props = this.props,
+            validationRegex = _props.validationRegex,
+            onChange = _props.onChange,
+            onlyUnique = _props.onlyUnique,
+            maxTags = _props.maxTags,
+            value = _props.value;
 
 
         if (onlyUnique) {
@@ -329,8 +340,7 @@
     }, {
       key: 'accept',
       value: function accept() {
-        var tag = this.state.tag;
-
+        var tag = this._tag();
 
         if (tag !== '') {
           tag = this._makeTag(tag);
@@ -354,9 +364,9 @@
       value: function handlePaste(e) {
         var _this3 = this;
 
-        var _props2 = this.props;
-        var addOnPaste = _props2.addOnPaste;
-        var pasteSplit = _props2.pasteSplit;
+        var _props2 = this.props,
+            addOnPaste = _props2.addOnPaste,
+            pasteSplit = _props2.pasteSplit;
 
 
         if (!addOnPaste) {
@@ -379,12 +389,12 @@
           return;
         }
 
-        var _props3 = this.props;
-        var value = _props3.value;
-        var removeKeys = _props3.removeKeys;
-        var addKeys = _props3.addKeys;
-        var tag = this.state.tag;
+        var _props3 = this.props,
+            value = _props3.value,
+            removeKeys = _props3.removeKeys,
+            addKeys = _props3.addKeys;
 
+        var tag = this._tag();
         var empty = tag === '';
         var keyCode = e.keyCode;
         var add = addKeys.indexOf(keyCode) !== -1;
@@ -413,6 +423,7 @@
     }, {
       key: 'handleChange',
       value: function handleChange(e) {
+        var onChangeInput = this.props.onChangeInput;
         var onChange = this.props.inputProps.onChange;
 
         var tag = e.target.value;
@@ -421,7 +432,11 @@
           onChange(e);
         }
 
-        this.setState({ tag: tag });
+        if (this.hasControlledInput()) {
+          onChangeInput(tag);
+        } else {
+          this.setState({ tag: tag });
+        }
       }
     }, {
       key: 'handleOnFocus',
@@ -464,12 +479,11 @@
     }, {
       key: 'inputProps',
       value: function inputProps() {
-        var _props$inputProps = this.props.inputProps;
-        var onChange = _props$inputProps.onChange;
-        var onFocus = _props$inputProps.onFocus;
-        var onBlur = _props$inputProps.onBlur;
-
-        var otherInputProps = _objectWithoutProperties(_props$inputProps, ['onChange', 'onFocus', 'onBlur']);
+        var _props$inputProps = this.props.inputProps,
+            onChange = _props$inputProps.onChange,
+            onFocus = _props$inputProps.onFocus,
+            onBlur = _props$inputProps.onBlur,
+            otherInputProps = _objectWithoutProperties(_props$inputProps, ['onChange', 'onFocus', 'onBlur']);
 
         var props = _extends({}, defaultInputProps, otherInputProps);
 
@@ -480,21 +494,44 @@
         return props;
       }
     }, {
+      key: 'inputValue',
+      value: function inputValue(props) {
+        return props.currentValue || props.inputValue || '';
+      }
+    }, {
+      key: 'hasControlledInput',
+      value: function hasControlledInput() {
+        var _props4 = this.props,
+            inputValue = _props4.inputValue,
+            onChangeInput = _props4.onChangeInput;
+
+
+        return typeof onChangeInput === 'function' && typeof inputValue === 'string';
+      }
+    }, {
       key: 'componentDidMount',
       value: function componentDidMount() {
+        if (this.hasControlledInput()) {
+          return;
+        }
+
         this.setState({
-          tag: this.props.currentValue
+          tag: this.inputValue(this.props)
         });
       }
     }, {
       key: 'componentWillReceiveProps',
       value: function componentWillReceiveProps(nextProps) {
-        if (!nextProps.currentValue) {
+        if (this.hasControlledInput()) {
+          return;
+        }
+
+        if (!this.inputValue(nextProps)) {
           return;
         }
 
         this.setState({
-          tag: nextProps.currentValue
+          tag: this.inputValue(nextProps)
         });
       }
     }, {
@@ -502,32 +539,31 @@
       value: function render() {
         var _this4 = this;
 
-        var _props4 = this.props;
-        var value = _props4.value;
-        var onChange = _props4.onChange;
-        var tagProps = _props4.tagProps;
-        var renderLayout = _props4.renderLayout;
-        var renderTag = _props4.renderTag;
-        var renderInput = _props4.renderInput;
-        var addKeys = _props4.addKeys;
-        var removeKeys = _props4.removeKeys;
-        var className = _props4.className;
-        var focusedClassName = _props4.focusedClassName;
-        var addOnBlur = _props4.addOnBlur;
-        var addOnPaste = _props4.addOnPaste;
-        var inputProps = _props4.inputProps;
-        var pasteSplit = _props4.pasteSplit;
-        var onlyUnique = _props4.onlyUnique;
-        var maxTags = _props4.maxTags;
-        var validationRegex = _props4.validationRegex;
-        var disabled = _props4.disabled;
-        var tagDisplayProp = _props4.tagDisplayProp;
+        var _props5 = this.props,
+            value = _props5.value,
+            onChange = _props5.onChange,
+            tagProps = _props5.tagProps,
+            renderLayout = _props5.renderLayout,
+            renderTag = _props5.renderTag,
+            renderInput = _props5.renderInput,
+            addKeys = _props5.addKeys,
+            removeKeys = _props5.removeKeys,
+            className = _props5.className,
+            focusedClassName = _props5.focusedClassName,
+            addOnBlur = _props5.addOnBlur,
+            addOnPaste = _props5.addOnPaste,
+            inputProps = _props5.inputProps,
+            pasteSplit = _props5.pasteSplit,
+            onlyUnique = _props5.onlyUnique,
+            maxTags = _props5.maxTags,
+            validationRegex = _props5.validationRegex,
+            disabled = _props5.disabled,
+            tagDisplayProp = _props5.tagDisplayProp,
+            inputValue = _props5.inputValue,
+            onChangeInput = _props5.onChangeInput,
+            other = _objectWithoutProperties(_props5, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput']);
 
-        var other = _objectWithoutProperties(_props4, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled', 'tagDisplayProp']);
-
-        var _state = this.state;
-        var tag = _state.tag;
-        var isFocused = _state.isFocused;
+        var isFocused = this.state.isFocused;
 
 
         if (isFocused) {
@@ -536,12 +572,17 @@
 
         var tagComponents = value.map(function (tag, index) {
           return renderTag(_extends({
-            key: index, tag: tag, onRemove: _this4.handleRemove.bind(_this4), disabled: disabled, getTagDisplayValue: _this4._getTagDisplayValue.bind(_this4) }, tagProps));
+            key: index,
+            tag: tag,
+            onRemove: _this4.handleRemove.bind(_this4),
+            disabled: disabled,
+            getTagDisplayValue: _this4._getTagDisplayValue.bind(_this4)
+          }, tagProps));
         });
 
         var inputComponent = renderInput(_extends({
           ref: 'input',
-          value: tag,
+          value: this._tag(),
           onPaste: this.handlePaste.bind(this),
           onKeyDown: this.handleKeyDown.bind(this),
           onChange: this.handleChange.bind(this),
@@ -567,8 +608,10 @@
     addOnBlur: _react2.default.PropTypes.bool,
     addOnPaste: _react2.default.PropTypes.bool,
     currentValue: _react2.default.PropTypes.string,
+    inputValue: _react2.default.PropTypes.string,
     inputProps: _react2.default.PropTypes.object,
     onChange: _react2.default.PropTypes.func.isRequired,
+    onChangeInput: _react2.default.PropTypes.func,
     removeKeys: _react2.default.PropTypes.array,
     renderInput: _react2.default.PropTypes.func,
     renderTag: _react2.default.PropTypes.func,
@@ -585,7 +628,6 @@
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
-    currentValue: '',
     addKeys: [9, 13],
     addOnBlur: false,
     addOnPaste: false,

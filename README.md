@@ -19,12 +19,15 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
     * [FAQ](#faq)
       * [How do I make the input dynamically grow in size?](#how-do-i-make-the-input-dynamically-grow-in-size)
       * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
+      * [How do I control the value of the input box?](#how-do-i-control-the-value-of-the-input-box)
     * [Component Interface](#component-interface)
       * [Props](#props)
         * [value (required)](#value-required)
         * [onChange (required)](#onchange-required)
+        * [onChangeInput](#onchangeinput)
         * [addKeys](#addkeys)
         * [currentValue](#currentvalue)
+        * [inputValue](#inputvalue)
         * [onlyUnique](#onlyunique)
         * [validationRegex](#validationregex)
         * [disabled](#disabled)
@@ -42,6 +45,8 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [focus()](#focus)
         * [blur()](#blur)
         * [accept()](#accept)
+        * [addTag()](#addTag)
+        * [clearInput()](#clearInput)
     * [Styling](#styling)
     * [Contributors](#contributors)
     * [Changelog](#changelog)
@@ -123,7 +128,39 @@ function autosuggestRenderInput (props) {
 }
 ```
 
-A working example can be found in [`example/index.js`](https://github.com/olahol/react-tagsinput/blob/master/example/index.js#L137).
+A working example can be found in [`example/components/autocomplete.js`](https://github.com/olahol/react-tagsinput/blob/master/example/components/autocomplete.js).
+
+##### How do I control the value of the input box?
+
+Use `inputValue` and `onChangeInput`:
+
+```js
+class Example extends React.Component {
+  constructor() {
+    super()
+    this.state = {tags: [], tag: ''}
+  }
+
+  handleChange(tags) {
+    this.setState({tags})
+  }
+
+  handleChangeInput(tag) {
+    this.setState({tag})
+  }
+
+  render() {
+    return (
+      <TagsInput
+        value={this.state.tags}
+        onChange={::this.handleChange}
+        inputValue={this.state.tag}
+        onChangeInput={::this.handleChangeInput}
+      />
+    )
+  }
+}
+```
 
 ## Component Interface
 
@@ -139,6 +176,10 @@ Callback when tags change, gets three arguments `tags` which is the new
 tag array, `changed` which is an array of the tags that have changed and
 `changedIndexes` which is an array of the indexes that have changed.
 
+##### onChangeInput
+
+Callback from the input box, gets one argument `value` which is the content of the input box.
+
 ##### addKeys
 
 An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
@@ -146,6 +187,10 @@ An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
 ##### currentValue
 
 A string to set a value on the input.
+
+##### inputValue
+
+Similar to `currentValue` but needed for controlling the input box.
 
 ##### onlyUnique
 
