@@ -30,6 +30,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [inputValue](#inputvalue)
         * [onlyUnique](#onlyunique)
         * [validationRegex](#validationregex)
+        * [onValidationReject](#onvalidationreject)
         * [disabled](#disabled)
         * [maxTags](#maxtags)
         * [addOnBlur](#addonblur)
@@ -199,6 +200,10 @@ Allow only unique tags, default is `false`.
 ##### validationRegex
 
 Allow only tags that pass this regex to be added. Default is `/.*/`.
+
+##### onValidationReject
+
+Callback when tags are rejected through validationRegex, passing array of tags as the argument.
 
 ##### disabled
 

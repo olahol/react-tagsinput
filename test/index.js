@@ -195,13 +195,22 @@ describe("TagsInput", () => {
     });
 
     it("should support validation", () => {
-      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} validationRegex={/a+/} />);
       let firstTag = 'aaa';
       let secondTag = randstring();
+      let thirdTag = randstring();
 
-      paste(comp, firstTag + ' ' + secondTag);
+      let fireCount = 0;
+      let onValidationReject = function (tags) {
+        assert.deepEqual(tags, [secondTag, thirdTag], "there should be rejected tags in onValidationReject callback");
+        fireCount += 1
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} onValidationReject={onValidationReject} validationRegex={/a+/} />);
+
+      paste(comp, firstTag + ' ' + secondTag + ' ' + thirdTag);
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), firstTag, "it should be the tag that was added");
+      assert.equal(fireCount, 1, "onValidationReject should be fired once");
     });
 
     it("should respect limit", () => {
@@ -457,6 +466,18 @@ describe("TagsInput", () => {
       add(comp, 'a');
       assert.equal(comp.len(), 1, "there should be one tag");
     });
+
+    it("should fire onValidationReject when tag is rejected through validation", () => {
+      let fireCount = 0;
+      let onValidationReject = function (tags) {
+        assert.deepEqual(tags, ['b']);
+        fireCount += 1
+      }
+      let comp = TestUtils.renderIntoDocument(<TestComponent validationRegex={/a+/} onValidationReject={onValidationReject} />);
+      add(comp, 'b');
+      add(comp, 'a');
+      assert.equal(fireCount, 1)
+    })
 
     it("should add pass changed value to onChange", () => {
       let onChange = function (tags, changed, changedIndexes) {
