@@ -176,14 +176,14 @@ class TagsInput extends React.Component {
   }
 
   _addTags (tags) {
-    let {validationRegex, onChange, onValidationReject, onlyUnique, maxTags, rejectedTags, value} = this.props
+    let {validationRegex, onChange, onValidationReject, onlyUnique, maxTags, value} = this.props
 
     if (onlyUnique) {
       tags = uniq(tags)
       tags = tags.filter(tag => value.every(currentTag => this._getTagDisplayValue(currentTag) !== this._getTagDisplayValue(tag)))
     }
 
-    rejectedTags = tags.filter(tag => !validationRegex.test(this._getTagDisplayValue(tag)))
+    const rejectedTags = tags.filter(tag => !validationRegex.test(this._getTagDisplayValue(tag)))
     tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))
     tags = tags.filter(tag => {
       let tagDisplayValue = this._getTagDisplayValue(tag)
