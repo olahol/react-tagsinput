@@ -71,7 +71,7 @@ class AutocompleteExample extends React.Component {
 
   render () {
     const autocompleteRenderInput = (props) => {
-      const {addTag, ...other} = props
+      delete props.addTag
 
       const handleOnChange = (e, {newValue, method}) => {
         if (method === 'enter') {
@@ -81,12 +81,11 @@ class AutocompleteExample extends React.Component {
         }
       }
 
-			const inputValue = (props.value && props.value.trim().toLowerCase()) || ''
-			const inputLength = inputValue.length
+      const inputValue = (props.value && props.value.trim().toLowerCase()) || ''
+      const inputLength = inputValue.length
 
-      let {tags} = this.state
       let suggestions = states().filter((state) => {
-				return state.name.toLowerCase().slice(0, inputLength) === inputValue
+        return state.name.toLowerCase().slice(0, inputLength) === inputValue
       })
 
       return (
@@ -96,10 +95,12 @@ class AutocompleteExample extends React.Component {
           shouldRenderSuggestions={(value) => value && value.trim().length > 0}
           getSuggestionValue={(suggestion) => suggestion.name}
           renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
-          inputProps={{...other, onChange: handleOnChange}}
+          inputProps={{...props, onChange: handleOnChange}}
           onSuggestionSelected={(e, {suggestion}) => {
             props.addTag(suggestion.name)
           }}
+          onSuggestionsClearRequested={() => this.setState({tags: []})}
+          onSuggestionsFetchRequested={() => {}}
         />
       )
     }
@@ -107,6 +108,5 @@ class AutocompleteExample extends React.Component {
     return <TagsInput renderInput={autocompleteRenderInput} value={this.state.tags} onChange={::this.handleChange} />
   }
 }
-
 
 export default AutocompleteExample
