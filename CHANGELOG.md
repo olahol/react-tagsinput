@@ -1,3 +1,7 @@
+### 3.15.0 (2017-02-12)
+
+* Add `onValidationReject`.
+
 ### 3.14.1 (2017-02-11)
 
 * Update README and fix examples.

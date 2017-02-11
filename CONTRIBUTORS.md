@@ -29,3 +29,4 @@
 * Alex Belozerov (@abelozerov)
 * Jake (@jakech)
 * Nicole Cua (@ncua)
+* Lucjan Suski (@methyl)
