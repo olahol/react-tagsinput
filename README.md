@@ -20,6 +20,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
       * [How do I make the input dynamically grow in size?](#how-do-i-make-the-input-dynamically-grow-in-size)
       * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
       * [How do I control the value of the input box?](#how-do-i-control-the-value-of-the-input-box)
+      * [How do I fix warning "unknown prop `addTag`"?](#how-do-i-fix-warning-unknown-prop-addtag)
     * [Component Interface](#component-interface)
       * [Props](#props)
         * [value (required)](#value-required)
@@ -177,6 +178,23 @@ class Example extends React.Component {
       />
     )
   }
+}
+```
+
+##### How do I fix warning "unknown prop `addTag`"?
+
+For ease of integration with auto complete components `react-tagsinput`
+passes the `addTag` method to `renderInput` props, if you are writing your
+own `renderInput` you need to filter `addTag` to not get an error about
+`unknown prop addTag` from React. Here is how it's done in the default
+`renderInput` function.
+
+```js
+function defaultRenderInput ({addTag, ...props}) {
+  let {onChange, value, ...other} = props
+  return (
+    <input type='text' onChange={onChange} value={value} {...other} />
+  )
 }
 ```
 

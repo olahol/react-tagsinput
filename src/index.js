@@ -45,9 +45,8 @@ defaultRenderTag.propTypes = {
   getTagDisplayValue: React.PropTypes.func
 }
 
-function defaultRenderInput (props) {
-  // eslint-disable-next-line
-  let {onChange, value, addTag, ...other} = props
+function defaultRenderInput ({addTag, ...props}) {
+  let {onChange, value, ...other} = props
   return (
     <input type='text' onChange={onChange} value={value} {...other} />
   )

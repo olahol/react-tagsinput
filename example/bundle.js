@@ -4588,11 +4588,13 @@
 	      getTagDisplayValue: _react2.default.PropTypes.func
 	    };
 
-	    function defaultRenderInput(props) {
+	    function defaultRenderInput(_ref) {
+	      var addTag = _ref.addTag,
+	          props = _objectWithoutProperties(_ref, ['addTag']);
+
 	      var onChange = props.onChange,
 	          value = props.value,
-	          addTag = props.addTag,
-	          other = _objectWithoutProperties(props, ['onChange', 'value', 'addTag']);
+	          other = _objectWithoutProperties(props, ['onChange', 'value']);
 
 	      return _react2.default.createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
 	    }
