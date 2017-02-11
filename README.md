@@ -21,6 +21,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
       * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
       * [How do I control the value of the input box?](#how-do-i-control-the-value-of-the-input-box)
       * [How do I fix warning "unknown prop `addTag`"?](#how-do-i-fix-warning-unknown-prop-addtag)
+      * [How do I copy paste from Excel?](#how-do-i-copy-pages-from-excel)
     * [Component Interface](#component-interface)
       * [Props](#props)
         * [value (required)](#value-required)
@@ -197,6 +198,25 @@ function defaultRenderInput ({addTag, ...props}) {
   )
 }
 ```
+##### How do I copy paste from Excel?
+
+Set the `pasteSplit` prop to this function:
+
+```js
+pasteSplit(data) {
+	const enterCharCode = String.fromCharCode(13)
+
+	if (data.includes(enterCharCode)) {
+    return data.split(enterCharCode)
+	}
+
+	const separators = [',', ';', '\\(', '\\)', '\\*', '/', ':', '\\?', '\n']
+	return data.split(new RegExp(separators.join('|'), 'g')).map(d => d.trim())
+}
+```
+
+Credit: @jonicious
+http://stackoverflow.com/a/42008610
 
 ## Component Interface
 
