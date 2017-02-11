@@ -70,9 +70,7 @@ class AutocompleteExample extends React.Component {
   }
 
   render () {
-    const autocompleteRenderInput = (props) => {
-      delete props.addTag
-
+    function autocompleteRenderInput ({addTag, ...props}) {
       const handleOnChange = (e, {newValue, method}) => {
         if (method === 'enter') {
           e.preventDefault()
@@ -97,9 +95,9 @@ class AutocompleteExample extends React.Component {
           renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
           inputProps={{...props, onChange: handleOnChange}}
           onSuggestionSelected={(e, {suggestion}) => {
-            props.addTag(suggestion.name)
+            addTag(suggestion.name)
           }}
-          onSuggestionsClearRequested={() => this.setState({tags: []})}
+          onSuggestionsClearRequested={() => {}}
           onSuggestionsFetchRequested={() => {}}
         />
       )

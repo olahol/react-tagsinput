@@ -180,7 +180,9 @@ class TagsInput extends React.Component {
 
     if (onlyUnique) {
       tags = uniq(tags)
-      tags = tags.filter(tag => value.every(currentTag => this._getTagDisplayValue(currentTag) !== this._getTagDisplayValue(tag)))
+      tags = tags.filter(tag => value.every(currentTag =>
+        this._getTagDisplayValue(currentTag) !== this._getTagDisplayValue(tag))
+      )
     }
 
     tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))

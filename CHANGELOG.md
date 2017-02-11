@@ -1,3 +1,7 @@
+### 3.14.1 (2017-02-11)
+
+* Update README and fix examples.
+
 ### 3.14.0 (2016-12-07)
 
 * Add `inputValue` and `onChangeInput` which allows control of input.

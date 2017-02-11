@@ -15,8 +15,8 @@ class AutosizeExample extends React.Component {
   }
 
   render () {
-    function autosizingRenderInput (props) {
-      let {onChange, value, addTag, ...other} = props
+    function autosizingRenderInput ({addTag, ...props}) {
+      let {onChange, value, ...other} = props
       return (
         <AutosizeInput type='text' onChange={onChange} value={value} {...other} />
       )

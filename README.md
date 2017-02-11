@@ -97,7 +97,7 @@ class Example extends React.Component {
 Install [`react-input-autosize`](https://github.com/JedWatson/react-input-autosize) and change the `renderInput` prop to:
 
 ```js
-function autosizingRenderInput (props) {
+function autosizingRenderInput ({addTag, ...props}) {
   let {onChange, value, ...other} = props
   return (
     <AutosizeInput type='text' onChange={onChange} value={value} {...other} />
@@ -111,7 +111,22 @@ Use [`react-autosuggest`](https://github.com/moroshko/react-autosuggest) and cha
 something like:
 
 ```js
-function autosuggestRenderInput (props) {
+function autosuggestRenderInput ({addTag, ...props}) {
+  const handleOnChange = (e, {newValue, method}) => {
+    if (method === 'enter') {
+      e.preventDefault()
+    } else {
+      props.onChange(e)
+    }
+  }
+
+  const inputValue = (props.value && props.value.trim().toLowerCase()) || ''
+  const inputLength = inputValue.length
+
+  let suggestions = states().filter((state) => {
+    return state.name.toLowerCase().slice(0, inputLength) === inputValue
+  })
+
   return (
     <Autosuggest
       ref={props.ref}
@@ -119,16 +134,19 @@ function autosuggestRenderInput (props) {
       shouldRenderSuggestions={(value) => value && value.trim().length > 0}
       getSuggestionValue={(suggestion) => suggestion.name}
       renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
-      inputProps={props}
+      inputProps={{...props, onChange: handleOnChange}}
       onSuggestionSelected={(e, {suggestion}) => {
-        this.refs.tagsinput.addTag(suggestion.name)
+        addTag(suggestion.name)
       }}
+      onSuggestionsClearRequested={() => {}}
+      onSuggestionsFetchRequested={() => {}}
     />
   )
 }
 ```
 
-A working example can be found in [`example/components/autocomplete.js`](https://github.com/olahol/react-tagsinput/blob/master/example/components/autocomplete.js).
+A working example can be found in
+[`example/components/autocomplete.js`](https://github.com/olahol/react-tagsinput/blob/master/example/components/autocomplete.js).
 
 ##### How do I control the value of the input box?
 
