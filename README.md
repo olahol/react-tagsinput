@@ -21,7 +21,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
       * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
       * [How do I control the value of the input box?](#how-do-i-control-the-value-of-the-input-box)
       * [How do I fix warning "unknown prop `addTag`"?](#how-do-i-fix-warning-unknown-prop-addtag)
-      * [How do I copy paste from Excel?](#how-do-i-copy-pages-from-excel)
+      * [How do I copy paste from Excel?](#how-do-i-copy-paste-from-excel)
     * [Component Interface](#component-interface)
       * [Props](#props)
         * [value (required)](#value-required)
