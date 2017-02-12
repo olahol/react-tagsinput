@@ -201,23 +201,18 @@ function defaultRenderInput ({addTag, ...props}) {
 ```
 ##### How do I copy paste from Excel?
 
+>All you need is to add a CR, carriage return, symbol (it is the default line break style in MS Office documents).
+
+See [answer on Stack Overflow](http://stackoverflow.com/a/42008826/3276759).
+
 Set the `pasteSplit` prop to this function:
 
 ```js
 pasteSplit(data) {
-	const enterCharCode = String.fromCharCode(13)
-
-	if (data.includes(enterCharCode)) {
-    return data.split(enterCharCode)
-	}
-
-	const separators = [',', ';', '\\(', '\\)', '\\*', '/', ':', '\\?', '\n']
-	return data.split(new RegExp(separators.join('|'), 'g')).map(d => d.trim())
+  const separators = [',', ';', '\\(', '\\)', '\\*', '/', ':', '\\?', '\n', '\r'];
+  return data.split(new RegExp(separators.join('|'))).map(d => d.trim());
 }
 ```
-
-Credit: @jonicious
-http://stackoverflow.com/a/42008610
 
 ## Component Interface
 
