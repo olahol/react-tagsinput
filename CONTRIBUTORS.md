@@ -30,3 +30,4 @@
 * Jake (@jakech)
 * Nicole Cua (@ncua)
 * Lucjan Suski (@methyl)
+* Jonas Reitmann (@jonicious)
