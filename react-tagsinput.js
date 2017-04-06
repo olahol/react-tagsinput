@@ -330,6 +330,19 @@
         return false;
       }
     }, {
+      key: '_shouldPreventDefaultEventOnAdd',
+      value: function _shouldPreventDefaultEventOnAdd(added, empty, keyCode) {
+        if (added) {
+          return true;
+        }
+
+        if (keyCode === 13) {
+          return this.props.preventSubmit || !this.props.preventSubmit && !empty;
+        }
+
+        return false;
+      }
+    }, {
       key: 'focus',
       value: function focus() {
         if (this.refs.input && typeof this.refs.input.focus === 'function') {
@@ -412,8 +425,7 @@
 
         if (add) {
           var added = this.accept();
-          // Special case for preventing forms submitting.
-          if (added || keyCode === 13) {
+          if (this._shouldPreventDefaultEventOnAdd(added, empty, keyCode)) {
             e.preventDefault();
           }
         }
@@ -633,7 +645,8 @@
     maxTags: _react2.default.PropTypes.number,
     validationRegex: _react2.default.PropTypes.instanceOf(RegExp),
     disabled: _react2.default.PropTypes.bool,
-    tagDisplayProp: _react2.default.PropTypes.string
+    tagDisplayProp: _react2.default.PropTypes.string,
+    preventSubmit: _react2.default.PropTypes.bool
   };
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
@@ -652,7 +665,8 @@
     maxTags: -1,
     validationRegex: /.*/,
     disabled: false,
-    tagDisplayProp: null
+    tagDisplayProp: null,
+    preventSubmit: true
   };
   exports.default = TagsInput;
   module.exports = exports['default'];

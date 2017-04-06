@@ -105,7 +105,8 @@ class TagsInput extends React.Component {
     maxTags: React.PropTypes.number,
     validationRegex: React.PropTypes.instanceOf(RegExp),
     disabled: React.PropTypes.bool,
-    tagDisplayProp: React.PropTypes.string
+    tagDisplayProp: React.PropTypes.string,
+    preventSubmit: React.PropTypes.bool
   }
 
   static defaultProps = {
@@ -125,7 +126,8 @@ class TagsInput extends React.Component {
     maxTags: -1,
     validationRegex: /.*/,
     disabled: false,
-    tagDisplayProp: null
+    tagDisplayProp: null,
+    preventSubmit: true
   }
 
   _getTagDisplayValue (tag) {
@@ -219,6 +221,18 @@ class TagsInput extends React.Component {
     return false
   }
 
+  _shouldPreventDefaultEventOnAdd (added, empty, keyCode) {
+    if (added) {
+      return true
+    }
+
+    if (keyCode === 13) {
+      return (this.props.preventSubmit || !this.props.preventSubmit && !empty)
+    }
+
+    return false
+  }
+
   focus () {
     if (this.refs.input && typeof this.refs.input.focus === 'function') {
       this.refs.input.focus()
@@ -283,8 +297,7 @@ class TagsInput extends React.Component {
 
     if (add) {
       let added = this.accept()
-      // Special case for preventing forms submitting.
-      if (added || keyCode === 13) {
+      if (this._shouldPreventDefaultEventOnAdd(added, empty, keyCode)) {
         e.preventDefault()
       }
     }

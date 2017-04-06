@@ -25,6 +25,7 @@
     "react-dom": "15.x.x",
     "react-input-autosize": "^1.0.0",
     "reactpack": "^0.9.0",
+    "sinon": "^2.1.0",
     "standard": "^8.6.0"
   },
   "scripts": {

@@ -44,6 +44,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [renderTag](#rendertag)
         * [renderInput](#renderinput)
         * [renderLayout](#renderlayout)
+        * [preventSubmit](#preventSubmit)
       * [Methods](#methods)
         * [focus()](#focus)
         * [blur()](#blur)
@@ -364,6 +365,13 @@ function defaultRenderLayout (tagComponents, inputComponent) {
   )
 }
 ```
+
+##### preventSubmit
+
+A `boolean` to prevent the default submit event when adding an 'empty' tag.
+Default: `true`
+
+Set to `false` if you want the default submit to fire when pressing enter again after adding a tag.
 
 ### Methods
 

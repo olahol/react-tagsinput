@@ -8,6 +8,7 @@ const TagsInput = require("../src");
 const React = require("react");
 const TestUtils = require("react-addons-test-utils");
 const assert = require("assert");
+const sinon = require('sinon');
 
 class TestComponent extends React.Component {
   constructor() {
@@ -512,10 +513,67 @@ describe("TagsInput", () => {
       remove(comp);
     });
 
+
     it("should disable input when component is disabled", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent disabled={true} />);
       assert.ok(comp.tagsinput().refs.input.disabled, "input should be disabled");
     });
+
+    describe('preventSubmit', () => {
+
+      function addTagWithEventSpy(comp, tag, preventDefaultSpy) {
+        change(comp, tag);
+        TestUtils.Simulate.keyDown(comp.input(), { keyCode: 13, preventDefault: preventDefaultSpy });
+      }
+
+      describe("when to to true", () => {
+        it("should prevent default submit event on enter key when adding a tag ", () => {
+          let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={true} />);
+          const preventDefault = sinon.spy();
+
+          addTagWithEventSpy(comp, "Tag", preventDefault);
+          assert.equal(preventDefault.called, true, "preventDefault was not called when it should be");
+        });
+
+        it("should prevent default submit on enter key when tag is empty when prop is true", () => {
+          let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={true} />);
+          const preventDefault = sinon.spy();
+
+          addTagWithEventSpy(comp, "", preventDefault);
+          assert.equal(preventDefault.called, true, "preventDefault was not called when it should be");
+        });
+
+      });
+
+      describe("when set to false", () => {
+        it("should not prevent default submit on enter key when tag is empty", () => {
+          let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={false} />);
+          const preventDefault = sinon.spy();
+
+          addTagWithEventSpy(comp, "", preventDefault);
+          assert.equal(preventDefault.called, false, "preventDefault was called when it should not be");
+        });
+
+        it("should still prevent default submit on enter key when tag is not empty and added", () => {
+          let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={false} />);
+          const preventDefault = sinon.spy();
+
+          addTagWithEventSpy(comp, "A tag", preventDefault);
+          assert.equal(preventDefault.called, true, "preventDefault was not called when it should have been");
+        });
+
+        it("should still prevent default submit event if a tag is rejected (unique etc..)", () => {
+          let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={false} onlyUnique={true} />);
+          const preventDefault = sinon.spy();
+
+          add(comp, "Tag", 13);
+          addTagWithEventSpy(comp, "Tag", preventDefault);
+
+          assert.equal(preventDefault.called, true, "preventDefault was not called when it should have been");
+        });
+      });
+    });
+
   });
 
   describe("methods", () => {
