@@ -31,3 +31,4 @@
 * Nicole Cua (@ncua)
 * Lucjan Suski (@methyl)
 * Jonas Reitmann (@jonicious)
+* Ryan Hyslop (@ryanhyslop)

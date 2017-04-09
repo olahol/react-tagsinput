@@ -1,3 +1,7 @@
+### 3.16.0 (2017-04-09)
+
+* Add `preventSubmit`.
+
 ### 3.15.0 (2017-02-12)
 
 * Add `onValidationReject`.
