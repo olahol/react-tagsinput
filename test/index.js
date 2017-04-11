@@ -6,7 +6,7 @@ global.navigator = window.navigator;
 const TagsInput = require("../src");
 
 const React = require("react");
-const TestUtils = require("react-addons-test-utils");
+const TestUtils = require("react-dom/test-utils");
 const assert = require("assert");
 const sinon = require('sinon');
 
@@ -606,18 +606,18 @@ describe("TagsInput", () => {
 
     describe("componentWillReceiveProps", () => {
       it("updates the state", () => {
-        const TestParent = React.createFactory(React.createClass({
-          getInitialState() {
-            return {
-              currentValue: "init"
-            };
-          },
+        class TestParent extends React.Component {
+          constructor() {
+            super()
+            this.state = {currentValue: "init"};
+          }
+
           render() {
             return <TestComponent ref="testComp" currentValue={this.state.currentValue} />
           }
-        }));
+        }
 
-        let parent = TestUtils.renderIntoDocument(TestParent());
+        let parent = TestUtils.renderIntoDocument(<TestParent />);
         parent.setState({
           currentValue: "test"
         });
@@ -626,19 +626,18 @@ describe("TagsInput", () => {
       })
 
       it("does not modify the state", () => {
-        const TestParent = React.createFactory(React.createClass({
-          getInitialState() {
-            return {
-              currentValue: "init",
-              fake: "fake"
-            };
-          },
+        class TestParent extends React.Component {
+          constructor() {
+            super()
+            this.state = {currentValue: "init", fake: "fake"};
+          }
+
           render() {
             return <TestComponent ref="testComp" fake={this.state.fake} currentValue={this.state.currentValue} />
           }
-        }));
+        }
 
-        let parent = TestUtils.renderIntoDocument(TestParent());
+        let parent = TestUtils.renderIntoDocument(<TestParent />);
         parent.setState({
           fake: "test"
         });
@@ -680,15 +679,15 @@ describe("TagsInput", () => {
     });
 
     it("should not focus on an input that does not have focus method", () => {
-      let Empty = React.createClass({
-        render: function () {
+      class Empty extends React.Component {
+        render () {
           return (
             <span>
               {this.props.children}
             </span>
           );
         }
-      })
+      }
 
       function renderInput (props) {
         let {onChange, value, addTag, ref, ...other} = props

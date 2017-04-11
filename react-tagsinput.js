@@ -158,14 +158,6 @@
     );
   }
 
-  defaultRenderTag.propTypes = {
-    key: _react2.default.PropTypes.number,
-    tag: _react2.default.PropTypes.string,
-    onRemove: _react2.default.PropTypes.func,
-    classNameRemove: _react2.default.PropTypes.string,
-    getTagDisplayValue: _react2.default.PropTypes.func
-  };
-
   function defaultRenderInput(_ref) {
     var addTag = _ref.addTag,
         props = _objectWithoutProperties(_ref, ['addTag']);
@@ -176,12 +168,6 @@
 
     return _react2.default.createElement('input', _extends({ type: 'text', onChange: onChange, value: value }, other));
   }
-
-  defaultRenderInput.propTypes = {
-    value: _react2.default.PropTypes.string,
-    onChange: _react2.default.PropTypes.func,
-    addTag: _react2.default.PropTypes.func
-  };
 
   function defaultRenderLayout(tagComponents, inputComponent) {
     return _react2.default.createElement(
@@ -624,30 +610,6 @@
     return TagsInput;
   }(_react2.default.Component);
 
-  TagsInput.propTypes = {
-    focusedClassName: _react2.default.PropTypes.string,
-    addKeys: _react2.default.PropTypes.array,
-    addOnBlur: _react2.default.PropTypes.bool,
-    addOnPaste: _react2.default.PropTypes.bool,
-    currentValue: _react2.default.PropTypes.string,
-    inputValue: _react2.default.PropTypes.string,
-    inputProps: _react2.default.PropTypes.object,
-    onChange: _react2.default.PropTypes.func.isRequired,
-    onChangeInput: _react2.default.PropTypes.func,
-    removeKeys: _react2.default.PropTypes.array,
-    renderInput: _react2.default.PropTypes.func,
-    renderTag: _react2.default.PropTypes.func,
-    renderLayout: _react2.default.PropTypes.func,
-    pasteSplit: _react2.default.PropTypes.func,
-    tagProps: _react2.default.PropTypes.object,
-    onlyUnique: _react2.default.PropTypes.bool,
-    value: _react2.default.PropTypes.array.isRequired,
-    maxTags: _react2.default.PropTypes.number,
-    validationRegex: _react2.default.PropTypes.instanceOf(RegExp),
-    disabled: _react2.default.PropTypes.bool,
-    tagDisplayProp: _react2.default.PropTypes.string,
-    preventSubmit: _react2.default.PropTypes.bool
-  };
   TagsInput.defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
