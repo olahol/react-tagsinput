@@ -234,16 +234,16 @@ class TagsInput extends React.Component {
   }
 
   focus () {
-    if (this.refs.input && typeof this.refs.input.focus === 'function') {
-      this.refs.input.focus()
+    if (this.input && typeof this.input.focus === 'function') {
+      this.input.focus()
     }
 
     this.handleOnFocus()
   }
 
   blur () {
-    if (this.refs.input && typeof this.refs.input.blur === 'function') {
-      this.refs.input.blur()
+    if (this.input && typeof this.input.blur === 'function') {
+      this.input.blur()
     }
 
     this.handleOnBlur()
@@ -309,7 +309,7 @@ class TagsInput extends React.Component {
   }
 
   handleClick (e) {
-    if (e.target === this.refs.div) {
+    if (e.target === this.div) {
       this.focus()
     }
   }
@@ -459,7 +459,7 @@ class TagsInput extends React.Component {
     })
 
     let inputComponent = renderInput({
-      ref: 'input',
+      ref: r => { this.input = r },
       value: this._tag(),
       onPaste: ::this.handlePaste,
       onKeyDown: ::this.handleKeyDown,
@@ -471,7 +471,7 @@ class TagsInput extends React.Component {
     })
 
     return (
-      <div ref='div' onClick={::this.handleClick} className={className}>
+      <div ref={r => { this.div = r }} onClick={::this.handleClick} className={className}>
         {renderLayout(tagComponents, inputComponent)}
       </div>
     )

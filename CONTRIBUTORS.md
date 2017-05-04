@@ -32,3 +32,4 @@
 * Lucjan Suski (@methyl)
 * Jonas Reitmann (@jonicious)
 * Ryan Hyslop (@ryanhyslop)
+* Kévin Berthommier (@bertho-zero)

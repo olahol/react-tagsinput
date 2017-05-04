@@ -20,11 +20,11 @@ class TestComponent extends React.Component {
   }
 
   input() {
-    return this.refs.tagsinput.refs.input;
+    return this.refs.tagsinput.input;
   }
 
   div() {
-    return this.refs.tagsinput.refs.div;
+    return this.refs.tagsinput.div;
   }
 
   tagsinput() {
@@ -140,7 +140,7 @@ describe("TagsInput", () => {
 
     it("should focus on input when clicking on component div", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
-      click(comp.tagsinput().refs.div);
+      click(comp.tagsinput().div);
     });
 
     it("should not add empty tag", () => {
@@ -516,7 +516,7 @@ describe("TagsInput", () => {
 
     it("should disable input when component is disabled", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent disabled={true} />);
-      assert.ok(comp.tagsinput().refs.input.disabled, "input should be disabled");
+      assert.ok(comp.tagsinput().input.disabled, "input should be disabled");
     });
 
     describe('preventSubmit', () => {

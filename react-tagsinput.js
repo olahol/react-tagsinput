@@ -331,8 +331,8 @@
     }, {
       key: 'focus',
       value: function focus() {
-        if (this.refs.input && typeof this.refs.input.focus === 'function') {
-          this.refs.input.focus();
+        if (this.input && typeof this.input.focus === 'function') {
+          this.input.focus();
         }
 
         this.handleOnFocus();
@@ -340,8 +340,8 @@
     }, {
       key: 'blur',
       value: function blur() {
-        if (this.refs.input && typeof this.refs.input.blur === 'function') {
-          this.refs.input.blur();
+        if (this.input && typeof this.input.blur === 'function') {
+          this.input.blur();
         }
 
         this.handleOnBlur();
@@ -424,7 +424,7 @@
     }, {
       key: 'handleClick',
       value: function handleClick(e) {
-        if (e.target === this.refs.div) {
+        if (e.target === this.div) {
           this.focus();
         }
       }
@@ -589,7 +589,9 @@
         });
 
         var inputComponent = renderInput(_extends({
-          ref: 'input',
+          ref: function ref(r) {
+            return _this4.input = r;
+          },
           value: this._tag(),
           onPaste: this.handlePaste.bind(this),
           onKeyDown: this.handleKeyDown.bind(this),
@@ -601,7 +603,9 @@
 
         return _react2.default.createElement(
           'div',
-          { ref: 'div', onClick: this.handleClick.bind(this), className: className },
+          { ref: function ref(r) {
+              return _this4.div = r;
+            }, onClick: this.handleClick.bind(this), className: className },
           renderLayout(tagComponents, inputComponent)
         );
       }
