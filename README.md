@@ -232,6 +232,7 @@ tag array, `changed` which is an array of the tags that have changed and
 ##### onChangeInput
 
 Callback from the input box, gets one argument `value` which is the content of the input box.
+(onChangeInput is only called if the input box is [controlled](https://facebook.github.io/react/docs/forms.html#controlled-components), for this to happen both inputValue and onChangeInput need to be set)
 
 ##### addKeys
 
@@ -243,7 +244,7 @@ A string to set a value on the input.
 
 ##### inputValue
 
-Similar to `currentValue` but needed for controlling the input box.
+Similar to `currentValue` but needed for controlling the input box. (inputValue is only useful if you use it together with onChangeInput)
 
 ##### onlyUnique
 
