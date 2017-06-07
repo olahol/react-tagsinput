@@ -217,6 +217,10 @@ class TagsInput extends React.Component {
       return true
     }
 
+    if (rejectedTags.length > 0) {
+      return false
+    }
+
     this._clearInput()
     return false
   }
