@@ -712,6 +712,7 @@ describe("TagsInput", () => {
 
       add(comp, '');
       assert.equal(comp.len(), 0, "there should be no tags");
+      comp.tagsinput()._clearInput();
     });
   });
 

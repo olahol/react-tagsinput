@@ -192,6 +192,7 @@
   var TagsInput = function (_React$Component) {
     _inherits(TagsInput, _React$Component);
 
+    /* istanbul ignore next */
     function TagsInput() {
       _classCallCheck(this, TagsInput);
 
@@ -310,6 +311,10 @@
           onChange(newValue, tags, indexes);
           this._clearInput();
           return true;
+        }
+
+        if (rejectedTags.length > 0) {
+          return false;
         }
 
         this._clearInput();
@@ -530,6 +535,7 @@
     }, {
       key: 'componentWillReceiveProps',
       value: function componentWillReceiveProps(nextProps) {
+        /* istanbul ignore next */
         if (this.hasControlledInput()) {
           return;
         }
@@ -590,7 +596,7 @@
 
         var inputComponent = renderInput(_extends({
           ref: function ref(r) {
-            return _this4.input = r;
+            _this4.input = r;
           },
           value: this._tag(),
           onPaste: this.handlePaste.bind(this),
@@ -604,7 +610,7 @@
         return _react2.default.createElement(
           'div',
           { ref: function ref(r) {
-              return _this4.div = r;
+              _this4.div = r;
             }, onClick: this.handleClick.bind(this), className: className },
           renderLayout(tagComponents, inputComponent)
         );

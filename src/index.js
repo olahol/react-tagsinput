@@ -77,6 +77,7 @@ const defaultInputProps = {
 }
 
 class TagsInput extends React.Component {
+  /* istanbul ignore next */
   constructor () {
     super()
     this.state = {tag: '', isFocused: false}
@@ -404,6 +405,7 @@ class TagsInput extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    /* istanbul ignore next */
     if (this.hasControlledInput()) {
       return
     }

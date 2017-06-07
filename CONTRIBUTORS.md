@@ -33,3 +33,5 @@
 * Jonas Reitmann (@jonicious)
 * Ryan Hyslop (@ryanhyslop)
 * Kévin Berthommier (@bertho-zero)
+* Ilias Tsangaris (@iliastsangaris)
+* Hatlen (@Hatlen)

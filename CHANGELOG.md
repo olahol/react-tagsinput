@@ -1,3 +1,7 @@
+### 3.17.0 (2017-06-07)
+
+* Ensure input is not cleared when input fails regex validation.
+
 ### 3.16.0 (2017-04-09)
 
 * Add `preventSubmit`.
