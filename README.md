@@ -302,7 +302,7 @@ Specify the class to add to the wrapper when the component is focused. Default i
 
 ##### tagProps
 
-Props passed down to every tag component. Defualt is: 
+Props passed down to every tag component. Default is: 
 ```javascript
 {
   className: 'react-tagsinput-tag', 
