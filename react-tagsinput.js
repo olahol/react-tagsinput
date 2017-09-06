@@ -411,8 +411,9 @@
         var tag = this._tag();
         var empty = tag === '';
         var keyCode = e.keyCode;
-        var add = addKeys.indexOf(keyCode) !== -1;
-        var remove = removeKeys.indexOf(keyCode) !== -1;
+        var key = e.key;
+        var add = addKeys.indexOf(keyCode) !== -1 || addKeys.indexOf(key) !== -1;
+        var remove = removeKeys.indexOf(keyCode) !== -1 || removeKeys.indexOf(key) !== -1;
 
         if (add) {
           var added = this.accept();

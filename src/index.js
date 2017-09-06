@@ -87,7 +87,10 @@ class TagsInput extends React.Component {
 
   static propTypes = {
     focusedClassName: React.PropTypes.string,
-    addKeys: React.PropTypes.array,
+    addKeys: React.PropTypes.arrayOf(React.Proptypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string
+    ])),
     addOnBlur: React.PropTypes.bool,
     addOnPaste: React.PropTypes.bool,
     currentValue: React.PropTypes.string,
@@ -95,7 +98,10 @@ class TagsInput extends React.Component {
     inputProps: React.PropTypes.object,
     onChange: React.PropTypes.func.isRequired,
     onChangeInput: React.PropTypes.func,
-    removeKeys: React.PropTypes.array,
+    removeKeys: React.PropTypes.arrayOf(React.Proptypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string
+    ])),
     renderInput: React.PropTypes.func,
     renderTag: React.PropTypes.func,
     renderLayout: React.PropTypes.func,
@@ -297,8 +303,9 @@ class TagsInput extends React.Component {
     const tag = this._tag()
     let empty = tag === ''
     let keyCode = e.keyCode
-    let add = addKeys.indexOf(keyCode) !== -1
-    let remove = removeKeys.indexOf(keyCode) !== -1
+    let key = e.key
+    let add = addKeys.indexOf(keyCode) !== -1 || addKeys.indexOf(key) !== -1
+    let remove = removeKeys.indexOf(keyCode) !== -1 || removeKeys.indexOf(key) !== -1
 
     if (add) {
       let added = this.accept()
