@@ -1,3 +1,7 @@
+### 3.18.0 (2017-09-16)
+
+* Match on key as well as keyCode.
+
 ### 3.17.0 (2017-06-07)
 
 * Ensure input is not cleared when input fails regex validation.

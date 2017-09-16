@@ -35,3 +35,4 @@
 * Kévin Berthommier (@bertho-zero)
 * Ilias Tsangaris (@iliastsangaris)
 * Hatlen (@Hatlen)
+* Thomas Levy (@NilSet)
