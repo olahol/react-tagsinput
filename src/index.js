@@ -1,17 +1,5 @@
 import React from 'react'
 
-function uniq (arr) {
-  let out = []
-
-  for (let i = 0; i < arr.length; i++) {
-    if (out.indexOf(arr[i]) === -1) {
-      out.push(arr[i])
-    }
-  }
-
-  return out
-}
-
 /* istanbul ignore next */
 function getClipboardData (e) {
   if (window.clipboardData) {
@@ -110,6 +98,7 @@ class TagsInput extends React.Component {
     onlyUnique: React.PropTypes.bool,
     value: React.PropTypes.array.isRequired,
     maxTags: React.PropTypes.number,
+    maxTagDisplay: React.PropTypes.number,
     validationRegex: React.PropTypes.instanceOf(RegExp),
     disabled: React.PropTypes.bool,
     tagDisplayProp: React.PropTypes.string,
@@ -131,6 +120,7 @@ class TagsInput extends React.Component {
     tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
     onlyUnique: false,
     maxTags: -1,
+    maxTagDisplay: -1,
     validationRegex: /.*/,
     disabled: false,
     tagDisplayProp: null,
@@ -187,10 +177,12 @@ class TagsInput extends React.Component {
     let {validationRegex, onChange, onValidationReject, onlyUnique, maxTags, value} = this.props
 
     if (onlyUnique) {
-      tags = uniq(tags)
-      tags = tags.filter(tag => value.every(currentTag =>
-        this._getTagDisplayValue(currentTag) !== this._getTagDisplayValue(tag))
-      )
+      let set = new Set(value)
+      tags = tags.filter(currentTag => {
+        const isUnique = !set.has(currentTag)
+        set.add(currentTag)
+        return isUnique
+      })
     }
 
     const rejectedTags = tags.filter(tag => !validationRegex.test(this._getTagDisplayValue(tag)))
@@ -450,6 +442,7 @@ class TagsInput extends React.Component {
       tagDisplayProp,
       inputValue,
       onChangeInput,
+      maxTagDisplay,
       ...other
     } = this.props
     /* eslint-enable */
@@ -460,7 +453,9 @@ class TagsInput extends React.Component {
       className += ' ' + focusedClassName
     }
 
-    let tagComponents = value.map((tag, index) => {
+    let displayableTags = maxTagDisplay === -1 || value.length < maxTagDisplay ? value : value.slice(0, maxTagDisplay)
+
+    let tagComponents = displayableTags.map((tag, index) => {
       return renderTag({
         key: index,
         tag,

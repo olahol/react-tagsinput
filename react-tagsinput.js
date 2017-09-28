@@ -576,7 +576,8 @@
             tagDisplayProp = _props5.tagDisplayProp,
             inputValue = _props5.inputValue,
             onChangeInput = _props5.onChangeInput,
-            other = _objectWithoutProperties(_props5, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput']);
+            maxTagDisplay = _props5.maxTagDisplay,
+            other = _objectWithoutProperties(_props5, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput', 'maxTagDisplay']);
 
         var isFocused = this.state.isFocused;
 
@@ -585,7 +586,9 @@
           className += ' ' + focusedClassName;
         }
 
-        var tagComponents = value.map(function (tag, index) {
+        var displayableTags = maxTagDisplay === -1 || displayableTags >= value.length ? value : value.slice(0, displayableTags);
+
+        var tagComponents = displayableTags.map(function (tag, index) {
           return renderTag(_extends({
             key: index,
             tag: tag,
@@ -636,6 +639,7 @@
     tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
     onlyUnique: false,
     maxTags: -1,
+    maxTagDisplay: -1,
     validationRegex: /.*/,
     disabled: false,
     tagDisplayProp: null,
