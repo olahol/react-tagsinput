@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define('ReactTagsInput', ['module', 'exports', 'react'], factory);
+    define('ReactTagsInput', ['module', 'exports', 'react', 'prop-types'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(module, exports, require('react'));
+    factory(module, exports, require('react'), require('prop-types'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod, mod.exports, global.React);
+    factory(mod, mod.exports, global.React, global.propTypes);
     global.ReactTagsInput = mod.exports;
   }
-})(this, function (module, exports, _react) {
+})(this, function (module, exports, _react, _propTypes) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -18,6 +18,8 @@
   });
 
   var _react2 = _interopRequireDefault(_react);
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
 
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
