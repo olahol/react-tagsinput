@@ -4,7 +4,7 @@
   "description": "Highly customizable React component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
-    "react": "^15.0.0 || ^0.14.0"
+    "react": "^16.0.0 || ^15.0.0 || ^0.14.0"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
@@ -20,6 +20,7 @@
     "istanbul": "^1.1.0-alpha.1",
     "jsdom": "^7.0.2",
     "mocha": "^2.3.3",
+    "prop-types": "^15.6.0",
     "react": "15.x.x",
     "react-addons-test-utils": "^15.0.0",
     "react-autosuggest": "^8.0.0",
