@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 /* istanbul ignore next */
 function getClipboardData (e) {
@@ -26,11 +27,11 @@ function defaultRenderTag (props) {
 }
 
 defaultRenderTag.propTypes = {
-  key: React.PropTypes.number,
-  tag: React.PropTypes.string,
-  onRemove: React.PropTypes.func,
-  classNameRemove: React.PropTypes.string,
-  getTagDisplayValue: React.PropTypes.func
+  key: PropTypes.number,
+  tag: PropTypes.string,
+  onRemove: PropTypes.func,
+  classNameRemove: PropTypes.string,
+  getTagDisplayValue: PropTypes.func
 }
 
 function defaultRenderInput ({addTag, ...props}) {
@@ -41,9 +42,9 @@ function defaultRenderInput ({addTag, ...props}) {
 }
 
 defaultRenderInput.propTypes = {
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  addTag: React.PropTypes.func
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  addTag: PropTypes.func
 }
 
 function defaultRenderLayout (tagComponents, inputComponent) {
@@ -74,21 +75,21 @@ class TagsInput extends React.Component {
   }
 
   static propTypes = {
-    focusedClassName: React.PropTypes.string,
-    addKeys: React.PropTypes.arrayOf(React.Proptypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.string
+    focusedClassName: PropTypes.string,
+    addKeys: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
     ])),
-    addOnBlur: React.PropTypes.bool,
-    addOnPaste: React.PropTypes.bool,
-    currentValue: React.PropTypes.string,
-    inputValue: React.PropTypes.string,
-    inputProps: React.PropTypes.object,
-    onChange: React.PropTypes.func.isRequired,
-    onChangeInput: React.PropTypes.func,
-    removeKeys: React.PropTypes.arrayOf(React.Proptypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.string
+    addOnBlur: PropTypes.bool,
+    addOnPaste: PropTypes.bool,
+    currentValue: PropTypes.string,
+    inputValue: PropTypes.string,
+    inputProps: PropTypes.object,
+    onChange: PropTypes.func.isRequired,
+    onChangeInput: PropTypes.func,
+    removeKeys: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
     ])),
     renderInput: React.PropTypes.func,
     renderTag: React.PropTypes.func,

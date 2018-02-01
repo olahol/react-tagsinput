@@ -1,10 +1,10 @@
 {
   "name": "react-tagsinput",
-  "version": "3.18.0",
+  "version": "3.19.0",
   "description": "Highly customizable React component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
-    "react": "^15.0.0 || ^0.14.0"
+    "react": "^16.0.0 || ^15.0.0 || ^0.14.0"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
@@ -20,10 +20,11 @@
     "istanbul": "^1.1.0-alpha.1",
     "jsdom": "^7.0.2",
     "mocha": "^2.3.3",
-    "react": "15.x.x",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
     "react-addons-test-utils": "^15.0.0",
     "react-autosuggest": "^8.0.0",
-    "react-dom": "15.x.x",
+    "react-dom": "^16.0.0",
     "react-input-autosize": "^1.0.0",
     "reactpack": "^0.9.0",
     "sinon": "^2.1.0",
