@@ -289,7 +289,7 @@
         tags = tags.filter(function (tag) {
           var tagDisplayValue = _this2._getTagDisplayValue(tag);
           if (typeof tagDisplayValue.trim === 'function') {
-            return tagDisplayValue.trim().length > 0;
+            return tagDisplayValue.trim().length >= 0;
           } else {
             return tagDisplayValue;
           }
@@ -356,9 +356,10 @@
     }, {
       key: 'accept',
       value: function accept() {
-        var tag = this._tag();
+        var preventSubmit = this.props.preventSubmit;
 
-        if (tag !== '') {
+        var tag = this._tag();
+        if (tag !== '' || !preventSubmit) {
           tag = this._makeTag(tag);
           return this._addTags([tag]);
         }
