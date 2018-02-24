@@ -610,12 +610,13 @@ describe("TagsInput", () => {
       });
 
       describe("when set to false", () => {
-        it("should not prevent default submit on enter key when tag is empty", () => {
+        it("should prevent default submit on enter key when tag is empty", () => {
           let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={false} />);
           const preventDefault = sinon.spy();
 
           addTagWithEventSpy(comp, "", preventDefault);
-          assert.equal(preventDefault.called, false, "preventDefault was called when it should not be");
+          assert.equal(preventDefault.called, true, "preventDefault was not called when it should have been");
+          assert.deepEqual(comp.state.tags, ['']);
         });
 
         it("should still prevent default submit on enter key when tag is not empty and added", () => {

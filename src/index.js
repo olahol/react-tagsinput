@@ -201,7 +201,7 @@ class TagsInput extends React.Component {
     tags = tags.filter(tag => {
       const tagDisplayValue = this._getTagDisplayValue(tag)
       if (typeof tagDisplayValue.trim === 'function') {
-        return tagDisplayValue.trim().length > 0
+        return tagDisplayValue.trim().length >= 0
       } else {
         return tagDisplayValue
       }
@@ -270,9 +270,9 @@ class TagsInput extends React.Component {
   }
 
   accept () {
+    const { preventSubmit } = this.props
     let tag = this._tag()
-
-    if (tag !== '') {
+    if (tag !== '' || !preventSubmit) {
       tag = this._makeTag(tag)
       return this._addTags([tag])
     }
