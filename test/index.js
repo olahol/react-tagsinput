@@ -195,7 +195,7 @@ describe("TagsInput", () => {
       assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
 
-    it("should support validation", () => {
+    it("should support validation regex", () => {
       let firstTag = 'aaa';
       let secondTag = randstring();
       let thirdTag = randstring();
@@ -211,6 +211,42 @@ describe("TagsInput", () => {
       paste(comp, firstTag + ' ' + secondTag + ' ' + thirdTag);
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), firstTag, "it should be the tag that was added");
+      assert.equal(fireCount, 1, "onValidationReject should be fired once");
+    });
+
+    it("should support validation callback", () => {
+      let firstTag = '10-20';
+      let secondTag = '20-20';
+      let thirdTag = '20-10';
+      let fourthTag = '20-';
+
+      let fireCount = 0;
+      let onValidationReject = function (tags) {
+        assert.deepEqual(tags, [thirdTag, fourthTag], "there should be rejected tags in onValidationReject callback");
+        fireCount += 1
+      }
+
+      let validate = function (tag) {
+        let matches = /^(\d+)-(\d+)$/.exec(tag);
+        if (!matches || matches.length !== 3) {
+          return false;
+        }
+
+        let min = parseInt(matches[1], 10);
+        let max = parseInt(matches[2], 10);
+        if (min > max) {
+          return false;
+        }
+
+        return true;
+      }
+
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnPaste={true} onValidationReject={onValidationReject} validate={validate} />);
+
+      paste(comp, firstTag + ' ' + secondTag + ' ' + thirdTag + ' ' + fourthTag);
+      assert.equal(comp.len(), 2, "there should be two tags");
+      assert.equal(comp.tag(0), firstTag, "it should allow the first tag");
+      assert.equal(comp.tag(1), secondTag, "it should allow the second tag");
       assert.equal(fireCount, 1, "onValidationReject should be fired once");
     });
 
