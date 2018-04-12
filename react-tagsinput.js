@@ -1,13 +1,13 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define('ReactTagsInput', ['module', 'exports', 'react', 'prop-types'], factory);
+    define(['module', 'exports', 'react', 'prop-types'], factory);
   } else if (typeof exports !== "undefined") {
     factory(module, exports, require('react'), require('prop-types'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod, mod.exports, global.React, global.propTypes);
+    factory(mod, mod.exports, global.React, global.PropTypes);
     global.ReactTagsInput = mod.exports;
   }
 })(this, function (module, exports, _react, _propTypes) {

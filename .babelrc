@@ -3,6 +3,13 @@
   "plugins": [
     "add-module-exports",
     "transform-react-remove-prop-types",
-    ["transform-es2015-modules-umd", {"globals": {"react": "React"}}]
+    ["transform-es2015-modules-umd", {
+      "globals": {
+        "react": "React",
+        "prop-types": "PropTypes",
+        "index": "ReactTagsInput"
+      },
+      "exactGlobals": true
+    }]
   ]
 }
