@@ -263,7 +263,6 @@
         var _this2 = this;
 
         var _props = this.props,
-            validationRegex = _props.validationRegex,
             onChange = _props.onChange,
             onValidationReject = _props.onValidationReject,
             onlyUnique = _props.onlyUnique,
@@ -281,10 +280,10 @@
         }
 
         var rejectedTags = tags.filter(function (tag) {
-          return !validationRegex.test(_this2._getTagDisplayValue(tag));
+          return !_this2._validate(_this2._getTagDisplayValue(tag));
         });
         tags = tags.filter(function (tag) {
-          return validationRegex.test(_this2._getTagDisplayValue(tag));
+          return _this2._validate(_this2._getTagDisplayValue(tag));
         });
         tags = tags.filter(function (tag) {
           var tagDisplayValue = _this2._getTagDisplayValue(tag);
@@ -321,6 +320,16 @@
 
         this._clearInput();
         return false;
+      }
+    }, {
+      key: '_validate',
+      value: function _validate(tag) {
+        var _props2 = this.props,
+            validate = _props2.validate,
+            validationRegex = _props2.validationRegex;
+
+
+        return validate(tag) && validationRegex.test(tag);
       }
     }, {
       key: '_shouldPreventDefaultEventOnAdd',
@@ -380,9 +389,9 @@
       value: function handlePaste(e) {
         var _this3 = this;
 
-        var _props2 = this.props,
-            addOnPaste = _props2.addOnPaste,
-            pasteSplit = _props2.pasteSplit;
+        var _props3 = this.props,
+            addOnPaste = _props3.addOnPaste,
+            pasteSplit = _props3.pasteSplit;
 
 
         if (!addOnPaste) {
@@ -405,10 +414,10 @@
           return;
         }
 
-        var _props3 = this.props,
-            value = _props3.value,
-            removeKeys = _props3.removeKeys,
-            addKeys = _props3.addKeys;
+        var _props4 = this.props,
+            value = _props4.value,
+            removeKeys = _props4.removeKeys,
+            addKeys = _props4.addKeys;
 
         var tag = this._tag();
         var empty = tag === '';
@@ -517,9 +526,9 @@
     }, {
       key: 'hasControlledInput',
       value: function hasControlledInput() {
-        var _props4 = this.props,
-            inputValue = _props4.inputValue,
-            onChangeInput = _props4.onChangeInput;
+        var _props5 = this.props,
+            inputValue = _props5.inputValue,
+            onChangeInput = _props5.onChangeInput;
 
 
         return typeof onChangeInput === 'function' && typeof inputValue === 'string';
@@ -556,29 +565,30 @@
       value: function render() {
         var _this4 = this;
 
-        var _props5 = this.props,
-            value = _props5.value,
-            onChange = _props5.onChange,
-            tagProps = _props5.tagProps,
-            renderLayout = _props5.renderLayout,
-            renderTag = _props5.renderTag,
-            renderInput = _props5.renderInput,
-            addKeys = _props5.addKeys,
-            removeKeys = _props5.removeKeys,
-            className = _props5.className,
-            focusedClassName = _props5.focusedClassName,
-            addOnBlur = _props5.addOnBlur,
-            addOnPaste = _props5.addOnPaste,
-            inputProps = _props5.inputProps,
-            pasteSplit = _props5.pasteSplit,
-            onlyUnique = _props5.onlyUnique,
-            maxTags = _props5.maxTags,
-            validationRegex = _props5.validationRegex,
-            disabled = _props5.disabled,
-            tagDisplayProp = _props5.tagDisplayProp,
-            inputValue = _props5.inputValue,
-            onChangeInput = _props5.onChangeInput,
-            other = _objectWithoutProperties(_props5, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput']);
+        var _props6 = this.props,
+            value = _props6.value,
+            onChange = _props6.onChange,
+            tagProps = _props6.tagProps,
+            renderLayout = _props6.renderLayout,
+            renderTag = _props6.renderTag,
+            renderInput = _props6.renderInput,
+            addKeys = _props6.addKeys,
+            removeKeys = _props6.removeKeys,
+            className = _props6.className,
+            focusedClassName = _props6.focusedClassName,
+            addOnBlur = _props6.addOnBlur,
+            addOnPaste = _props6.addOnPaste,
+            inputProps = _props6.inputProps,
+            pasteSplit = _props6.pasteSplit,
+            onlyUnique = _props6.onlyUnique,
+            maxTags = _props6.maxTags,
+            validate = _props6.validate,
+            validationRegex = _props6.validationRegex,
+            disabled = _props6.disabled,
+            tagDisplayProp = _props6.tagDisplayProp,
+            inputValue = _props6.inputValue,
+            onChangeInput = _props6.onChangeInput,
+            other = _objectWithoutProperties(_props6, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validate', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput']);
 
         var isFocused = this.state.isFocused;
 
@@ -638,6 +648,9 @@
     tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
     onlyUnique: false,
     maxTags: -1,
+    validate: function validate() {
+      return true;
+    },
     validationRegex: /.*/,
     disabled: false,
     tagDisplayProp: null,

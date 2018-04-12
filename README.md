@@ -31,6 +31,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
         * [currentValue](#currentvalue)
         * [inputValue](#inputvalue)
         * [onlyUnique](#onlyunique)
+        * [validate](#validate)
         * [validationRegex](#validationregex)
         * [onValidationReject](#onvalidationreject)
         * [disabled](#disabled)
@@ -249,6 +250,10 @@ Similar to `currentValue` but needed for controlling the input box. (inputValue 
 ##### onlyUnique
 
 Allow only unique tags, default is `false`.
+
+##### validate
+
+Allow only tags that pass this validation function. Gets one argument `tag` which is the tag to validate. Default is `() => true`.
 
 ##### validationRegex
 

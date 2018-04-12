@@ -111,6 +111,7 @@ class TagsInput extends React.Component {
     onlyUnique: PropTypes.bool,
     value: PropTypes.array.isRequired,
     maxTags: PropTypes.number,
+    validate: PropTypes.func,
     validationRegex: PropTypes.instanceOf(RegExp),
     disabled: PropTypes.bool,
     tagDisplayProp: PropTypes.string,
@@ -132,6 +133,7 @@ class TagsInput extends React.Component {
     tagProps: {className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove'},
     onlyUnique: false,
     maxTags: -1,
+    validate: () => true,
     validationRegex: /.*/,
     disabled: false,
     tagDisplayProp: null,
@@ -185,7 +187,7 @@ class TagsInput extends React.Component {
   }
 
   _addTags (tags) {
-    let {validationRegex, onChange, onValidationReject, onlyUnique, maxTags, value} = this.props
+    let {onChange, onValidationReject, onlyUnique, maxTags, value} = this.props
 
     if (onlyUnique) {
       tags = uniq(tags)
@@ -194,8 +196,8 @@ class TagsInput extends React.Component {
       )
     }
 
-    const rejectedTags = tags.filter(tag => !validationRegex.test(this._getTagDisplayValue(tag)))
-    tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))
+    const rejectedTags = tags.filter(tag => !this._validate(this._getTagDisplayValue(tag)))
+    tags = tags.filter(tag => this._validate(this._getTagDisplayValue(tag)))
     tags = tags.filter(tag => {
       let tagDisplayValue = this._getTagDisplayValue(tag)
       if (typeof tagDisplayValue.trim === 'function') {
@@ -231,6 +233,12 @@ class TagsInput extends React.Component {
 
     this._clearInput()
     return false
+  }
+
+  _validate (tag) {
+    let {validate, validationRegex} = this.props
+
+    return validate(tag) && validationRegex.test(tag)
   }
 
   _shouldPreventDefaultEventOnAdd (added, empty, keyCode) {
@@ -446,6 +454,7 @@ class TagsInput extends React.Component {
       pasteSplit,
       onlyUnique,
       maxTags,
+      validate,
       validationRegex,
       disabled,
       tagDisplayProp,
