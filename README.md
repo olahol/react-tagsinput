@@ -76,6 +76,7 @@ bower install react-tagsinput --save
 ## Example
 
 ```javascript
+import React from 'react'
 import TagsInput from 'react-tagsinput'
 
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
@@ -91,7 +92,7 @@ class Example extends React.Component {
   }
 
   render() {
-    return <TagsInput value={this.state.tags} onChange={::this.handleChange} />
+    return <TagsInput value={this.state.tags} onChange={this.handleChange} />
   }
 }
 ```
@@ -176,9 +177,9 @@ class Example extends React.Component {
     return (
       <TagsInput
         value={this.state.tags}
-        onChange={::this.handleChange}
+        onChange={this.handleChange}
         inputValue={this.state.tag}
-        onChangeInput={::this.handleChangeInput}
+        onChangeInput={this.handleChangeInput}
       />
     )
   }
