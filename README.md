@@ -85,6 +85,7 @@ class Example extends React.Component {
   constructor() {
     super()
     this.state = {tags: []}
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(tags) {
