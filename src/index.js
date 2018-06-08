@@ -84,6 +84,7 @@ class TagsInput extends React.Component {
     this.state = {tag: '', isFocused: false}
     this.focus = ::this.focus
     this.blur = ::this.blur
+    this.accept = ::this.accept
   }
 
   static propTypes = {
