@@ -80,9 +80,11 @@ class TagsInput extends React.Component {
   /* istanbul ignore next */
   constructor () {
     super()
+<<<<<<< HEAD
     this.state = { tag: '', isFocused: false }
     this.focus = this.focus.bind(this)
     this.blur = this.blur.bind(this)
+    this.accept = this.accept.bind(this)
   }
 
   static propTypes = {
