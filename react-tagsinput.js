@@ -564,7 +564,6 @@
       key: 'render',
       value: function render() {
         var _this4 = this;
-
         var _props6 = this.props,
             value = _props6.value,
             onChange = _props6.onChange,
@@ -588,6 +587,7 @@
             tagDisplayProp = _props6.tagDisplayProp,
             inputValue = _props6.inputValue,
             onChangeInput = _props6.onChangeInput,
+            maxTagDisplay = _props6.maxTagDisplay,
             other = _objectWithoutProperties(_props6, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validate', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput']);
 
         var isFocused = this.state.isFocused;
@@ -597,7 +597,9 @@
           className += ' ' + focusedClassName;
         }
 
-        var tagComponents = value.map(function (tag, index) {
+        var displayableTags = maxTagDisplay === -1 || displayableTags >= value.length ? value : value.slice(0, displayableTags);
+
+        var tagComponents = displayableTags.map(function (tag, index) {
           return renderTag(_extends({
             key: index,
             tag: tag,
@@ -648,6 +650,7 @@
     tagProps: { className: 'react-tagsinput-tag', classNameRemove: 'react-tagsinput-remove' },
     onlyUnique: false,
     maxTags: -1,
+    maxTagDisplay: -1,
     validate: function validate() {
       return true;
     },
