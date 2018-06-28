@@ -11,6 +11,7 @@ import AutocompleteExample from "./components/autocomplete";
 import EmailExample from "./components/email";
 import FormExample from "./components/form";
 import AutoaddExample from "./components/autoadd";
+import ValidationCallbackExample from "./components/validationcallback";
 
 import '../react-tagsinput.css'
 
@@ -35,6 +36,9 @@ class Examples extends React.Component {
         <FormExample />
         <h2>Auto add</h2>
         <AutoaddExample />
+        <h2>Validation callback</h2>
+        <p>Each tag must have the format <code>min-max</code>, where <code>min</code> and <code>max</code> are integers and <code>min</code> &le; <code>max</code>.</p>
+        <ValidationCallbackExample />
       </div>
     )
   }

@@ -91,19 +91,20 @@ class TagsInput extends React.Component {
       PropTypes.number,
       PropTypes.string
     ])),
-    renderInput: React.PropTypes.func,
-    renderTag: React.PropTypes.func,
-    renderLayout: React.PropTypes.func,
-    pasteSplit: React.PropTypes.func,
-    tagProps: React.PropTypes.object,
-    onlyUnique: React.PropTypes.bool,
-    value: React.PropTypes.array.isRequired,
-    maxTags: React.PropTypes.number,
+    renderInput: PropTypes.func,
+    renderTag: PropTypes.func,
+    renderLayout: PropTypes.func,
+    pasteSplit: PropTypes.func,
+    tagProps: PropTypes.object,
+    onlyUnique: PropTypes.bool,
+    value: PropTypes.array.isRequired,
+    maxTags: PropTypes.number,
     maxTagDisplay: React.PropTypes.number,
-    validationRegex: React.PropTypes.instanceOf(RegExp),
-    disabled: React.PropTypes.bool,
-    tagDisplayProp: React.PropTypes.string,
-    preventSubmit: React.PropTypes.bool
+    validate: PropTypes.func,
+    validationRegex: PropTypes.instanceOf(RegExp),
+    disabled: PropTypes.bool,
+    tagDisplayProp: PropTypes.string,
+    preventSubmit: PropTypes.bool
   }
 
   static defaultProps = {
@@ -122,6 +123,7 @@ class TagsInput extends React.Component {
     onlyUnique: false,
     maxTags: -1,
     maxTagDisplay: -1,
+    validate: () => true,
     validationRegex: /.*/,
     disabled: false,
     tagDisplayProp: null,
@@ -175,7 +177,7 @@ class TagsInput extends React.Component {
   }
 
   _addTags (tags) {
-    let {validationRegex, onChange, onValidationReject, onlyUnique, maxTags, value} = this.props
+    let {onChange, onValidationReject, onlyUnique, maxTags, value} = this.props
 
     if (onlyUnique) {
       let set = new Set(value)
@@ -186,8 +188,8 @@ class TagsInput extends React.Component {
       })
     }
 
-    const rejectedTags = tags.filter(tag => !validationRegex.test(this._getTagDisplayValue(tag)))
-    tags = tags.filter(tag => validationRegex.test(this._getTagDisplayValue(tag)))
+    const rejectedTags = tags.filter(tag => !this._validate(this._getTagDisplayValue(tag)))
+    tags = tags.filter(tag => this._validate(this._getTagDisplayValue(tag)))
     tags = tags.filter(tag => {
       let tagDisplayValue = this._getTagDisplayValue(tag)
       if (typeof tagDisplayValue.trim === 'function') {
@@ -223,6 +225,12 @@ class TagsInput extends React.Component {
 
     this._clearInput()
     return false
+  }
+
+  _validate (tag) {
+    let {validate, validationRegex} = this.props
+
+    return validate(tag) && validationRegex.test(tag)
   }
 
   _shouldPreventDefaultEventOnAdd (added, empty, keyCode) {
@@ -438,6 +446,7 @@ class TagsInput extends React.Component {
       pasteSplit,
       onlyUnique,
       maxTags,
+      validate,
       validationRegex,
       disabled,
       tagDisplayProp,
