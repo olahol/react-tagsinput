@@ -331,7 +331,10 @@ class TagsInput extends React.Component {
   }
 
   handleClick (e) {
-    if (e.target === this.div) {
+    const clickedElement = e.target
+    const parentElement = e.target && e.target.parentElement
+
+    if (clickedElement === this.div || parentElement === this.div) {
       this.focus()
     }
   }
