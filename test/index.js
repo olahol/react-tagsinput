@@ -141,6 +141,13 @@ describe("TagsInput", () => {
     it("should focus on input when clicking on component div", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
       click(comp.tagsinput().div);
+      assert.equal(comp.tagsinput().div.className.includes("react-tagsinput--focused"), true);
+    });
+
+    it("should focus on input when clicking on component's child span (which is triggered when input is multi-line)", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent />);
+      click(comp.tagsinput().div.firstChild);
+      assert.equal(comp.tagsinput().div.className.includes("react-tagsinput--focused"), true);
     });
 
     it("should not add empty tag", () => {
