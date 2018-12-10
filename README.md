@@ -237,7 +237,7 @@ Callback from the input box, gets one argument `value` which is the content of t
 
 ##### addKeys
 
-An array of key codes that add a tag, default is `[9, 13]` (Tab and Enter).
+An array of key codes that add a tag, default is `['Enter', 'Tab']`.
 
 ##### currentValue
 
