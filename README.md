@@ -225,14 +225,14 @@ function defaultRenderInput (props) {
 
 ##### renderLayout
 
-Renders the layout of the component. Takes `tagComponents` and `inputComponent` as args. Default is:
+Renders the layout of the component. Takes `tagElements` and `inputElement` as args. Default is:
 
 ```javascript
-function defaultRenderLayout (tagComponents, inputComponent) {
+function defaultRenderLayout (tagElements, inputElement) {
   return (
     <span>
-      {tagComponents}
-      {inputComponent}
+      {tagElements}
+      {inputElement}
     </span>
   )
 }
