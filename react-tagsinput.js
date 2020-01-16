@@ -546,18 +546,18 @@
       }
     }, {
       key: 'componentDidUpdate',
-      value: function componentDidUpdate(nextProps) {
+      value: function componentDidUpdate(prevProps) {
         /* istanbul ignore next */
         if (this.hasControlledInput()) {
           return;
         }
 
-        if (!this.inputValue(nextProps)) {
+        if (!this.inputValue(this.props)) {
           return;
         }
 
-        if (this.inputValue(nextProps) !== this.inputValue(this.props)) {
-          this.setState({ tag: this.inputValue(nextProps) });
+        if (this.inputValue(prevProps) !== this.inputValue(this.props)) {
+          this.setState({ tag: this.inputValue(this.props) });
         }
       }
     }, {
