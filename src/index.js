@@ -426,7 +426,7 @@ class TagsInput extends React.Component {
       return
     }
 
-    if (!this.inputValue(nextProps)) {
+    if (!this.inputValue(this.props)) {
       return
     }
 
