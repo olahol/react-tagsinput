@@ -660,7 +660,7 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), 1, "there should be one tag")
     });
 
-    describe("componentWillReceiveProps", () => {
+    describe("componentDidUpdate", () => {
       it("updates the state", () => {
         class TestParent extends React.Component {
           constructor() {

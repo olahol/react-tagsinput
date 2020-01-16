@@ -545,8 +545,8 @@
         });
       }
     }, {
-      key: 'componentWillReceiveProps',
-      value: function componentWillReceiveProps(nextProps) {
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate(nextProps) {
         /* istanbul ignore next */
         if (this.hasControlledInput()) {
           return;
@@ -556,9 +556,9 @@
           return;
         }
 
-        this.setState({
-          tag: this.inputValue(nextProps)
-        });
+        if (this.inputValue(nextProps) !== this.inputValue(this.props)) {
+          this.setState({ tag: this.inputValue(nextProps) });
+        }
       }
     }, {
       key: 'render',
