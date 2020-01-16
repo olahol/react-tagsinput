@@ -545,20 +545,20 @@
         });
       }
     }, {
-      key: 'componentWillReceiveProps',
-      value: function componentWillReceiveProps(nextProps) {
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate(prevProps) {
         /* istanbul ignore next */
         if (this.hasControlledInput()) {
           return;
         }
 
-        if (!this.inputValue(nextProps)) {
+        if (!this.inputValue(this.props)) {
           return;
         }
 
-        this.setState({
-          tag: this.inputValue(nextProps)
-        });
+        if (this.inputValue(prevProps) !== this.inputValue(this.props)) {
+          this.setState({ tag: this.inputValue(this.props) });
+        }
       }
     }, {
       key: 'render',

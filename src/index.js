@@ -82,8 +82,8 @@ class TagsInput extends React.Component {
   constructor () {
     super()
     this.state = {tag: '', isFocused: false}
-    this.focus = ::this.focus
-    this.blur = ::this.blur
+    this.focus = this.focus.bind(this)
+    this.blur = this.blur.bind(this)
   }
 
   static propTypes = {
@@ -420,19 +420,19 @@ class TagsInput extends React.Component {
     })
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentDidUpdate (prevProps) {
     /* istanbul ignore next */
     if (this.hasControlledInput()) {
       return
     }
 
-    if (!this.inputValue(nextProps)) {
+    if (!this.inputValue(this.props)) {
       return
     }
 
-    this.setState({
-      tag: this.inputValue(nextProps)
-    })
+    if (this.inputValue(prevProps) !== this.inputValue(this.props)) {
+      this.setState({ tag: this.inputValue(this.props) })
+    }
   }
 
   render () {
@@ -474,9 +474,9 @@ class TagsInput extends React.Component {
       return renderTag({
         key: index,
         tag,
-        onRemove: ::this.handleRemove,
+        onRemove: this.handleRemove.bind(this),
         disabled,
-        getTagDisplayValue: ::this._getTagDisplayValue,
+        getTagDisplayValue: this._getTagDisplayValue.bind(this),
         ...tagProps
       })
     })
@@ -484,17 +484,17 @@ class TagsInput extends React.Component {
     let inputComponent = renderInput({
       ref: r => { this.input = r },
       value: this._tag(),
-      onPaste: ::this.handlePaste,
-      onKeyDown: ::this.handleKeyDown,
-      onChange: ::this.handleChange,
-      onFocus: ::this.handleOnFocus,
-      onBlur: ::this.handleOnBlur,
-      addTag: ::this.addTag,
+      onPaste: this.handlePaste.bind(this),
+      onKeyDown: this.handleKeyDown.bind(this),
+      onChange: this.handleChange.bind(this),
+      onFocus: this.handleOnFocus.bind(this),
+      onBlur: this.handleOnBlur.bind(this),
+      addTag: this.addTag.bind(this),
       ...this.inputProps()
     })
 
     return (
-      <div ref={r => { this.div = r }} onClick={::this.handleClick} className={className}>
+      <div ref={r => { this.div = r }} onClick={this.handleClick.bind(this)} className={className}>
         {renderLayout(tagComponents, inputComponent)}
       </div>
     )
