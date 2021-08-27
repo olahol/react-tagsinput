@@ -112,46 +112,28 @@ function autosizingRenderInput ({addTag, ...props}) {
 
 ##### How do I add auto suggestion?
 
-Use [`react-autosuggest`](https://github.com/moroshko/react-autosuggest) and change the `renderInput` prop to
-something like:
+Use the [native html `datalist` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist). Something like:
 
 ```js
-function autosuggestRenderInput ({addTag, ...props}) {
-  const handleOnChange = (e, {newValue, method}) => {
-    if (method === 'enter') {
-      e.preventDefault()
-    } else {
-      props.onChange(e)
+<TagsInput
+  value={value}
+  onChange={onChange}
+  inputValue={inputValue}
+  onChangeInput={onChangeInput}
+  inputProps={
+    {
+      list: 'ice-cream-flavors',
     }
   }
-
-  const inputValue = (props.value && props.value.trim().toLowerCase()) || ''
-  const inputLength = inputValue.length
-
-  let suggestions = states().filter((state) => {
-    return state.name.toLowerCase().slice(0, inputLength) === inputValue
-  })
-
-  return (
-    <Autosuggest
-      ref={props.ref}
-      suggestions={suggestions}
-      shouldRenderSuggestions={(value) => value && value.trim().length > 0}
-      getSuggestionValue={(suggestion) => suggestion.name}
-      renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
-      inputProps={{...props, onChange: handleOnChange}}
-      onSuggestionSelected={(e, {suggestion}) => {
-        addTag(suggestion.name)
-      }}
-      onSuggestionsClearRequested={() => {}}
-      onSuggestionsFetchRequested={() => {}}
-    />
-  )
-}
+/>
+<datalist id="ice-cream-flavors">
+  <option value="Chocolate">
+  <option value="Coconut">
+  <option value="Mint">
+  <option value="Strawberry">
+  <option value="Vanilla">
+</datalist>
 ```
-
-A working example can be found in
-[`example/components/autocomplete.js`](https://github.com/olahol/react-tagsinput/blob/master/example/components/autocomplete.js).
 
 ##### How do I control the value of the input box?
 
@@ -307,10 +289,10 @@ Specify the class to add to the wrapper when the component is focused. Default i
 
 ##### tagProps
 
-Props passed down to every tag component. Default is: 
+Props passed down to every tag component. Default is:
 ```javascript
 {
-  className: 'react-tagsinput-tag', 
+  className: 'react-tagsinput-tag',
   classNameRemove: 'react-tagsinput-remove'
 }
 ```
