@@ -1,6 +1,7 @@
-const jsdom = require("jsdom");
-global.document = jsdom.jsdom("");
-global.window = document.defaultView;
+const { JSDOM }= require("jsdom");
+const dom = new JSDOM(`<!DOCTYPE html>`);
+global.document = dom.window.document;
+global.window = dom.window;
 global.navigator = window.navigator;
 
 const TagsInput = require("../src");
@@ -153,7 +154,7 @@ describe("TagsInput", () => {
 
     it("should set a default value for the input", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent currentValue="Default Value" />);
-      assert.equal(comp.input()._value, "Default Value", "there should be no tag");
+      assert.equal(comp.input().value, "Default Value", "there should be a default value");
     });
   });
 
@@ -660,7 +661,7 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), 1, "there should be one tag")
     });
 
-    describe("componentWillReceiveProps", () => {
+    describe("componentDidUpdate", () => {
       it("updates the state", () => {
         class TestParent extends React.Component {
           constructor() {
