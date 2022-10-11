@@ -1,7 +1,6 @@
 # react-tagsinput
 
 [![NPM version][npm-image]][npm-url]
-[![Dependency Status][dep-image]][dep-url]
 [![Size][size-image]][size-url]
 [![Download Count][downloads-image]][downloads-url]
 [![js-standard-style][standard-image]][standard-url]
@@ -295,9 +294,7 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 [npm-url]: https://npmjs.org/package/react-tagsinput
 [downloads-image]: http://img.shields.io/npm/dm/react-tagsinput.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/react-tagsinput
-[dep-image]: https://david-dm.org/olahol/react-tagsinput/peer-status.svg?style=flat-square
-[dep-url]: https://david-dm.org/olahol/react-tagsinput
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: https://github.com/feross/standard
-[size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/src/index.js?style=flat-square
-[size-url]: https://github.com/olahol/react-tagsinput/blob/master/src/index.js
+[size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/react-tagsinput.js?style=flat-square
+[size-url]: https://github.com/olahol/react-tagsinput/blob/master/react-tagsinput.js
