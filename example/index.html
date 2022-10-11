@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>react-tagsinput</title>
+    <link rel="stylesheet" href="../react-tagsinput.css">
+  </head>
+  <body>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script>
+    window.module = {exports: null};
+  </script>
+	<script src="../react-tagsinput.js"></script>
+	<script type="module">
+      class Example extends React.Component {
+        constructor() {
+          super()
+          this.state = {tags: []}
+        }
+
+        handleChange = (tags) => {
+          this.setState({tags})
+        }
+
+        render() {
+          return React.createElement(ReactTagsInput.default, {value: this.state.tags, onChange: this.handleChange})
+        }
+      }
+
+      const container = document.getElementById('root')
+      const root = ReactDOM.createRoot(container)
+
+      root.render(React.createElement(Example))
+  </script>
+  </body>
+</html>

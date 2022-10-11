@@ -1,8 +1,6 @@
 # react-tagsinput
 
 [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Coverage Status][coverage-image]][coverage-url]
 [![Dependency Status][dep-image]][dep-url]
 [![Size][size-image]][size-url]
 [![Download Count][downloads-image]][downloads-url]
@@ -16,12 +14,6 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
     * [Demo](#demo)
     * [Install](#install)
     * [Example](#example)
-    * [FAQ](#faq)
-      * [How do I make the input dynamically grow in size?](#how-do-i-make-the-input-dynamically-grow-in-size)
-      * [How do I add auto suggestion?](#how-do-i-add-auto-suggestion)
-      * [How do I control the value of the input box?](#how-do-i-control-the-value-of-the-input-box)
-      * [How do I fix warning "unknown prop `addTag`"?](#how-do-i-fix-warning-unknown-prop-addtag)
-      * [How do I copy paste from Excel?](#how-do-i-copy-paste-from-excel)
     * [Component Interface](#component-interface)
       * [Props](#props)
         * [value (required)](#value-required)
@@ -59,7 +51,7 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
 
 ## Demo
 
-[![Demo](./example/demo.gif)][demo-url]
+![Demo](./example/demo.gif)
 
 ### [Interactive Demo](https://olahol.github.io/react-tagsinput)
 
@@ -69,16 +61,13 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
 npm install react-tagsinput --save
 ```
 
-```bash
-bower install react-tagsinput --save
-```
-
 ## Example
 
 ```javascript
+import React from 'react'
 import TagsInput from 'react-tagsinput'
 
-import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
+import 'react-tagsinput/react-tagsinput.css'
 
 class Example extends React.Component {
   constructor() {
@@ -86,133 +75,13 @@ class Example extends React.Component {
     this.state = {tags: []}
   }
 
-  handleChange(tags) {
+  handleChange = (tags) => {
     this.setState({tags})
   }
 
   render() {
-    return <TagsInput value={this.state.tags} onChange={::this.handleChange} />
+    return <TagsInput value={this.state.tags} onChange={this.handleChange} />
   }
-}
-```
-## FAQ
-
-##### How do I make the input dynamically grow in size?
-
-Install [`react-input-autosize`](https://github.com/JedWatson/react-input-autosize) and change the `renderInput` prop to:
-
-```js
-function autosizingRenderInput ({addTag, ...props}) {
-  let {onChange, value, ...other} = props
-  return (
-    <AutosizeInput type='text' onChange={onChange} value={value} {...other} />
-  )
-}
-```
-
-##### How do I add auto suggestion?
-
-Use [`react-autosuggest`](https://github.com/moroshko/react-autosuggest) and change the `renderInput` prop to
-something like:
-
-```js
-function autosuggestRenderInput ({addTag, ...props}) {
-  const handleOnChange = (e, {newValue, method}) => {
-    if (method === 'enter') {
-      e.preventDefault()
-    } else {
-      props.onChange(e)
-    }
-  }
-
-  const inputValue = (props.value && props.value.trim().toLowerCase()) || ''
-  const inputLength = inputValue.length
-
-  let suggestions = states().filter((state) => {
-    return state.name.toLowerCase().slice(0, inputLength) === inputValue
-  })
-
-  return (
-    <Autosuggest
-      ref={props.ref}
-      suggestions={suggestions}
-      shouldRenderSuggestions={(value) => value && value.trim().length > 0}
-      getSuggestionValue={(suggestion) => suggestion.name}
-      renderSuggestion={(suggestion) => <span>{suggestion.name}</span>}
-      inputProps={{...props, onChange: handleOnChange}}
-      onSuggestionSelected={(e, {suggestion}) => {
-        addTag(suggestion.name)
-      }}
-      onSuggestionsClearRequested={() => {}}
-      onSuggestionsFetchRequested={() => {}}
-    />
-  )
-}
-```
-
-A working example can be found in
-[`example/components/autocomplete.js`](https://github.com/olahol/react-tagsinput/blob/master/example/components/autocomplete.js).
-
-##### How do I control the value of the input box?
-
-Use `inputValue` and `onChangeInput`:
-
-```js
-class Example extends React.Component {
-  constructor() {
-    super()
-    this.state = {tags: [], tag: ''}
-  }
-
-  handleChange(tags) {
-    this.setState({tags})
-  }
-
-  handleChangeInput(tag) {
-    this.setState({tag})
-  }
-
-  render() {
-    return (
-      <TagsInput
-        value={this.state.tags}
-        onChange={::this.handleChange}
-        inputValue={this.state.tag}
-        onChangeInput={::this.handleChangeInput}
-      />
-    )
-  }
-}
-```
-
-##### How do I fix warning "unknown prop `addTag`"?
-
-For ease of integration with auto complete components `react-tagsinput`
-passes the `addTag` method to `renderInput` props, if you are writing your
-own `renderInput` you need to filter `addTag` to not get an error about
-`unknown prop addTag` from React. Here is how it's done in the default
-`renderInput` function.
-
-```js
-function defaultRenderInput ({addTag, ...props}) {
-  let {onChange, value, ...other} = props
-  return (
-    <input type='text' onChange={onChange} value={value} {...other} />
-  )
-}
-```
-##### How do I copy paste from Excel?
-
->All you need is to add a CR, carriage return, symbol (it is the default line break style in MS Office documents).
-
-See [answer on Stack Overflow](http://stackoverflow.com/a/42008826/3276759).
-
-Set the `pasteSplit` prop to this function:
-
-```js
-pasteSplit(data) {
-  const separators = [',', ';', '\\(', '\\)', '\\*', '/', ':', '\\?', '\n', '\r'];
-  return data.split(new RegExp(separators.join('|'))).map(d => d.trim());
 }
 ```
 
@@ -307,10 +176,10 @@ Specify the class to add to the wrapper when the component is focused. Default i
 
 ##### tagProps
 
-Props passed down to every tag component. Default is: 
+Props passed down to every tag component. Default is:
 ```javascript
 {
-  className: 'react-tagsinput-tag', 
+  className: 'react-tagsinput-tag',
   classNameRemove: 'react-tagsinput-remove'
 }
 ```
@@ -426,11 +295,6 @@ Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 [npm-url]: https://npmjs.org/package/react-tagsinput
 [downloads-image]: http://img.shields.io/npm/dm/react-tagsinput.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/react-tagsinput
-[travis-image]: https://img.shields.io/travis/olahol/react-tagsinput/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/olahol/react-tagsinput
-[coverage-image]: https://img.shields.io/coveralls/olahol/react-tagsinput.svg?style=flat-square
-[coverage-url]: https://coveralls.io/r/olahol/react-tagsinput
-[demo-url]: https://github.com/olahol/react-tagsinput/blob/master/example/index.html
 [dep-image]: https://david-dm.org/olahol/react-tagsinput/peer-status.svg?style=flat-square
 [dep-url]: https://david-dm.org/olahol/react-tagsinput
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
