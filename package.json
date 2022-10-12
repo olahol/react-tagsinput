@@ -16,9 +16,9 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
-    "istanbul": "^1.1.0-alpha.1",
     "jsdom": "^20.0.1",
     "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +28,7 @@
   "scripts": {
     "test": "standard src/index.js && mocha --require babel-register",
     "build": "babel --module-id ReactTagsInput -m umd src/index.js > react-tagsinput.js",
-    "coverage": "istanbul cover --report text --report html _mocha -- --compilers js:babel-register",
+    "coverage": "npx nyc --reporter=lcov npm test",
     "prepublish": "npm run build"
   },
   "repository": {

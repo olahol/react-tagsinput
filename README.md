@@ -7,58 +7,7 @@
 
 Highly customizable [React](http://facebook.github.io/react/index.html) component for inputing tags.
 
-## Table of Contents
-
-  * [react-tagsinput](#react-tagsinput)
-    * [Demo](#demo)
-    * [Install](#install)
-    * [Example](#example)
-    * [Component Interface](#component-interface)
-      * [Props](#props)
-        * [value (required)](#value-required)
-        * [onChange (required)](#onchange-required)
-        * [onChangeInput](#onchangeinput)
-        * [addKeys](#addkeys)
-        * [currentValue](#currentvalue)
-        * [inputValue](#inputvalue)
-        * [onlyUnique](#onlyunique)
-        * [validate](#validate)
-        * [validationRegex](#validationregex)
-        * [onValidationReject](#onvalidationreject)
-        * [disabled](#disabled)
-        * [maxTags](#maxtags)
-        * [addOnBlur](#addonblur)
-        * [addOnPaste](#addonpaste)
-        * [pasteSplit](#pastesplit)
-        * [removeKeys](#removekeys)
-        * [tagProps](#tagprops)
-        * [inputProps](#inputprops)
-        * [renderTag](#rendertag)
-        * [renderInput](#renderinput)
-        * [renderLayout](#renderlayout)
-        * [preventSubmit](#preventSubmit)
-      * [Methods](#methods)
-        * [focus()](#focus)
-        * [blur()](#blur)
-        * [accept()](#accept)
-        * [addTag()](#addTag)
-        * [clearInput()](#clearInput)
-    * [Styling](#styling)
-    * [Contributors](#contributors)
-    * [Changelog](#changelog)
-    * [License](#license)
-
-## Demo
-
 ![Demo](./example/demo.gif)
-
-### [Interactive Demo](https://olahol.github.io/react-tagsinput)
-
-## Install
-
-```bash
-npm install react-tagsinput --save
-```
 
 ## Example
 
@@ -83,6 +32,48 @@ class Example extends React.Component {
   }
 }
 ```
+
+## Table of Contents
+
+  * [Example](#example)
+  * [Styling](#styling)
+  * [Component Interface](#component-interface)
+    * [Props](#props)
+      * [value (required)](#value-required)
+      * [onChange (required)](#onchange-required)
+      * [onChangeInput](#onchangeinput)
+      * [addKeys](#addkeys)
+      * [currentValue](#currentvalue)
+      * [inputValue](#inputvalue)
+      * [onlyUnique](#onlyunique)
+      * [validate](#validate)
+      * [validationRegex](#validationregex)
+      * [onValidationReject](#onvalidationreject)
+      * [disabled](#disabled)
+      * [maxTags](#maxtags)
+      * [addOnBlur](#addonblur)
+      * [addOnPaste](#addonpaste)
+      * [pasteSplit](#pastesplit)
+      * [removeKeys](#removekeys)
+      * [tagProps](#tagprops)
+      * [inputProps](#inputprops)
+      * [renderTag](#rendertag)
+      * [renderInput](#renderinput)
+      * [renderLayout](#renderlayout)
+      * [preventSubmit](#preventSubmit)
+    * [Methods](#methods)
+      * [focus()](#focus)
+      * [blur()](#blur)
+      * [accept()](#accept)
+      * [addTag()](#addTag)
+      * [clearInput()](#clearInput)
+  * [Contributors](#contributors)
+  * [Changelog](#changelog)
+  * [License](#license)
+
+## Styling
+
+Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 
 ## Component Interface
 
@@ -274,10 +265,6 @@ Convenience method that adds a tag.
 ##### clearInput()
 
 Clears the input value.
-
-## Styling
-
-Look at [react-tagsinput.css](./react-tagsinput.css) for a basic style.
 
 ## [Contributors](./CONTRIBUTORS.md)
 
