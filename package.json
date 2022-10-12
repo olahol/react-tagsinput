@@ -27,6 +27,8 @@
   },
   "scripts": {
     "test": "standard src/index.js && mocha --require babel-register",
+    "lint": "standard src/index.js",
+    "fix": "standard src/index.js --fix",
     "build": "babel --module-id ReactTagsInput -m umd src/index.js > react-tagsinput.js",
     "coverage": "npx nyc --reporter=lcov --reporter=text-summary npm test",
     "prepublish": "npm run build"

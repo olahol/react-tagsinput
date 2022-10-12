@@ -388,8 +388,7 @@ class TagsInput extends React.Component {
   }
 
   inputProps () {
-    // eslint-disable-next-line
-    let {onChange, onFocus, onBlur, ...otherInputProps} = this.props.inputProps
+    const { onChange, onFocus, onBlur, ...otherInputProps } = this.props.inputProps
 
     const props = {
       ...defaultInputProps,
@@ -441,39 +440,17 @@ class TagsInput extends React.Component {
   }
 
   render () {
-    /* eslint-disable */
-    let {
+    const {
       value,
-      onChange,
       tagProps,
       renderLayout,
       renderTag,
       renderInput,
-      addKeys,
-      removeKeys,
       className,
       focusedClassName,
-      addOnBlur,
-      addOnPaste,
-      inputProps,
-      pasteSplit,
-      onlyUnique,
-      maxTags,
-      validate,
-      validationRegex,
-      disabled,
-      tagDisplayProp,
-      inputValue,
-      onChangeInput,
-      ...other
+      disabled
     } = this.props
-    /* eslint-enable */
-
     const { isFocused } = this.state
-
-    if (isFocused) {
-      className += ' ' + focusedClassName
-    }
 
     const tagComponents = value.map((tag, index) => {
       return renderTag({
@@ -499,7 +476,7 @@ class TagsInput extends React.Component {
     })
 
     return (
-      <div ref={r => { this.div = r }} onClick={this.handleClick.bind(this)} className={className}>
+      <div ref={r => { this.div = r }} onClick={this.handleClick.bind(this)} className={className + (isFocused ? ' ' + focusedClassName : '')}>
         {renderLayout(tagComponents, inputComponent)}
       </div>
     )
