@@ -203,6 +203,7 @@
       _this.state = { tag: '', isFocused: false };
       _this.focus = _this.focus.bind(_this);
       _this.blur = _this.blur.bind(_this);
+      _this.accept = _this.accept.bind(_this);
       return _this;
     }
 
@@ -441,7 +442,10 @@
     }, {
       key: 'handleClick',
       value: function handleClick(e) {
-        if (e.target === this.div) {
+        var clickedElement = e.target;
+        var parentElement = e.target && e.target.parentElement;
+
+        if (clickedElement === this.div || parentElement === this.div) {
           this.focus();
         }
       }
