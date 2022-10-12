@@ -267,7 +267,12 @@ Convenience method that adds a tag.
 
 Clears the input value.
 
-## [Contributors](./CONTRIBUTORS.md)
+## Contributors
+
+<a href="https://github.com/olahol/react-tagsinput/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=olahol/react-tagsinput" />
+</a>
+
 
 ## [Changelog](./CHANGELOG.md)
 
