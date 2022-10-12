@@ -2,7 +2,8 @@
 
 [![NPM version][npm-image]][npm-url]
 [![Size][size-image]][size-url]
-[![Download Count][downloads-image]][downloads-url]
+[![Code coverage][codecov-image]][codecov-url]
+[![Download count][downloads-image]][downloads-url]
 [![js-standard-style][standard-image]][standard-url]
 
 Highly customizable [React](http://facebook.github.io/react/index.html) component for inputing tags.
@@ -285,3 +286,5 @@ Clears the input value.
 [standard-url]: https://github.com/feross/standard
 [size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/react-tagsinput.js?style=flat-square
 [size-url]: https://github.com/olahol/react-tagsinput/blob/master/react-tagsinput.js
+[codecov-image]: https://img.shields.io/codecov/c/github/olahol/react-tagsinput?style=flat-square
+[codecov-url]: https://app.codecov.io/github/olahol/react-tagsinput
