@@ -87,12 +87,12 @@ function click(comp) {
 
 function add(comp, tag, keyCode) {
   change(comp, tag);
-  keyDown(comp, keyCode || 13);
+  keyDown(comp, keyCode || 13, 'Enter');
 }
 
 function remove(comp) {
   change(comp, "");
-  keyDown(comp, 8);
+  keyDown(comp, 8, 'Backspace');
 }
 
 function allTag(comp, tagName) {
@@ -110,7 +110,7 @@ describe("TagsInput", () => {
       let tag = randstring();
 
       change(comp, tag);
-      keyDown(comp, 13);
+      keyDown(comp, 13, 'Enter');
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
@@ -121,7 +121,7 @@ describe("TagsInput", () => {
 
       add(comp, tag);
       assert.equal(comp.len(), 1, "there should be one tag");
-      keyDown(comp, 8);
+      keyDown(comp, 8, 'Backspace');
       assert.equal(comp.len(), 0, "there should be no tags");
     });
 
@@ -155,7 +155,7 @@ describe("TagsInput", () => {
       let comp = TestUtils.renderIntoDocument(<TestComponent />);
 
       change(comp, "");
-      keyDown(comp, 13);
+      keyDown(comp, 13, 'Enter');
       assert.equal(comp.len(), 0, "there should be no tag");
     });
 
@@ -294,9 +294,9 @@ describe("TagsInput", () => {
       let tag = randstring();
 
       change(comp, tag);
-      keyDown(comp, 13);
+      keyDown(comp, 13, 'Enter');
       change(comp, tag);
-      keyDown(comp, 13);
+      keyDown(comp, 13, 'Enter');
       assert.equal(comp.len(), 1, "there should be one tag");
     });
 
@@ -305,9 +305,9 @@ describe("TagsInput", () => {
       let tag = randstring();
 
       change(comp, tag);
-      keyDown(comp, 13);
+      keyDown(comp, 13, 'Enter');
       change(comp, tag);
-      keyDown(comp, 13);
+      keyDown(comp, 13, 'Enter');
       assert.equal(comp.len(), 2, "there should be two tags");
     });
 
@@ -316,7 +316,7 @@ describe("TagsInput", () => {
       let tag = randstring();
 
       change(comp, tag);
-      keyDown(comp, 44);
+      keyDown(comp, 44, 'Enter');
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), tag, "it should be the tag that was added");
     });
@@ -587,7 +587,7 @@ describe("TagsInput", () => {
 
       function addTagWithEventSpy(comp, tag, preventDefaultSpy) {
         change(comp, tag);
-        TestUtils.Simulate.keyDown(comp.input(), { keyCode: 13, preventDefault: preventDefaultSpy });
+        TestUtils.Simulate.keyDown(comp.input(), { keyCode: 13, key: 'Enter', preventDefault: preventDefaultSpy });
       }
 
       describe("when to to true", () => {

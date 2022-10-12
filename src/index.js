@@ -121,11 +121,11 @@ class TagsInput extends React.Component {
   static defaultProps = {
     className: 'react-tagsinput',
     focusedClassName: 'react-tagsinput--focused',
-    addKeys: [9, 13],
+    addKeys: ['Tab', 'Enter'],
     addOnBlur: false,
     addOnPaste: false,
     inputProps: {},
-    removeKeys: [8],
+    removeKeys: ['Backspace'],
     renderInput: defaultRenderInput,
     renderTag: defaultRenderTag,
     renderLayout: defaultRenderLayout,
@@ -241,12 +241,12 @@ class TagsInput extends React.Component {
     return validate(tag) && validationRegex.test(tag)
   }
 
-  _shouldPreventDefaultEventOnAdd (added, empty, keyCode) {
+  _shouldPreventDefaultEventOnAdd (added, empty, key) {
     if (added) {
       return true
     }
 
-    if (keyCode === 13) {
+    if (key === 'Enter') {
       return this.props.preventSubmit || (!this.props.preventSubmit && !empty)
     }
 
@@ -318,7 +318,7 @@ class TagsInput extends React.Component {
 
     if (add) {
       const added = this.accept()
-      if (this._shouldPreventDefaultEventOnAdd(added, empty, keyCode)) {
+      if (this._shouldPreventDefaultEventOnAdd(added, empty, key)) {
         e.preventDefault()
       }
     }
