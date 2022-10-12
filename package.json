@@ -1,10 +1,10 @@
 {
   "name": "react-tagsinput",
-  "version": "4.0.0",
+  "version": "3.20.0",
   "description": "Highly customizable React component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
-    "react": "^18.0.0 || ^17.0.0"
+    "react": "^18.0.0 || ^17.0.0 || ^16.0.0 || ^15.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
