@@ -574,35 +574,15 @@
 
         var _props6 = this.props,
             value = _props6.value,
-            onChange = _props6.onChange,
             tagProps = _props6.tagProps,
             renderLayout = _props6.renderLayout,
             renderTag = _props6.renderTag,
             renderInput = _props6.renderInput,
-            addKeys = _props6.addKeys,
-            removeKeys = _props6.removeKeys,
             className = _props6.className,
             focusedClassName = _props6.focusedClassName,
-            addOnBlur = _props6.addOnBlur,
-            addOnPaste = _props6.addOnPaste,
-            inputProps = _props6.inputProps,
-            pasteSplit = _props6.pasteSplit,
-            onlyUnique = _props6.onlyUnique,
-            maxTags = _props6.maxTags,
-            validate = _props6.validate,
-            validationRegex = _props6.validationRegex,
-            disabled = _props6.disabled,
-            tagDisplayProp = _props6.tagDisplayProp,
-            inputValue = _props6.inputValue,
-            onChangeInput = _props6.onChangeInput,
-            other = _objectWithoutProperties(_props6, ['value', 'onChange', 'tagProps', 'renderLayout', 'renderTag', 'renderInput', 'addKeys', 'removeKeys', 'className', 'focusedClassName', 'addOnBlur', 'addOnPaste', 'inputProps', 'pasteSplit', 'onlyUnique', 'maxTags', 'validate', 'validationRegex', 'disabled', 'tagDisplayProp', 'inputValue', 'onChangeInput']);
-
+            disabled = _props6.disabled;
         var isFocused = this.state.isFocused;
 
-
-        if (isFocused) {
-          className += ' ' + focusedClassName;
-        }
 
         var tagComponents = value.map(function (tag, index) {
           return renderTag(_extends({
@@ -631,7 +611,7 @@
           'div',
           { ref: function ref(r) {
               _this4.div = r;
-            }, onClick: this.handleClick.bind(this), className: className },
+            }, onClick: this.handleClick.bind(this), className: className + (isFocused ? ' ' + focusedClassName : '') },
           renderLayout(tagComponents, inputComponent)
         );
       }

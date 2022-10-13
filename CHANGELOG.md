@@ -1,3 +1,7 @@
+### 3.20.0 (2022-10-13)
+
+* Support for React 18 and 17
+
 ### 3.18.0 (2017-09-16)
 
 * Match on key as well as keyCode.

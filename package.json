@@ -50,5 +50,8 @@
   "bugs": {
     "url": "https://github.com/olahol/react-tagsinput/issues"
   },
-  "homepage": "https://github.com/olahol/react-tagsinput"
+  "homepage": "https://github.com/olahol/react-tagsinput",
+  "files": [
+    "react-tagsinput.css"
+  ]
 }
