@@ -584,10 +584,9 @@ describe("TagsInput", () => {
     });
 
     describe('preventSubmit', () => {
-
-      function addTagWithEventSpy(comp, tag, preventDefaultSpy) {
+      function addTagWithEventSpy(comp, tag, preventDefaultSpy, key = 'Enter') {
         change(comp, tag);
-        TestUtils.Simulate.keyDown(comp.input(), { keyCode: 13, key: 'Enter', preventDefault: preventDefaultSpy });
+        TestUtils.Simulate.keyDown(comp.input(), { key, preventDefault: preventDefaultSpy });
       }
 
       describe("when to to true", () => {
@@ -607,6 +606,13 @@ describe("TagsInput", () => {
           assert.equal(preventDefault.called, true, "preventDefault was not called when it should be");
         });
 
+        it("prevent default coverage", () => {
+          let comp = TestUtils.renderIntoDocument(<TestComponent preventSubmit={true} />);
+          const preventDefault = sinon.spy();
+
+          addTagWithEventSpy(comp, "", preventDefault, 'Tab');
+          assert.equal(preventDefault.called, false, "preventDefault was not called when it should be");
+        });
       });
 
       describe("when set to false", () => {
