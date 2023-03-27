@@ -377,7 +377,7 @@ class TagsInput extends React.Component {
       onBlur(e)
     }
 
-    if (this.props.addOnBlur) {
+    if (this.props.addOnBlur && e.target.value) {
       const tag = this._makeTag(e.target.value)
       this._addTags([tag])
     }
