@@ -496,7 +496,7 @@
           onBlur(e);
         }
 
-        if (this.props.addOnBlur && e.target.value) {
+        if (this.props.addOnBlur) {
           var tag = this._makeTag(e.target.value);
           this._addTags([tag]);
         }
