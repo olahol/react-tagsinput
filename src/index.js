@@ -6,7 +6,7 @@ function uniq (arr) {
 
   for (let i = 0; i < arr.length; i++) {
     if (out.indexOf(arr[i]) === -1) {
-      out.push(arr[i])
+      out.push(arr[i].trim())
     }
   }
 
