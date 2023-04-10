@@ -1,3 +1,8 @@
+### 3.20.1 (2023-04-10)
+
+* Fix `addOnBlur` empty values.
+* Fix trim for `onlyUnique`.
+
 ### 3.20.0 (2022-10-13)
 
 * Support for React 18 and 17

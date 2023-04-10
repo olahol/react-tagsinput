@@ -812,5 +812,27 @@ describe("TagsInput", () => {
 
       comp.tagsinput().addTag({name: "test"});
     });
+
+    it("should not add a tag on blur if it is empty", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent addOnBlur />);
+      let tag = "";
+
+      change(comp, tag);
+      blur(comp);
+
+      assert.equal(comp.len(), 0, "there should be no tag");
+    });
+
+    it("should trim unique tags", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} />);
+      let tag = "  " + randstring() + " ";
+
+      change(comp, tag);
+      keyDown(comp, 13, 'Enter');
+      change(comp, tag);
+      keyDown(comp, 13, 'Enter');
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag.trim(), "and it should be trimmed");
+    });
   });
 });
