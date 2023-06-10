@@ -1,3 +1,7 @@
+### 3.20.2 (2023-06-09)
+
+* Fix `onlyUnique` regression for object tags.
+
 ### 3.20.1 (2023-04-10)
 
 * Fix `addOnBlur` empty values.

@@ -289,7 +289,7 @@ Clears the input value.
 [downloads-url]: https://npmjs.org/package/react-tagsinput
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [standard-url]: https://github.com/feross/standard
-[size-image]: https://badge-size.herokuapp.com/olahol/react-tagsinput/master/react-tagsinput.js?style=flat-square
+[size-image]: https://img.badgesize.io/olahol/react-tagsinput/master/react-tagsinput.js.svg?style=flat-square
 [size-url]: https://github.com/olahol/react-tagsinput/blob/master/react-tagsinput.js
 [codecov-image]: https://img.shields.io/codecov/c/github/olahol/react-tagsinput?style=flat-square
 [codecov-url]: https://app.codecov.io/github/olahol/react-tagsinput
