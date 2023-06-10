@@ -834,5 +834,20 @@ describe("TagsInput", () => {
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), tag.trim(), "and it should be trimmed");
     });
+
+    it("should not trim object unique tags", () => {
+      let comp = TestUtils.renderIntoDocument(<TestComponent onlyUnique={true} tagDisplayProp="label" />);
+
+      let tag = {
+        label: "Test",
+        value: "test"
+      };
+
+      comp.tagsinput().addTag(tag);
+      comp.tagsinput().addTag(tag);
+
+      assert.equal(comp.len(), 1, "there should be one tag");
+      assert.equal(comp.tag(0), tag, "and it should be the same object");
+    });
   });
 });
