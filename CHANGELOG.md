@@ -1,4 +1,4 @@
-### 3.20.2 (2023-06-09)
+### 3.20.3 (2023-06-09)
 
 * Fix `onlyUnique` regression for object tags.
 

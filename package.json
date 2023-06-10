@@ -1,6 +1,6 @@
 {
   "name": "react-tagsinput",
-  "version": "3.20.2",
+  "version": "3.20.3",
   "description": "Highly customizable React component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
@@ -31,7 +31,7 @@
     "fix": "standard src/index.js --fix",
     "build": "babel --module-id ReactTagsInput -m umd src/index.js > react-tagsinput.js",
     "coverage": "npx nyc --reporter=lcov --reporter=text-summary npm test",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
