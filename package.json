@@ -4,7 +4,7 @@
   "description": "Highly customizable React component for inputing tags",
   "main": "react-tagsinput.js",
   "peerDependencies": {
-    "react": "^18.0.0 || ^17.0.0 || ^16.0.0 || ^15.0.0"
+    "react": "^19.0.0 || ^18.0.0 || ^17.0.0 || ^16.0.0 || ^15.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
