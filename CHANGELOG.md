@@ -1,3 +1,8 @@
+### 3.21.0 (2026-09-22)
+
+* Support for React 19.
+* Upgrade development dependencies (Babel 8, testing-library, mocha, nyc, sinon).
+
 ### 3.20.3 (2023-06-09)
 
 * Fix `onlyUnique` regression for object tags.

@@ -1,8 +1,27 @@
 {
-  "presets": ["es2015", "react", "stage-0"],
-  "plugins": [
-    "add-module-exports",
-    "transform-react-remove-prop-types",
-    ["transform-es2015-modules-umd", {"globals": {"react": "React"}}]
-  ]
+  "env": {
+    "production": {
+      "targets": {"ie": "11"},
+      "presets": [
+        ["@babel/preset-env", {"modules": false}],
+        ["@babel/preset-react", {"runtime": "classic"}]
+      ],
+      "plugins": [
+        "./plugins/commonjs.js",
+        "transform-react-remove-prop-types",
+        ["@babel/plugin-transform-modules-umd", {
+          "moduleId": "ReactTagsInput",
+          "globals": {"react": "React"}
+        }]
+      ]
+    },
+    "test": {
+      "targets": {"node": "current"},
+      "sourceMaps": "inline",
+      "presets": [
+        ["@babel/preset-env", {"modules": "commonjs"}],
+        ["@babel/preset-react", {"runtime": "automatic"}]
+      ]
+    }
+  }
 }

@@ -13,24 +13,15 @@ Highly customizable [React](http://facebook.github.io/react/index.html) componen
 ## Example
 
 ```javascript
-import React from 'react'
+import {useState} from 'react'
 import TagsInput from 'react-tagsinput'
 
 import 'react-tagsinput/react-tagsinput.css'
 
-class Example extends React.Component {
-  constructor() {
-    super()
-    this.state = {tags: []}
-  }
+function Example () {
+  const [tags, setTags] = useState([])
 
-  handleChange = (tags) => {
-    this.setState({tags})
-  }
-
-  render() {
-    return <TagsInput value={this.state.tags} onChange={this.handleChange} />
-  }
+  return <TagsInput value={tags} onChange={setTags} />
 }
 ```
 
