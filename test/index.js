@@ -9,6 +9,8 @@ const TagsInput = require("../src").default;
 
 const React = require("react");
 const { act } = React;
+const { flushSync } = require('react-dom');
+const { renderToStaticMarkup } = require('react-dom/server');
 const { render, cleanup, fireEvent, createEvent } = require('@testing-library/react/pure');
 const assert = require("assert");
 const sinon = require('sinon');
@@ -490,6 +492,16 @@ describe("TagsInput", () => {
       assert.ok(blurred, "should have blurred");
     });
 
+    it("should trigger onPaste on input", () => {
+      let pasted = false;
+
+      let comp = mount(<TestComponent inputProps={{onPaste: () => { pasted = true; }}} />);
+
+      paste(comp, randstring());
+
+      assert.ok(pasted, "should have pasted");
+    });
+
     it("should fire onChange on input", (done) => {
       let tag = randstring()
       let onChange = (e) => {
@@ -628,12 +640,12 @@ describe("TagsInput", () => {
       });
 
       describe("when set to false", () => {
-        it("should prevent default submit on enter key when tag is empty", () => {
+        it("should allow submission when the input is empty", () => {
           let comp = mount(<TestComponent preventSubmit={false} />);
 
           const preventDefault = addTagWithEventSpy(comp, "");
-          assert.equal(preventDefault.called, true, "preventDefault was not called when it should have been");
-          assert.deepEqual(comp.state.tags, ['']);
+          assert.equal(preventDefault.called, false);
+          assert.deepEqual(comp.state.tags, []);
         });
 
         it("should still prevent default submit on enter key when tag is not empty and added", () => {
@@ -657,6 +669,33 @@ describe("TagsInput", () => {
   });
 
   describe("methods", () => {
+    [false, true].forEach(controlled => {
+      [
+        {name: "invalid", props: {validationRegex: /^valid$/}, tag: "draft", clear: false},
+        {name: "duplicate", props: {onlyUnique: true, value: ["draft"]}, tag: "draft", clear: true},
+        {name: "over-limit", props: {maxTags: 0}, tag: "draft", clear: true},
+        {name: "blank", props: {}, tag: "   ", clear: true}
+      ].forEach(({name, props, tag, clear}) => {
+        it(`should ${clear ? "clear" : "retain"} ${name} ${controlled ? "controlled" : "uncontrolled"} input`, () => {
+          const onChange = sinon.spy();
+          const onChangeInput = sinon.spy();
+          const comp = mount(<TagsInput
+            value={[]}
+            onChange={onChange}
+            currentValue={tag}
+            {...props}
+            {...(controlled ? {inputValue: tag, onChangeInput} : {})}
+          />);
+
+          act(() => assert.strictEqual(comp.accept(), false));
+
+          assert.equal(onChange.called, false);
+          assert.equal(comp.input.value, controlled || !clear ? tag : "");
+          assert.deepStrictEqual(onChangeInput.args, controlled && clear ? [[""]] : []);
+        });
+      });
+    });
+
     it("should focus input", () => {
       let comp = mount(<TestComponent />);
 
@@ -796,6 +835,122 @@ describe("TagsInput", () => {
     });
   });
 
+  describe("compatibility", () => {
+    it("should preserve validation and change callback order", () => {
+      const calls = [];
+      const comp = mount(<TestComponent
+        value={["duplicate"]}
+        inputValue="draft"
+        onChangeInput={value => calls.push(["input", value])}
+        onChange={(...args) => calls.push(["change", ...args])}
+        onlyUnique
+        addOnPaste
+        pasteSplit={text => text.split(",")}
+        validate={tag => {
+          calls.push(["validate", tag]);
+          return tag !== "invalid";
+        }}
+        onValidationReject={tags => calls.push(["reject", tags])}
+      />);
+
+      paste(comp, "duplicate, ,invalid, valid ,valid");
+
+      assert.deepStrictEqual(calls, [
+        ["validate", "invalid"],
+        ["validate", "valid"],
+        ["reject", ["invalid"]],
+        ["change", ["duplicate", "valid"], ["valid"], [1]],
+        ["input", ""]
+      ]);
+    });
+
+    it("should preserve whitespace when onlyUnique is false", () => {
+      const comp = mount(<TestComponent />);
+
+      add(comp, " alpha ");
+
+      assert.deepStrictEqual(comp.state.tags, [" alpha "]);
+    });
+
+    it("should keep subclass methods bound", () => {
+      class CustomTagsInput extends TagsInput {
+        addTag(tag) {
+          return super.addTag(tag.toUpperCase());
+        }
+      }
+
+      const onChange = sinon.spy();
+      const comp = mount(<CustomTagsInput value={[]} onChange={onChange} />);
+      const {addTag} = comp;
+
+      act(() => assert.strictEqual(addTag("alpha"), true));
+
+      assert.deepStrictEqual(onChange.firstCall.args, [["ALPHA"], ["ALPHA"], [0]]);
+    });
+
+    it("should release replaced and unmounted callback refs", () => {
+      const firstRef = sinon.spy();
+      const secondRef = sinon.spy();
+      const onChange = () => {};
+      const view = render(<TagsInput value={[]} onChange={onChange} inputProps={{ref: firstRef}} />);
+      const input = view.container.querySelector("input");
+
+      assert.ok(firstRef.lastCall.args[0] === input);
+
+      view.rerender(<TagsInput value={[]} onChange={onChange} inputProps={{ref: secondRef}} />);
+
+      assert.strictEqual(firstRef.lastCall.args[0], null);
+      assert.ok(secondRef.lastCall.args[0] === input);
+
+      view.unmount();
+
+      assert.strictEqual(secondRef.lastCall.args[0], null);
+    });
+
+    it("should preserve renderer prop overrides", () => {
+      const onRemove = sinon.spy();
+      const comp = mount(<TestComponent
+        value={["alpha"]}
+        disabled
+        currentValue="draft"
+        tagProps={{disabled: false, onRemove, className: "custom-tag"}}
+        inputProps={{disabled: false, value: "visible", type: "search"}}
+      />);
+
+      assert.equal(comp.input().value, "visible");
+      assert.equal(comp.input().type, "search");
+      assert.equal(comp.input().disabled, true);
+
+      click(allTag(comp, "a")[0]);
+
+      assert.deepStrictEqual(onRemove.args, [[0]]);
+      assert.equal(allClass(comp, "custom-tag").length, 1);
+    });
+
+    it("should use inputValue as an editable default without onChangeInput", () => {
+      const comp = mount(<TestComponent inputValue="default" />);
+
+      assert.equal(comp.input().value, "default");
+
+      add(comp, "edited");
+
+      assert.deepStrictEqual(comp.state.tags, ["edited"]);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should prioritize currentValue for uncontrolled input", () => {
+      const comp = mount(<TestComponent currentValue="current" inputValue="input" />);
+
+      assert.equal(comp.input().value, "current");
+    });
+
+    it("should prioritize inputValue for controlled input", () => {
+      const comp = mount(<TestComponent currentValue="current" inputValue="input" onChangeInput={() => {}} />);
+
+      assert.equal(comp.input().value, "input");
+    });
+  });
+
   describe("bugs", () => {
     it("should not add empty tags", () => {
       let comp = mount(<TestComponent />);
@@ -857,6 +1012,788 @@ describe("TagsInput", () => {
 
       assert.equal(comp.len(), 1, "there should be one tag");
       assert.equal(comp.tag(0), tag, "and it should be the same object");
+    });
+
+    it("should not add a whitespace-only tag", () => {
+      let comp = mount(<TestComponent />);
+
+      add(comp, "   ");
+      assert.equal(comp.len(), 0, "there should be no tags, whitespace-only tags should be rejected like empty ones");
+    });
+
+    it("should dedupe unique object tags within the same batch", () => {
+      let comp = mount(<TestComponent addOnPaste={true} onlyUnique={true} tagDisplayProp="label" />);
+
+      paste(comp, "a a");
+      assert.equal(comp.len(), 1, "there should be one tag, duplicates pasted together should be deduped too");
+    });
+
+    it("should dedupe unique tags that differ only in whitespace", () => {
+      let comp = mount(<TestComponent addOnPaste={true} onlyUnique={true} pasteSplit={(data) => data.split(",")} />);
+
+      paste(comp, "a ,a");
+      assert.equal(comp.len(), 1, "there should be one tag, tags are trimmed after they are deduped");
+    });
+
+    it("should add a tag that matches a global validationRegex", () => {
+      let rejected = [];
+      let comp = mount(<TestComponent validationRegex={/a+/g} onValidationReject={(tags) => rejected.push(tags)} />);
+
+      add(comp, "a");
+      assert.equal(comp.len(), 1, "the tag is valid, but the regex is tested twice and lastIndex is not reset");
+      assert.equal(rejected.length, 0, "no tag should be rejected");
+    });
+
+    it("should not call inputProps.onFocus without an event", () => {
+      let events = [];
+      let comp = mount(<TestComponent inputProps={{onFocus: (e) => events.push(e)}} />);
+
+      act(() => comp.tagsinput().focus());
+
+      assert.ok(events.length > 0, "onFocus should be called");
+      assert.ok(events.every(e => e != null), "onFocus should never be called without an event");
+    });
+
+    it("should clear the input when currentValue changes to empty", () => {
+      class TestParent extends React.Component {
+        constructor() {
+          super()
+          this.state = {currentValue: "init"};
+        }
+
+        render() {
+          return <TestComponent ref={ref => { this.testComp = ref; }} currentValue={this.state.currentValue} />
+        }
+      }
+
+      let parent = mount(<TestParent />);
+      act(() => parent.setState({currentValue: ""}));
+
+      assert.equal(parent.testComp.input().value, "", "the input should be empty");
+    });
+
+    it("should still add tags when inputProps has an onKeyDown", () => {
+      let called = false;
+      let comp = mount(<TestComponent inputProps={{onKeyDown: () => { called = true; }}} />);
+
+      add(comp, "a");
+      assert.ok(called, "the onKeyDown of inputProps should be called");
+      assert.equal(comp.len(), 1, "the onKeyDown of inputProps should not replace the handler of the component");
+    });
+
+    it("should reject whitespace-only unique tags", () => {
+      const comp = mount(<TestComponent onlyUnique />);
+
+      add(comp, "   ");
+
+      assert.deepStrictEqual(comp.state.tags, []);
+    });
+
+    it("should skip empty paste fragments before applying maxTags", () => {
+      const comp = mount(<TestComponent addOnPaste maxTags={2} />);
+
+      paste(comp, " alpha  beta ");
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha", "beta"]);
+    });
+
+    it("should respect paste cancellation", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent
+        addOnPaste
+        onChange={onChange}
+        inputProps={{onPaste: e => e.preventDefault()}}
+      />);
+
+      change(comp, "draft");
+      paste(comp, "alpha beta");
+
+      assert.equal(onChange.called, false);
+      assert.equal(comp.input().value, "draft");
+    });
+
+    it("should allow Enter to submit after adding a tag when preventSubmit is false", () => {
+      const comp = mount(<TestComponent preventSubmit={false} />);
+
+      add(comp, "alpha");
+      const event = createEvent.keyDown(comp.input(), {key: "Enter", keyCode: 13});
+      fireEvent(comp.input(), event);
+
+      assert.equal(event.defaultPrevented, false);
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+    });
+
+    it("should leave Enter to the IME during composition", () => {
+      const comp = mount(<TestComponent />);
+
+      fireEvent.compositionStart(comp.input());
+      change(comp, "日本");
+      const event = createEvent.keyDown(comp.input(), {
+        key: "Enter", keyCode: 13, isComposing: true
+      });
+      fireEvent(comp.input(), event);
+
+      assert.deepStrictEqual(comp.state.tags, []);
+      assert.equal(comp.input().value, "日本");
+      assert.equal(event.defaultPrevented, false);
+    });
+
+    it("should leave Backspace to the IME during composition", () => {
+      const comp = mount(<TestComponent />);
+
+      add(comp, "alpha");
+      fireEvent.compositionStart(comp.input());
+      const event = createEvent.keyDown(comp.input(), {
+        key: "Backspace", keyCode: 8, isComposing: true
+      });
+      fireEvent(comp.input(), event);
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.equal(event.defaultPrevented, false);
+    });
+
+    it("should leave key code 229 to the IME", () => {
+      const comp = mount(<TestComponent />);
+
+      change(comp, "日本");
+      const event = createEvent.keyDown(comp.input(), {key: "Enter", keyCode: 229});
+      fireEvent(comp.input(), event);
+
+      assert.deepStrictEqual(comp.state.tags, []);
+      assert.equal(comp.input().value, "日本");
+      assert.equal(event.defaultPrevented, false);
+    });
+
+    it("should accept an object tag displaying zero", () => {
+      const comp = mount(<TestComponent tagDisplayProp="label" />);
+      const tag = {label: 0};
+
+      act(() => comp.tagsinput().addTag(tag));
+
+      assert.deepStrictEqual(comp.state.tags, [tag]);
+    });
+
+    it("should not mark a disabled input focused when clicked", () => {
+      const comp = mount(<TestComponent disabled />);
+
+      click(comp.div());
+
+      assert.notStrictEqual(document.activeElement, comp.input());
+      assert.equal(comp.div().classList.contains("react-tagsinput--focused"), false);
+    });
+
+    [null, undefined].forEach(label => {
+      it(`should ignore an object tag displaying ${label}`, () => {
+        const onChange = sinon.spy();
+        const comp = mount(<TestComponent tagDisplayProp="label" onChange={onChange} />);
+        let added;
+
+        act(() => { added = comp.tagsinput().addTag({label}); });
+
+        assert.strictEqual(added, false);
+        assert.deepStrictEqual(comp.state.tags, []);
+        assert.equal(onChange.called, false);
+      });
+    });
+
+    it("should retain tags added before React flushes updates", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent onChange={onChange} />);
+
+      act(() => {
+        comp.tagsinput().addTag("alpha");
+        comp.tagsinput().addTag("beta");
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha", "beta"]);
+      assert.deepStrictEqual(onChange.args, [
+        [["alpha"], ["alpha"], [0]],
+        [["alpha", "beta"], ["beta"], [1]]
+      ]);
+    });
+
+    it("should enforce onlyUnique across batched additions", () => {
+      const comp = mount(<TestComponent onlyUnique />);
+
+      act(() => {
+        comp.tagsinput().addTag("alpha");
+        assert.strictEqual(comp.tagsinput().addTag("alpha"), false);
+        comp.tagsinput().addTag("beta");
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha", "beta"]);
+    });
+
+    it("should enforce maxTags across batched additions", () => {
+      const comp = mount(<TestComponent maxTags={1} />);
+
+      act(() => {
+        comp.tagsinput().addTag("alpha");
+        assert.strictEqual(comp.tagsinput().addTag("beta"), false);
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+    });
+
+    it("should retain removals when adding within the same batch", () => {
+      const comp = mount(<TestComponent />);
+      add(comp, "alpha");
+
+      act(() => {
+        comp.tagsinput().handleRemove(0);
+        comp.tagsinput().addTag("beta");
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["beta"]);
+    });
+
+    it("should discard pending changes when the parent keeps its value", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TagsInput
+        value={[]}
+        onChange={onChange}
+        inputValue=""
+        onChangeInput={() => {}}
+      />);
+
+      act(() => comp.addTag("alpha"));
+      act(() => comp.addTag("beta"));
+
+      assert.deepStrictEqual(onChange.lastCall.args, [["beta"], ["beta"], [0]]);
+    });
+
+    it("should render currentValue on the server", () => {
+      const markup = renderToStaticMarkup(<TestComponent currentValue="draft" />);
+      const container = document.createElement("div");
+      container.innerHTML = markup;
+
+      assert.equal(container.querySelector("input").value, "draft");
+    });
+
+    it("should accept the input only once within a batch", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent onChange={onChange} />);
+      const accepted = [];
+
+      change(comp, "alpha");
+      act(() => {
+        accepted.push(comp.tagsinput().accept());
+        accepted.push(comp.tagsinput().accept());
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.deepStrictEqual(accepted, [true, false]);
+      assert.equal(onChange.callCount, 1);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should dedupe against existing tags with surrounding whitespace", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent onlyUnique onChange={onChange} />);
+
+      act(() => comp.setState({tags: [" alpha "]}));
+      add(comp, " alpha ");
+
+      assert.deepStrictEqual(comp.state.tags, [" alpha "]);
+      assert.equal(onChange.called, false);
+    });
+
+    it("should reconcile pending clears when the controlled input stays unchanged", () => {
+      const onChangeInput = sinon.spy();
+      const comp = mount(<TestComponent inputValue="alpha" onChangeInput={onChangeInput} />);
+      const accepted = [];
+
+      act(() => comp.tagsinput().clearInput());
+      act(() => {
+        accepted.push(comp.tagsinput().accept());
+        accepted.push(comp.tagsinput().accept());
+      });
+
+      assert.deepStrictEqual(accepted, [true, false]);
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.equal(comp.input().value, "alpha");
+      assert.deepStrictEqual(onChangeInput.args, [[""], [""]]);
+
+      act(() => comp.tagsinput().accept());
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha", "alpha"]);
+    });
+
+    it("should enforce maxTags after onValidationReject adds a fallback", () => {
+      const comp = mount(<TestComponent
+        addOnPaste
+        maxTags={1}
+        validate={tag => tag !== "invalid"}
+        onValidationReject={() => comp.tagsinput().addTag("fallback")}
+      />);
+
+      paste(comp, "invalid alpha");
+
+      assert.deepStrictEqual(comp.state.tags, ["fallback"]);
+    });
+
+    it("should enforce onlyUnique after onValidationReject adds a tag", () => {
+      const comp = mount(<TestComponent
+        addOnPaste
+        onlyUnique
+        validate={tag => tag !== "invalid"}
+        onValidationReject={() => comp.tagsinput().addTag("alpha")}
+      />);
+
+      paste(comp, "invalid alpha");
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+    });
+
+    it("should report indexes after onValidationReject adds a tag", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent
+        addOnPaste
+        onChange={onChange}
+        validate={tag => tag !== "invalid"}
+        onValidationReject={() => comp.tagsinput().addTag("fallback")}
+      />);
+
+      paste(comp, "invalid alpha");
+
+      assert.deepStrictEqual(comp.state.tags, ["fallback", "alpha"]);
+      assert.deepStrictEqual(onChange.args, [
+        [["fallback"], ["fallback"], [0]],
+        [["fallback", "alpha"], ["alpha"], [1]]
+      ]);
+    });
+
+    it("should not add an accepted tag again on blur within a batch", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent addOnBlur onChange={onChange} />);
+
+      change(comp, "alpha");
+      act(() => comp.tagsinput().focus());
+
+      act(() => {
+        comp.tagsinput().accept();
+        comp.tagsinput().blur();
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.equal(onChange.callCount, 1);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should not add a tag twice when onChange blurs the input", () => {
+      const onChange = sinon.spy(() => comp.tagsinput().blur());
+      const comp = mount(<TestComponent addOnBlur onChange={onChange} />);
+
+      act(() => comp.tagsinput().focus());
+      add(comp, "alpha");
+
+      assert.deepStrictEqual(onChange.args, [
+        [["alpha"], ["alpha"], [0]]
+      ]);
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should not add a cleared input on blur within a batch", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent addOnBlur onChange={onChange} />);
+
+      change(comp, "alpha");
+      act(() => comp.tagsinput().focus());
+
+      act(() => {
+        comp.tagsinput().clearInput();
+        comp.tagsinput().blur();
+      });
+
+      assert.deepStrictEqual(comp.state.tags, []);
+      assert.equal(onChange.called, false);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should remain unfocused when onFocus blurs the input", () => {
+      const comp = mount(<TestComponent
+        inputProps={{onFocus: e => e.target.blur()}}
+      />);
+
+      act(() => comp.tagsinput().focus());
+
+      assert.notStrictEqual(document.activeElement, comp.input());
+      assert.equal(comp.div().classList.contains("react-tagsinput--focused"), false);
+    });
+
+    it("should remain focused when onBlur refocuses the input", () => {
+      const comp = mount(<TestComponent
+        inputProps={{onBlur: e => e.target.focus()}}
+      />);
+
+      act(() => comp.tagsinput().focus());
+      act(() => comp.tagsinput().blur());
+
+      assert.strictEqual(document.activeElement, comp.input());
+      assert.equal(comp.div().classList.contains("react-tagsinput--focused"), true);
+    });
+
+    [null, undefined].forEach(label => {
+      it(`should skip validation for an object tag displaying ${label}`, () => {
+        const validate = sinon.spy(tag => tag.trim().length > 0);
+        const comp = mount(<TestComponent tagDisplayProp="label" validate={validate} />);
+        let added;
+
+        act(() => { added = comp.tagsinput().addTag({label}); });
+
+        assert.strictEqual(added, false);
+        assert.deepStrictEqual(comp.state.tags, []);
+        assert.equal(validate.called, false);
+      });
+    });
+
+    it("should not reject empty paste fragments", () => {
+      const onValidationReject = sinon.spy();
+      const comp = mount(<TestComponent
+        addOnPaste
+        validationRegex={/^[a-z]+$/}
+        onValidationReject={onValidationReject}
+      />);
+
+      paste(comp, " alpha  beta ");
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha", "beta"]);
+      assert.equal(onValidationReject.called, false);
+    });
+
+    it("should not duplicate a tag when onChange flushes updates before blur", () => {
+      const onChange = sinon.spy(function (tags) {
+        flushSync(() => this.setState({tags}));
+        this.tagsinput().blur();
+      });
+      const comp = mount(<TestComponent addOnBlur onChange={onChange} />);
+
+      act(() => comp.tagsinput().focus());
+      add(comp, "alpha");
+
+      assert.deepStrictEqual(onChange.args, [
+        [["alpha"], ["alpha"], [0]]
+      ]);
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should remove the clicked tags before React flushes updates", () => {
+      const comp = mount(<TestComponent addOnPaste />);
+
+      paste(comp, "alpha beta gamma");
+      const removes = Array.from(allTag(comp, "a"));
+
+      act(() => {
+        click(removes[0]);
+        click(removes[1]);
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["gamma"]);
+    });
+
+    it("should focus the input when inputProps supplies a ref", () => {
+      const ref = React.createRef();
+      const comp = mount(<TestComponent inputProps={{ref}} />);
+
+      // Never pass DOM nodes to strictEqual, the failure message exhausts memory.
+      assert.ok(ref.current === comp.div().querySelector("input"));
+
+      act(() => comp.tagsinput().focus());
+
+      assert.ok(document.activeElement === ref.current);
+    });
+
+    it("should enforce onlyUnique after validate adds a tag", () => {
+      let added = false;
+      const comp = mount(<TestComponent
+        onlyUnique
+        validate={tag => {
+          if (!added) {
+            added = true;
+            comp.tagsinput().addTag(tag);
+          }
+
+          return true;
+        }}
+      />);
+
+      add(comp, "alpha");
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+    });
+
+    it("should remove a clicked tag only once within a batch", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent addOnPaste onChange={onChange} />);
+
+      paste(comp, "alpha beta gamma");
+      onChange.resetHistory();
+      const remove = allTag(comp, "a")[0];
+
+      act(() => {
+        click(remove);
+        click(remove);
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["beta", "gamma"]);
+      assert.deepStrictEqual(onChange.args, [
+        [["beta", "gamma"], ["alpha"], [0]]
+      ]);
+    });
+
+    it("should reset a global validationRegex after validate adds a tag", () => {
+      const onValidationReject = sinon.spy();
+      const comp = mount(<TestComponent
+        validationRegex={/^[a-z]+$/g}
+        onValidationReject={onValidationReject}
+        validate={tag => {
+          if (tag === "alpha") {
+            comp.tagsinput().addTag("beta");
+          }
+
+          return true;
+        }}
+      />);
+
+      add(comp, "alpha");
+
+      assert.deepStrictEqual(comp.state.tags, ["beta", "alpha"]);
+      assert.equal(onValidationReject.called, false);
+    });
+
+    it("should clear currentValue when an uncontrolled inputValue is present", () => {
+      const onChange = sinon.spy();
+      const view = render(<TagsInput
+        value={[]}
+        onChange={onChange}
+        currentValue="draft"
+        inputValue="default"
+      />);
+
+      view.rerender(<TagsInput
+        value={[]}
+        onChange={onChange}
+        currentValue=""
+        inputValue="default"
+      />);
+
+      assert.equal(view.container.querySelector("input").value, "");
+      assert.equal(onChange.called, false);
+    });
+
+    it("should apply a new currentValue matching the original inputValue", () => {
+      const onChange = sinon.spy();
+      const view = render(<TagsInput value={[]} onChange={onChange} inputValue="alpha" />);
+      const input = view.container.querySelector("input");
+
+      fireEvent.change(input, {target: {value: "draft"}});
+      assert.equal(input.value, "draft");
+
+      view.rerender(<TagsInput
+        value={[]}
+        onChange={onChange}
+        inputValue="alpha"
+        currentValue="alpha"
+      />);
+
+      assert.equal(input.value, "alpha");
+      assert.equal(onChange.called, false);
+    });
+
+    it("should run input ref cleanup on unmount", () => {
+      const cleanupRef = sinon.spy();
+      const ref = sinon.spy(input => input ? cleanupRef : undefined);
+      const componentRef = React.createRef();
+      const view = render(<TagsInput ref={componentRef} value={[]} onChange={() => {}} inputProps={{ref}} />);
+      const comp = componentRef.current;
+
+      assert.equal(ref.callCount, 1);
+      assert.ok(ref.firstCall.args[0] === view.container.querySelector("input"));
+
+      view.unmount();
+
+      assert.equal(cleanupRef.callCount, 1);
+      assert.equal(ref.callCount, 1);
+      assert.strictEqual(comp.input, null);
+    });
+
+    it("should not remove a replacement tag through a stale click after Backspace", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent addOnPaste onChange={onChange} />);
+
+      paste(comp, "alpha beta");
+      onChange.resetHistory();
+      const removeBeta = allTag(comp, "a")[1];
+
+      act(() => {
+        keyDown(comp, 8, "Backspace");
+        comp.tagsinput().addTag("gamma");
+        click(removeBeta);
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha", "gamma"]);
+      assert.deepStrictEqual(onChange.args, [
+        [["alpha"], ["beta"], [1]],
+        [["alpha", "gamma"], ["gamma"], [1]]
+      ]);
+    });
+
+    it("should clean up a replaced input ref", () => {
+      const cleanupRef = sinon.spy();
+      const firstRef = sinon.spy(input => input ? cleanupRef : undefined);
+      const secondRef = React.createRef();
+      const componentRef = React.createRef();
+      const onChange = () => {};
+      const view = render(<TagsInput
+        ref={componentRef} value={[]} onChange={onChange} inputProps={{ref: firstRef}}
+      />);
+      const input = view.container.querySelector("input");
+
+      view.rerender(<TagsInput
+        ref={componentRef} value={[]} onChange={onChange} inputProps={{ref: secondRef}}
+      />);
+
+      assert.equal(cleanupRef.callCount, 1);
+      assert.equal(firstRef.callCount, 1);
+      assert.ok(secondRef.current === input);
+      assert.ok(componentRef.current.input === input);
+    });
+
+    it("should track clicked and keyboard removals across pending additions", () => {
+      const comp = mount(<TestComponent addOnPaste />);
+
+      paste(comp, "alpha beta gamma");
+      const removes = Array.from(allTag(comp, "a"));
+
+      act(() => {
+        click(removes[0]);
+        comp.tagsinput().addTag("delta");
+        keyDown(comp, 8, "Backspace");
+        keyDown(comp, 8, "Backspace");
+        comp.tagsinput().addTag("epsilon");
+        click(removes[2]);
+        click(removes[1]);
+      });
+
+      assert.deepStrictEqual(comp.state.tags, ["epsilon"]);
+    });
+
+    it("should keep a stable input ref attached while typing", () => {
+      const cleanupRef = sinon.spy();
+      const ref = sinon.spy(input => input ? cleanupRef : undefined);
+      const comp = mount(<TestComponent inputProps={{ref}} />);
+      const input = comp.input();
+
+      change(comp, "alpha");
+
+      assert.ok(comp.input() === input);
+      assert.equal(cleanupRef.callCount, 0);
+      assert.equal(ref.callCount, 1);
+    });
+
+    [null, undefined].forEach(tag => {
+      it(`should ignore ${tag} when tagDisplayProp is set`, () => {
+        const onChange = sinon.spy();
+        const comp = mount(<TestComponent tagDisplayProp="label" onChange={onChange} />);
+        let added;
+
+        act(() => { added = comp.tagsinput().addTag(tag); });
+
+        assert.strictEqual(added, false);
+        assert.deepStrictEqual(comp.state.tags, []);
+        assert.equal(onChange.called, false);
+      });
+    });
+
+    it("should retain the latest inputValue when onChangeInput is removed", () => {
+      const onChange = sinon.spy();
+      const onChangeInput = sinon.spy();
+      const view = render(<TagsInput
+        value={[]} onChange={onChange} inputValue="alpha" onChangeInput={onChangeInput}
+      />);
+
+      view.rerender(<TagsInput
+        value={[]} onChange={onChange} inputValue="beta" onChangeInput={onChangeInput}
+      />);
+      assert.equal(view.container.querySelector("input").value, "beta");
+
+      view.rerender(<TagsInput value={[]} onChange={onChange} inputValue="beta" />);
+
+      assert.equal(view.container.querySelector("input").value, "beta");
+      assert.equal(onChange.called, false);
+    });
+
+    it("should accept the visible inputProps value", () => {
+      const comp = mount(<TestComponent inputProps={{value: "alpha"}} />);
+
+      assert.equal(comp.input().value, "alpha");
+
+      act(() => comp.tagsinput().accept());
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+    });
+
+    it("should not remove tags while inputProps.value is nonempty", () => {
+      const comp = mount(<TestComponent inputProps={{value: "draft"}} />);
+
+      act(() => comp.tagsinput().addTag("alpha"));
+      keyDown(comp, 8, "Backspace");
+
+      assert.deepStrictEqual(comp.state.tags, ["alpha"]);
+      assert.equal(comp.input().value, "draft");
+    });
+
+    it("should not accept hidden inputValue when inputProps.value is empty", () => {
+      const comp = mount(<TestComponent
+        inputValue="hidden" onChangeInput={() => {}} inputProps={{value: ""}}
+      />);
+
+      act(() => assert.strictEqual(comp.tagsinput().accept(), false));
+
+      assert.deepStrictEqual(comp.state.tags, []);
+      assert.equal(comp.input().value, "");
+    });
+
+    it("should allow Enter to submit after clearing within a batch", () => {
+      const comp = mount(<TestComponent preventSubmit={false} />);
+
+      change(comp, "draft");
+      const event = createEvent.keyDown(comp.input(), {key: "Enter", keyCode: 13});
+
+      act(() => {
+        comp.tagsinput().clearInput();
+        fireEvent(comp.input(), event);
+      });
+
+      assert.equal(comp.input().value, "");
+      assert.deepStrictEqual(comp.state.tags, []);
+      assert.equal(event.defaultPrevented, false);
+    });
+
+    it("should remove the last tag after clearing within a batch", () => {
+      const onChange = sinon.spy();
+      const comp = mount(<TestComponent onChange={onChange} />);
+
+      add(comp, "alpha");
+      change(comp, "draft");
+      onChange.resetHistory();
+
+      act(() => {
+        comp.tagsinput().clearInput();
+        keyDown(comp, 8, "Backspace");
+      });
+
+      assert.equal(comp.input().value, "");
+      assert.deepStrictEqual(comp.state.tags, []);
+      assert.deepStrictEqual(onChange.args, [[[], ["alpha"], [0]]]);
+    });
+
+    it("should use currentValue when inputProps.value is undefined", () => {
+      const comp = mount(<TestComponent currentValue="draft" inputProps={{value: undefined}} />);
+
+      assert.equal(comp.input().value, "draft");
     });
   });
 });
