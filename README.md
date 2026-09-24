@@ -88,7 +88,7 @@ Callback from the input box, gets one argument `value` which is the content of t
 
 ##### addKeys
 
-An array of [keys](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) or [key codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which) that add a tag, default is `[9, 13]` (Tab and Enter).
+An array of [keys](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) or [key codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which) that add a tag, default is `['Tab', 'Enter']`.
 
 ##### currentValue
 
@@ -143,7 +143,7 @@ function defaultPasteSplit (data) {
 
 ##### removeKeys
 
-An array of key codes that remove a tag, default is `[8]` (Backspace).
+An array of [keys](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) or [key codes](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which) that remove a tag, default is `['Backspace']`.
 
 
 ##### className
