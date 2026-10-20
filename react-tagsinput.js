@@ -1,17 +1,17 @@
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define("ReactTagsInput", ["exports", "react", "prop-types"], factory);
+    define("ReactTagsInput", ["exports", "react"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require("react"), require("prop-types"));
+    factory(exports, require("react"));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.React, global.propTypes);
+    factory(mod.exports, global.React);
     global.ReactTagsInput = mod.exports;
   }
-})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports, _react, _propTypes) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports, _react) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -19,7 +19,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   });
   _exports.default = void 0;
   _react = _interopRequireDefault(_react);
-  _propTypes = _interopRequireDefault(_propTypes);
   var _excluded = ["onChange", "onFocus", "onBlur", "onKeyDown", "onPaste"],
     _excluded2 = ["ref"],
     _excluded3 = ["tag", "key", "disabled", "onRemove", "classNameRemove", "getTagDisplayValue"],
